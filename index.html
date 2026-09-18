@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ПИТРС и ВЭ-ПИТРС по ОМС в РФ - справочник препаратов</title>
+<meta name="description" content="Справочник препаратов, изменяющих течение рассеянного склероза (ПИТРС и ВЭ-ПИТРС), доступных в РФ по ОМС: МНН / торговое название, эффективность по РКИ (СЧО, T2, Gd+, CDP), прямые ссылки на клинические исследования, ГРЛС и официальные PDF.">
+<meta name="theme-color" content="#f4f6fa">
+<script>/* светлая тема по умолчанию; тёмная - только если пользователь её выбрал */
+if(localStorage.getItem('pitrs-theme')==='dark')document.documentElement.classList.add('dark');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<style>
+  :root{
+    --bg:#f4f6fa; --panel:#ffffff; --panel-2:#f8fafc; --line:#e2e8f0; --line-2:#cbd5e1;
+    --txt:#0f172a; --muted:#5b6779; --accent:#2563eb; --accent-soft:#e8efff; --ve:#7c3aed; --ve-soft:#f1e9ff;
+    --ok:#047857; --ok-soft:#e3f6ef; --warn:#b45309; --warn-soft:#fdf1de; --danger:#b91c1c; --danger-soft:#fee2e2;
+    --shadow:0 1px 2px rgba(15,23,42,.06),0 8px 24px -12px rgba(15,23,42,.18);
+  }
+  html.dark{
+    --bg:#0a0f1a; --panel:#101725; --panel-2:#151d2e; --line:#22304a; --line-2:#2f405e;
+    --txt:#e7edf7; --muted:#93a2bb; --accent:#7aa2ff; --accent-soft:#16233d; --ve:#b79cff; --ve-soft:#1d1a38;
+    --ok:#4ade80; --ok-soft:#11291f; --warn:#fbbf24; --warn-soft:#2c2313; --danger:#f87171; --danger-soft:#2e1518;
+    --shadow:0 1px 2px rgba(0,0,0,.5),0 10px 30px -14px rgba(0,0,0,.7);
+  }
+  *{-webkit-tap-highlight-color:transparent}
+  body{background:var(--bg);color:var(--txt);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;overflow-wrap:break-word}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+  .sub{background:var(--panel-2)}
+  .muted{color:var(--muted)}
+  .bd{border-color:var(--line)}
+  .chip{border:1px solid var(--line-2);color:var(--muted);background:transparent}
+  .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+  .acc-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .28s ease}
+  .acc.open .acc-body{grid-template-rows:1fr}
+  .acc-body>div{overflow:hidden}
+  .chev{transition:transform .28s ease}
+  .acc.open .chev{transform:rotate(180deg)}
+  .acc.open{border-color:var(--accent)}
+  .acc{scroll-margin-top:170px}
+  a.lnk{color:var(--accent);text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--accent) 40%,transparent)}
+  a.lnk:active{opacity:.7}
+  input,button{font:inherit}
+  .no-scrollbar::-webkit-scrollbar{display:none}
+  .src{font-size:11px;letter-spacing:.02em;padding:1px 6px;border-radius:6px;background:var(--accent-soft);color:var(--accent);font-weight:600;white-space:nowrap;display:inline-block}
+  .pdfb{font-size:11px;letter-spacing:.02em;padding:1px 6px;border-radius:6px;background:var(--ok-soft);color:var(--ok);font-weight:600;white-space:nowrap;display:inline-block}
+  .warnb{font-size:11px;letter-spacing:.02em;padding:1px 6px;border-radius:6px;background:var(--warn-soft);color:var(--warn);font-weight:600;white-space:nowrap;display:inline-block}
+  .dangerb{font-size:11px;letter-spacing:.02em;padding:1px 6px;border-radius:6px;background:var(--danger-soft);color:var(--danger);font-weight:600;white-space:nowrap;display:inline-block}
+  .k{font-size:11.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.02em}
+  .stat-grid{display:grid;grid-template-columns:1fr;gap:6px}
+  @media (min-width:640px){.stat-grid{grid-template-columns:repeat(2,1fr)}}
+  .cmp-table th{background:var(--panel-2);color:var(--muted);font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.03em;padding:8px 10px;text-align:left;border-bottom:1px solid var(--line)}
+  .cmp-table td{padding:10px;border-bottom:1px solid var(--line);font-size:12.5px;vertical-align:top}
+  .cmp-table tr:last-child td{border-bottom:none}
+  /* Раскрытая сводная таблица выходит на всю ширину экрана, центрируясь по вьюпорту.
+     Работает через класс .open (добавляется при раскрытии аккордеона), не затрагивая другие карточки. */
+  #comparison-table.open{position:relative;left:50%;transform:translateX(-50%);width:min(1360px,calc(100vw - 40px));transition:width .28s ease}
+  @media (max-width:700px){#comparison-table.open{left:auto;transform:none;width:auto}}
+  @media print{
+    .no-print{display:none!important}
+    .acc-body{grid-template-rows:1fr!important}
+    body{background:#fff}
+    .card{break-inside:avoid;box-shadow:none}
+  }
+</style>
+</head>
+<body class="min-h-screen">
+
+<header class="sticky top-0 z-30 backdrop-blur-md no-print" style="background:color-mix(in srgb,var(--bg) 88%,transparent);border-bottom:1px solid var(--line)">
+  <div class="max-w-3xl mx-auto px-4 pt-3 pb-2">
+    <div class="flex items-start gap-3">
+      <div class="flex-1 min-w-0">
+        <h1 class="text-[17px] sm:text-xl font-bold leading-tight">ПИТРС / ВЭ-ПИТРС по ОМС в РФ</h1>
+        <p class="text-[12px] sm:text-[13px] muted leading-snug mt-0.5">МНН / торговое название, эффективность по РКИ, ссылки на исследования и официальные документы.</p>
+      </div>
+      <button id="theme" class="chip rounded-full px-3 py-2 text-[13px] font-medium shrink-0" title="Тема">🌙</button>
+    </div>
+
+    <div class="mt-3 flex gap-2">
+      <input id="q" type="search" placeholder="Поиск: МНН, торговое название, исследование..."
+        class="flex-1 rounded-xl px-3 py-2.5 text-[15px] outline-none" style="background:var(--panel);border:1px solid var(--line)">
+      <button id="toggleAll" class="chip rounded-xl px-3 py-2.5 text-[13px] font-medium whitespace-nowrap">Развернуть всё</button>
+    </div>
+
+    <div class="mt-2 flex gap-2 overflow-x-auto no-scrollbar pb-1" id="filters">
+      <button class="chip rounded-full px-3 py-1.5 text-[12.5px] font-medium whitespace-nowrap" data-f="all" aria-pressed="true">Все</button>
+      <button class="chip rounded-full px-3 py-1.5 text-[12.5px] font-medium whitespace-nowrap" data-f="1-я линия" aria-pressed="false">1-я линия</button>
+      <button class="chip rounded-full px-3 py-1.5 text-[12.5px] font-medium whitespace-nowrap" data-f="2-я линия" aria-pressed="false">2-я линия</button>
+      <button class="chip rounded-full px-3 py-1.5 text-[12.5px] font-medium whitespace-nowrap" data-f="ВЭ-ПИТРС" aria-pressed="false">ВЭ-ПИТРС</button>
+      <button class="chip rounded-full px-3 py-1.5 text-[12.5px] font-medium whitespace-nowrap" data-f="Резерв" aria-pressed="false">Резерв</button>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-3xl mx-auto px-4 pb-24">
+
+  <div id="list" class="mt-4 space-y-6"></div>
+  <p id="empty" class="hidden text-center muted text-[14px] py-10">Ничего не найдено. Попробуйте другой запрос.</p>
+
+
+  <!-- КАК ЧИТАТЬ ЦИФРЫ -->
+  <section class="card p-4 mt-4">
+    <h2 class="font-semibold text-[15px]">Как читать блок «Эффективность по РКИ»</h2>
+    <p class="text-[13.5px] mt-2"><b>СЧО (ARR)</b> - среднегодовая частота обострений (число обострений на пациента в год). В карточке каждая запись оформлена отдельной строкой: группа препарата, контрольная группа, расчётное снижение и показатель из статьи.</p>
+    <div class="mt-3 space-y-2 text-[13.5px]">
+      <div class="px-3 py-2 rounded-xl sub" style="border-left:3px solid var(--accent)">
+        <b>Процент снижения СЧО.</b> «Снижение (расчёт)» вычислено по формуле (1 − СЧО препарата / СЧО контроля) × 100% из опубликованных чисел. «Снижение (в статье)» - показатель авторов публикации. Небольшая разница (в 1-2 процентных пункта) объясняется округлением СЧО в тексте статьи, тогда как авторы вычисляют процент по неокруглённым данным пациентов.
+      </div>
+      <div class="px-3 py-2 rounded-xl sub" style="border-left:3px solid var(--warn)">
+        <b>Единицы МРТ-показателей.</b> В зависимости от протокола РКИ очаги считаются «на скан», «в год» или «кумулятивно за 2 года». Единицы сохранены в точности по публикации. Пересчитывать проценты между разными единицами некорректно.
+      </div>
+      <div class="px-3 py-2 rounded-xl sub" style="border-left:3px solid var(--ok)">
+        <b>Прямые и косвенные сравнения.</b> В карточках проценты приведены относительно контрольной группы конкретного РКИ (плацебо, интерферон бета-1а 44 или 30 мкг, терифлуномид 14 мг), поэтому напрямую между препаратами их сравнивать нельзя. В сводной таблице выше все препараты приведены к единой точке отсчёта - плацебо: где было прямое плацебо-РКИ, взято оно; где контроль был активным, использованы опубликованные сетевые метаанализы и прозрачный косвенный расчёт по цепочке (с пометкой). Такие оценки приблизительны и служат только для общего представления.
+      </div>
+      <div class="px-3 py-2 rounded-xl sub" style="border-left:3px solid var(--ve)">
+        <b>CDP / CDW</b> - подтверждённое прогрессирование (нарастание) неврологической инвалидизации по шкале EDSS, подтверждённое через 12 недель (3 месяца) или 24 недели (6 месяцев).
+      </div>
+    </div>
+  </section>
+
+  <!-- ОМС -->
+  <section class="card p-4 mt-4" id="oms">
+    <h2 class="font-semibold text-[15px]">Получение ПИТРС по ОМС в РФ</h2>
+    <p class="text-[13.5px] mt-1.5 muted">Назначение ПИТРС осуществляется по решению врачебной комиссии регионального центра рассеянного склероза в соответствии с утверждёнными клиническими рекомендациями Минздрава РФ (ID 739) и программой государственных гарантий.</p>
+    <div class="mt-3 flex flex-wrap gap-2 text-[12.5px]">
+      <a class="lnk rounded-lg px-2.5 py-1.5 sub" href="https://cr.minzdrav.gov.ru/schema/739_1" target="_blank" rel="noopener">Клинические рекомендации МЗ РФ «Рассеянный склероз»</a>
+      <a class="lnk rounded-lg px-2.5 py-1.5 sub" href="https://grls.rosminzdrav.ru/" target="_blank" rel="noopener">Официальный портал ГРЛС Минздрава РФ</a>
+    </div>
+  </section>
+
+  <!-- ИСТОЧНИКИ -->
+  <section class="card overflow-hidden mt-4 acc" id="istochniki">
+    <button class="w-full text-left px-4 py-3.5 flex items-center gap-3" aria-expanded="false" aria-controls="istochniki-body">
+      <span class="flex-1 min-w-0">
+        <span class="block font-semibold text-[15px]">Какие ссылки принимают гос. органы</span>
+        <span class="block text-[12.5px] muted mt-0.5">ГРЛС, клинрекомендации, ЖНВЛП, ВАК, PubMed</span>
+      </span>
+      <svg class="chev shrink-0" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="acc-body" id="istochniki-body"><div>
+      <div class="px-4 pb-4 border-t bd">
+        <p class="text-[13.5px] mt-3"><b>Правило:</b> нормативные документы доказывают, что препарат обязаны предоставить. Научные публикации доказывают, что он работает. Нужны обе группы, но основа - первая.</p>
+        <div class="mt-3 space-y-2">
+          <div class="px-3 py-2.5 rounded-xl sub" style="border-left:3px solid var(--ok)">
+            <div class="text-[11px] uppercase tracking-wide font-semibold" style="color:var(--ok)">Нормативная сила</div>
+            <ul class="text-[13.5px] mt-1.5 space-y-1 list-disc pl-5">
+              <li><b>ГРЛС</b> - государственный реестр МЗ РФ: номер РУ, ОХЛП и инструкция со штампом Минздрава. Приоритет №1.</li>
+              <li><b>Клинические рекомендации МЗ РФ «Рассеянный склероз»</b> (ID 739) - обязательны к применению медорганизациями по ФЗ №323-ФЗ, ст. 37.</li>
+              <li><b>Перечень ЖНВЛП</b> - распоряжение Правительства РФ, ключевой аргумент по закупке и финансированию.</li>
+              <li><b>Регуляторные PDF</b>: EMA Product Information (SmPC), FDA label, DailyMed. Первоисточник зарегистрированных показателей эффективности.</li>
+            </ul>
+          </div>
+          <div class="px-3 py-2.5 rounded-xl sub" style="border-left:3px solid var(--accent)">
+            <div class="text-[11px] uppercase tracking-wide font-semibold" style="color:var(--accent)">Доказательная база</div>
+            <ul class="text-[13.5px] mt-1.5 space-y-1 list-disc pl-5">
+              <li><b>Журналы-первоисточники</b>: NEJM, The Lancet, Lancet Neurology, JAMA, Annals of Neurology. Основная ссылка ведёт через DOI прямо на сайт журнала.</li>
+              <li><b>Российские журналы перечня ВАК</b>: «Журнал неврологии и психиатрии им. С.С. Корсакова» (публикации MIRANTIBUS по Ивлизи, Тенексиа, Тимексон).</li>
+              <li><b>PubMed</b> - база Национальной медицинской библиотеки США (NLM/NIH). Служит указателем: по PMID всегда можно проверить публикацию.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- СВОДНАЯ СРАВНИТЕЛЬНАЯ ТАБЛИЦА -->
+  <section class="card overflow-hidden mt-6 acc" id="comparison-table">
+    <button class="w-full text-left px-4 py-3.5 flex items-center gap-3" aria-expanded="false" aria-controls="comparison-table-body">
+      <span class="flex-1 min-w-0">
+        <span class="block font-semibold text-[15px]">Сводная сравнительная таблица РКИ и профилей безопасности</span>
+        <span class="block text-[12.5px] muted mt-0.5">Ознакомительное сопоставление всех препаратов: СЧО, МРТ, прогрессирование и побочные эффекты с тяжестью. На широком экране раскрывается во всю ширину.</span>
+      </span>
+      <svg class="chev shrink-0" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="acc-body" id="comparison-table-body"><div>
+      <div class="p-4 border-t bd">
+        <div class="px-3 py-2 rounded-xl sub mb-3 text-[12.5px] muted" style="border-left:3px solid var(--accent)">
+          <b>Единая точка отсчёта - плацебо (отсутствие терапии).</b> Столбец «Снижение СЧО к плацебо» показывает, насколько препарат уменьшает среднегодовую частоту обострений по сравнению с отсутствием лечения. Способ получения цифры помечен цветом:
+          <span class="pdfb">прямое РКИ</span> - препарат сравнивали с плацебо напрямую;
+          <span class="src">объединенный NMA</span> - оценка к плацебо из опубликованного NMA, объединяющего все РКИ;
+          <span class="warnb">косвенный расчёт</span> - перемножение отношений частот по цепочке (препарат к активному контролю × активный контроль к плацебо), выполнено нами по опубликованным СЧО.
+          Таблица ознакомительная: косвенные оценки имеют широкие доверительные интервалы и не заменяют первоисточники из карточек.
+        </div>
+        <div class="overflow-x-auto no-scrollbar -mx-4 px-4">
+          <table class="w-full cmp-table min-w-[820px]">
+            <thead>
+              <tr>
+                <th style="min-width:140px">Препарат / Линия</th>
+                <th style="min-width:150px">Снижение СЧО к плацебо</th>
+                <th style="min-width:170px">Как получено</th>
+                <th style="min-width:120px">МРТ-эффект</th>
+                <th style="min-width:110px">CDP (инвалидизация)</th>
+                <th style="min-width:190px">Побочные эффекты и риски</th>
+              </tr>
+            </thead>
+            <tbody id="cmp-tbody"></tbody>
+          </table>
+        </div>
+        <div class="mt-3 text-[11.5px] muted space-y-1">
+          <div><b>Источники косвенных оценок к плацебо:</b></div>
+          <div>Samjoo IA и соавт. Efficacy classification of modern therapies in multiple sclerosis. J Comp Eff Res 2021;10(6):495-507. <a class="src" href="https://doi.org/10.2217/cer-2020-0267" target="_blank" rel="noopener">DOI</a> <a class="src" href="https://pubmed.ncbi.nlm.nih.gov/33620251/" target="_blank" rel="noopener">PMID 33620251</a></div>
+          <div>Samjoo IA и соавт. Comparative efficacy of therapies for relapsing multiple sclerosis: NMA. J Comp Eff Res 2023. <a class="src" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10508312/" target="_blank" rel="noopener">PMC10508312 (полный текст)</a></div>
+          <div>Российский объединенный NMA: дивозилимаб и ПИТРС 2-й линии в РФ. Журнал неврологии и психиатрии им. С.С. Корсакова, 2025. <a class="src" href="https://pubmed.ncbi.nlm.nih.gov/40047834/" target="_blank" rel="noopener">PMID 40047834</a></div>
+          <div>Опорные значения «активный контроль к плацебо» для цепочек: интерферон бета-1а 44 мкг п/к - PRISMS (1,73/2,56 = 0,68); интерферон бета-1а 30 мкг в/м - MSCRG 1996 (0,61/0,90 = 0,68, <a class="src" href="https://pubmed.ncbi.nlm.nih.gov/8602746/" target="_blank" rel="noopener">PMID 8602746</a>); терифлуномид 14 мг - TEMSO и TOWER (0,685 и 0,637, среднее ≈0,66).</div>
+        </div>
+      </div>
+    </div></div>
+  </section>
+  
+  <footer class="mt-6 card p-4 text-[12.5px] muted space-y-2">
+    <p>Все числовые показатели эффективности проверены по публикациям пивотных РКИ и официальным документам регуляторов (EMA SmPC, ОХЛП Минздрава РФ). Каждый PMID сверен по базе Europe PMC. Ссылки ведут на сайты первоисточников через DOI.</p>
+    <p>Не является медицинской рекомендацией. Выбор и смена терапии ПИТРС осуществляются исключительно по решению врачебной комиссии лечебного учреждения.</p>
+  </footer>
+</main>
+
+<script>
+/*
+  Формат объекта stats:
+  tr: название исследования
+  pop: популяция / срок / N
+  drug: группа лечения с режимом
+  ctrl: контрольная группа с режимом
+  metrics: массив объектов метрик:
+    m: название показателя
+    lines: массив отдельных строк для вывода друг под другом
+  u: DOI ссылка
+  p: PMID
+  pdf: {t: название, u: ссылка на PDF}
+*/
+const DATA = [
+  {g:"Анти-CD20", note:"Окревус и Ивлизи вводятся инфузионно 1 раз в 6 месяцев.", items:[
+    {
+      id:"ocrelizumab", inn:"Окрелизумаб", brand:"Окревус®", maker:"Ф. Хоффманн-Ля Рош Лтд.", tag:"ВЭ-ПИТРС", ve:true,
+      klass:"Анти-CD20, гуманизированное моноклональное антитело",
+      shema:"600 мг в/в. Старт: 2 инфузии по 300 мг с интервалом 14 дней, далее 600 мг 1 раз в 6 месяцев.",
+      pokaz:"РРС с обострениями, ВПРС с обострениями, первично-прогрессирующий РС (ППРС).",
+      reg:"ЛП-№(003473)-(РГ-RU), ранее ЛП-004503",
+      cmp:{
+        ctrl:"Интерферон бета-1а 44 мкг п/к 3 р/нед (OPERA); Плацебо (ORATORIO)",
+        arr:"0,16 против 0,29 (OPERA) → снижение 46-47%",
+        mri:"T2: снижение на 77-83%; Gd+: 0,02 против 0,29-0,42 на скан (снижение 94-95%)",
+        cdp:"Снижение риска CDP24 на 40% (OPERA); снижение риска CDP12 на 24% при ППРС (ORATORIO)",
+        tox:{lvl:"warn", t:"Инфузионные реакции (34-40%, зуд, гиперемия, одышка), инфекции верхних дыхательных путей, герпес. При длительном курсе - снижение IgG, риск оппортунистических инфекций, реактивация гепатита B, редкие случаи ПМЛ."}
+      },
+      stats:[
+        {tr:"OPERA I и OPERA II (NCT01247324, NCT01412333)",
+         pop:"Рассеянный склероз с обострениями (RMS), 96 недель, n=1656 (821 и 835)",
+         drug:"окрелизумаб 600 мг внутривенно 1 раз в 24 недели",
+         ctrl:"интерферон бета-1а 44 мкг подкожно 3 раза в неделю",
+         metrics:[
+           {m:"СЧО (ARR) за 96 недель",
+            lines:[
+              "Группа окрелизумаба: 0,16 обострения на пациента в год",
+              "Группа контроля (интерферон бета-1а 44 мкг): 0,29 обострения на пациента в год",
+              "Снижение (расчёт): 44,8% по сравнению с интерфероном бета-1а",
+              "Снижение (в статье): 46% в OPERA I и 47% в OPERA II (p<0,001 в обоих РКИ)",
+              "Документ EMA SmPC: зафиксированы те же значения 0,16 и 0,29 для обоих исследований"
+            ]},
+           {m:"Gd+ T1-очаги (на скан)",
+            lines:[
+              "OPERA I: 0,02 (окрелизумаб) и 0,29 (контроль) → снижение 94% (p<0,001)",
+              "OPERA II: 0,02 (окрелизумаб) и 0,42 (контроль) → снижение 95% (p<0,001)"
+            ]},
+           {m:"Новые или увеличившиеся T2-очаги",
+            lines:[
+              "OPERA I: относительное снижение числа очагов на 77% (p<0,001)",
+              "OPERA II: относительное снижение числа очагов на 83% (p<0,001)"
+            ]},
+           {m:"Подтверждённое прогрессирование инвалидизации (CDP)",
+            lines:[
+              "Подтверждённое через 12 недель: снижение риска на 40% (ОР 0,60; p<0,001 в объединённом анализе)",
+              "Подтверждённое через 24 недели: 6,9% (окрелизумаб) и 10,5% (контроль) → снижение риска на 40% (ОР 0,60; p=0,002)"
+            ]}
+         ],
+         u:"https://doi.org/10.1056/NEJMoa1601277", p:"28002679",
+         pdf:{t:"EMA: Ocrevus - Product Information (SmPC), официальный PDF регулятора ЕС", u:"https://www.ema.europa.eu/en/documents/product-information/ocrevus-epar-product-information_en.pdf"}},
+        {tr:"ORATORIO (NCT01194570)",
+         pop:"Первично-прогрессирующий РС (PPMS), 120 недель, n=732",
+         drug:"окрелизумаб 600 мг внутривенно 1 раз в 24 недели",
+         ctrl:"плацебо",
+         metrics:[
+           {m:"CDP (прогрессирование инвалидизации, первичная точка)",
+            lines:[
+              "Подтверждённое через 12 недель: 32,9% (окрелизумаб) и 39,3% (плацебо)",
+              "Снижение относительного риска (в статье): 24% (ОР 0,76; 95% ДИ 0,59-0,98; p=0,03)",
+              "Подтверждённое через 24 недели: 29,6% (окрелизумаб) и 35,7% (плацебо) → снижение риска на 25% (ОР 0,75; p=0,04)"
+            ]},
+           {m:"Объём T2-очагов на МРТ",
+            lines:[
+              "Изменение объёма за 120 недель: −3,4% (окрелизумаб) и +7,4% (плацебо)",
+              "Различие между группами: p<0,001"
+            ]}
+         ],
+         u:"https://doi.org/10.1056/NEJMoa1606468", p:"28002688",
+         pdf:{t:"EMA: Ocrevus - EPAR summary, официальный PDF регулятора ЕС", u:"https://www.ema.europa.eu/en/documents/overview/ocrevus-epar-summary-public_en.pdf"}}
+      ],
+      studies:[
+        {t:"OPERA I и OPERA II. Окрелизумаб против интерферона бета-1а при РС с обострениями, 96 недель. NEJM, 2017", u:"https://doi.org/10.1056/NEJMoa1601277", p:"28002679", n:"1656 пациентов. Первичная точка - СЧО."},
+        {t:"ORATORIO. Окрелизумаб против плацебо при ППРС, 120 недель. NEJM, 2017", u:"https://doi.org/10.1056/NEJMoa1606468", p:"28002688", n:"732 пациента. Первый препарат с доказанной эффективностью при ППРС."},
+        {t:"Исследование РФ. Окрелизумаб и натализумаб при высокоактивном РС в реальной практике. Журнал неврологии и психиатрии им. С.С. Корсакова, 2023", u:"https://doi.org/10.17116/jnevro202312307277", n:"123 пациента Московской области, 46 на окрелизумабе. Наблюдательное исследование."}
+      ],
+      docs:[
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по названию «Окревус» или МНН «окрелизумаб»", off:true},
+        {t:"EMA: Ocrevus - Product Information (SmPC)", u:"https://www.ema.europa.eu/en/documents/product-information/ocrevus-epar-product-information_en.pdf", n:"Официальный регуляторный PDF ЕС, раздел 5.1 содержит сводные таблицы OPERA и ORATORIO", pdf:true},
+        {t:"Карточка препарата в реестре (зеркало ГРЛС)", u:"https://pharmcontrol.ru/registry/drugs/60010/", n:"ЛП-№(003473)-(РГ-RU)"},
+        {t:"Страница препарата на сайте производителя", u:"https://med.roche.ru/diseases/neurology/multiplesclerosis/", n:"Материалы Roche для специалистов"}
+      ]
+    },
+    {
+      id:"divozilimab", inn:"Дивозилимаб", brand:"Ивлизи®", maker:"БИОКАД, оригинальный препарат, РФ", tag:"ВЭ-ПИТРС", ve:true,
+      klass:"Анти-CD20, моноклональное антитело с модифицированным гликозилированием Fc",
+      shema:"500 мг в/в. Старт: 2 инфузии по 250 мг с интервалом 14 дней, далее 1 раз в 6 месяцев.",
+      pokaz:"Взрослые от 18 лет: РРС и ВПРС с обострениями при активности по клинике или МРТ. Также зарегистрирован при системной склеродермии с 16 лет.",
+      reg:"ЛП-№(002035)-(РГ-RU)",
+      cmp:{
+        ctrl:"Терифлуномид 14 мг внутрь 1 раз/сут (MIRANTIBUS)",
+        arr:"0,057 против 0,164 → снижение 65,2% (p=0,0001)",
+        mri:"Gd+: 0,0 против 1,0 на скан (p<0,0001); CUA и новые T2 достоверно снижены",
+        cdp:"Прогрессирование EDSS за 2 года: 10,7% против 21,3% (p=0,0075); при ВПРС за 2 года - 0 обострений",
+        tox:{lvl:"warn", t:"Инфузионные реакции (озноб, гиперемия, головная боль, кожный зуд), инфекции верхних дыхательных путей. Глубокое истощение пула CD19+ B-клеток, требуется контроль IgG/IgM и инфекционного статуса перед каждой инфузией."}
+      },
+      stats:[
+        {tr:"BCD-132-4 / MIRANTIBUS (NCT05385744)",
+         pop:"РС с обострениями (РРС и ВПРС с обострениями), 100 недель (2 года), n=338",
+         drug:"дивозилимаб 500 мг внутривенно 1 раз в 24 недели",
+         ctrl:"терифлуномид 14 мг внутрь ежедневно",
+         metrics:[
+           {m:"СЧО (ARR) за 100 недель",
+            lines:[
+              "Группа дивозилимаба: 0,057 обострения на пациента в год",
+              "Группа контроля (терифлуномид 14 мг): 0,164 обострения на пациента в год",
+              "Снижение (расчёт): 65,2% по сравнению с терифлуномидом",
+              "Отношение частот (в статье): 0,346 (95% ДИ 0,202-0,593; p=0,0001)"
+            ]},
+           {m:"Доля пациентов с обострениями за 100 недель",
+            lines:[
+              "Группа дивозилимаба: 11,2% (19 из 170 пациентов)",
+              "Группа контроля (терифлуномид 14 мг): 23,1% (39 из 168 пациентов)",
+              "Различие между группами: p=0,0039"
+            ]},
+           {m:"Gd+ T1-очаги (на скан, среднее ± SD)",
+            lines:[
+              "Группа дивозилимаба: 0,0 ± 0,08 очага на скан",
+              "Группа контроля (терифлуномид 14 мг): 1,0 ± 4,46 очага на скан",
+              "Различие между группами: p<0,0001"
+            ]},
+           {m:"Новые или увеличившиеся T2-очаги и CUA",
+            lines:[
+              "Подтверждено статистически значимое превосходство дивозилимаба по CUA и объёму T2-очагов (p<0,0001)",
+              "Точные средние значения представлены в статье в виде графиков (рис. 4-5 публикации)"
+            ]},
+           {m:"Прогрессирование инвалидизации по шкале EDSS за 100 недель",
+            lines:[
+              "Доля пациентов с нарастанием EDSS: 10,7% (дивозилимаб) и 21,3% (терифлуномид), p=0,0075",
+              "В подгруппе ВПРС за 2 года на дивозилимабе не зафиксировано ни одного случая подтверждённого нарастания EDSS"
+            ]}
+         ],
+         u:"https://doi.org/10.17116/jnevro202412404186", p:"38676683",
+         pdf:{t:"ОХЛП Ивлизи со штампом Минздрава РФ (SPC.132.1.EAEU-RU.06.02), официальный PDF", u:"https://ivlizi.ru/v1_1.3.1-ohlp-spc.132.1.eaeu-ru.06.02-1733561921-0015-shtamp-mz.pdf"}}
+      ],
+      studies:[
+        {t:"MIRANTIBUS (BCD-132-4), 2 года терапии. Журнал неврологии и психиатрии им. С.С. Корсакова, 2024", u:"https://doi.org/10.17116/jnevro202412404186", p:"38676683", n:"Итоговый отчёт по 100 неделям. Источник числовых данных выше."},
+        {t:"MIRANTIBUS (BCD-132-2), 48 недель. Полный текст. Журнал неврологии и психиатрии им. С.С. Корсакова, 2023", u:"https://www.mediasphera.ru/issues/zhurnal-nevrologii-i-psikhiatrii-im-s-s-korsakova/2023/7/1199772982023071043", n:"338 пациентов, первый год двойного слепого периода."},
+        {t:"MIRANTIBUS, продлённое наблюдение 4 года. Журнал неврологии и психиатрии им. С.С. Корсакова, 2025", u:"https://www.mediasphera.ru/issues/zhurnal-nevrologii-i-psikhiatrii-im-s-s-korsakova-2/2025/7-2/1199772982025072051", n:"Отдалённые данные по безопасности и эффективности."}
+      ],
+      docs:[
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по названию «Ивлизи». РУ ЛП-№(002035)-(РГ-RU)", off:true},
+        {t:"ОХЛП Ивлизи со штампом МЗ РФ, версия SPC.132.1.EAEU-RU.06.02", u:"https://ivlizi.ru/v1_1.3.1-ohlp-spc.132.1.eaeu-ru.06.02-1733561921-0015-shtamp-mz.pdf", n:"Официальный PDF, разделы 4.1, 4.2 и 5.1", pdf:true},
+        {t:"ОХЛП Ивлизи от 10.03.2025", u:"https://ivlizi.ru/05SPC_10032025.pdf", n:"Актуальная редакция ОХЛП производителя", pdf:true},
+        {t:"Карточка препарата в реестре (зеркало ГРЛС)", u:"https://pharmcontrol.ru/registry/drugs/57522/", n:"ЛП-№(002035)-(РГ-RU)"},
+        {t:"Листок-вкладыш, информация для пациента", u:"https://ivlizi.ru/docs/supplement", n:"Показания, схема, предостережения"}
+      ]
+    }
+  ]},
+
+  {g:"ПИТРС 1-й линии", note:"Препараты умеренной эффективности для стартовой терапии при умеренной активности РС.", items:[
+    {
+      id:"ifnb1a", inn:"Интерферон бета-1а", brand:"Ребиф®, Авонекс®, Синновекс®, Тебериф®", maker:"Merck, Biogen, Novartis, БИОКАД, Генериум", tag:"1-я линия", ve:false,
+      klass:"Иммуномодулятор, интерферон",
+      shema:"44 мкг п/к 3 раза в неделю (Ребиф) или 30 мкг в/м 1 раз в неделю (Авонекс).",
+      pokaz:"РРС с обострениями.",
+      cmp:{
+        ctrl:"Плацебо (PRISMS, 2 года)",
+        arr:"~0,87 против ~1,28 в год (расчётные значения) → снижение 32%",
+        mri:"Медиана активных T2-очагов: 0,5 против 2,25 на скан (снижение 78%)",
+        cdp:"Замедление времени до подтверждённого прогрессирования инвалидизации",
+        tox:{lvl:"ok", t:"Гриппоподобный синдром (температура, озноб, миалгии в первые 24 ч после укола), реакции в месте инъекции (эритема, уплотнение), преходящее повышение трансаминаз (АЛТ/АСТ), депрессивные состояния."}
+      },
+      stats:[
+        {tr:"PRISMS (Lancet 1998, 2 года)",
+         pop:"РРС (RRMS), 2 года, n=560",
+         drug:"интерферон бета-1а 44 мкг подкожно 3 раза в неделю",
+         ctrl:"плацебо",
+         metrics:[
+           {m:"СЧО (ARR) за 2 года",
+            lines:[
+              "Число обострений за 2 года: 1,73 на пациента (44 мкг) и 2,56 на пациента (плацебо)",
+              "СЧО (расчётное значение на основе данных исследования): ~0,87 (препарат) и ~1,28 (плацебо)",
+              "Снижение (расчёт): 32,0% по сравнению с плацебо",
+              "Снижение (в статье): 32% для дозы 44 мкг (p<0,005) и 29% для дозы 22 мкг"
+            ]},
+           {m:"МРТ-активность за 2 года",
+            lines:[
+              "Активные T2-очаги на скан (медиана): 0,5 (препарат 44 мкг) и 2,25 (плацебо)",
+              "Снижение числа активных T2-очагов (в статье): 78% (p<0,0001)"
+            ]}
+         ],
+         u:"https://doi.org/10.1016/S0140-6736(98)03334-0", p:"9820297",
+         pdf:{t:"EMA: Rebif - Product Information (SmPC), официальный PDF", u:"https://www.ema.europa.eu/en/documents/product-information/rebif-epar-product-information_en.pdf"}}
+      ],
+      studies:[
+        {t:"PRISMS. Интерферон бета-1а подкожно против плацебо, 2 года. The Lancet, 1998", u:"https://doi.org/10.1016/S0140-6736(98)03334-0", p:"9820297", n:"560 пациентов. Базовое исследование эффективности подкожного интерферона бета-1а."}
+      ],
+      docs:[
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по МНН «интерферон бета-1а»", off:true},
+        {t:"EMA: Rebif - Product Information (SmPC)", u:"https://www.ema.europa.eu/en/documents/product-information/rebif-epar-product-information_en.pdf", n:"Официальный регуляторный PDF ЕС", pdf:true},
+        {t:"Тебериф (БИОКАД), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/7030/", n:"ЛП-№(006268)-(РГ-RU)"},
+        {t:"Ребиф, карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/6843/", n:"ЛП-№(006073)-(РГ-RU)"},
+        {t:"Авонекс, карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/78939/", n:"ЛСР-000008"}
+      ]
+    },
+    {
+      id:"ifnb1b", inn:"Интерферон бета-1б", brand:"Бетаферон®, Инфибета®", maker:"Bayer, БИОКАД, Генериум", tag:"1-я линия", ve:false,
+      klass:"Иммуномодулятор, интерферон",
+      shema:"250 мкг п/к через день.",
+      pokaz:"РРС с обострениями, ВПРС с обострениями.",
+      cmp:{
+        ctrl:"Плацебо (РКИ 1993); Глатирамера ацетат 20 мг (BEYOND)",
+        arr:"0,84 против 1,27 (vs плацебо) → снижение 34%; в BEYOND равен глатирамера ацетату (~0,33)",
+        mri:"Снижение частоты появления новых активных очагов на МРТ",
+        cdp:"Замедление прогрессирования у пациентов с обострениями",
+        tox:{lvl:"ok", t:"Гриппоподобный синдром, местные кожные реакции в местах уколов (эритема, уплотнение, редко некроз при нарушении техники инъекций), бессонница, транзиторное повышение ферментов печени."}
+      },
+      stats:[
+        {tr:"IFNB MS Study Group (Neurology 1993, плацебо-контроль) и BEYOND (2009)",
+         pop:"РРС (RRMS), 2-3 года, n=372 (1993) и n=2244 (BEYOND)",
+         drug:"интерферон бета-1б 250 мкг (8 млн МЕ) подкожно через день",
+         ctrl:"плацебо (исследование 1993); глатирамера ацетат 20 мг/сут (BEYOND)",
+         metrics:[
+           {m:"СЧО (ARR) против плацебо (РКИ 1993)",
+            lines:[
+              "Группа интерферона бета-1б 250 мкг: 0,84 обострения в год",
+              "Группа плацебо: 1,27 обострения в год",
+              "Снижение (расчёт): 33,9% по сравнению с плацебо",
+              "Снижение (в статье): 34% (p=0,0001)"
+            ]},
+           {m:"Сравнение с глатирамера ацетатом (BEYOND, 2009)",
+            lines:[
+              "СЧО в группе интерферона бета-1б 250 мкг: ~0,33 в год",
+              "СЧО в группе глатирамера ацетата 20 мг: ~0,33 в год",
+              "Вывод исследования: статистически значимых различий по частоте обострений между препаратами нет (ОР 1,01)"
+            ]}
+         ],
+         u:"https://doi.org/10.1016/S1474-4422(09)70226-1", p:"19729344",
+         pdf:{t:"EMA: Betaferon - Product Information (SmPC), официальный PDF", u:"https://www.ema.europa.eu/en/documents/product-information/betaferon-epar-product-information_en.pdf"}}
+      ],
+      studies:[
+        {t:"BEYOND. Интерферон бета-1б 250 и 500 мкг против глатирамера ацетата. Lancet Neurology, 2009", u:"https://doi.org/10.1016/S1474-4422(09)70226-1", p:"19729344", n:"2244 пациента. Прямое сравнение двух препаратов 1-й линии."}
+      ],
+      docs:[
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по МНН «интерферон бета-1b»", off:true},
+        {t:"EMA: Betaferon - Product Information (SmPC)", u:"https://www.ema.europa.eu/en/documents/product-information/betaferon-epar-product-information_en.pdf", n:"Официальный регуляторный PDF", pdf:true},
+        {t:"Инфибета (АО Генериум), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/7612/", n:"ЛП-№(006888)-(РГ-RU)"},
+        {t:"Бетаферон, карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/95255/", n:"П N012097/01"}
+      ]
+    },
+    {
+      id:"pegifnb", inn:"Пэгинтерферон бета-1а", brand:"Плегриди®", maker:"Biogen", tag:"1-я линия", ve:false,
+      klass:"Иммуномодулятор, пегилированный интерферон",
+      shema:"125 мкг п/к 1 раз в 14 дней.",
+      pokaz:"РРС с обострениями.",
+      cmp:{
+        ctrl:"Плацебо (ADVANCE, 1 год)",
+        arr:"0,256 против 0,397 → снижение 36% (p=0,0007)",
+        mri:"Новые T2: 3,6 против 10,9 (снижение 67%); Gd+: снижение на 86%",
+        cdp:"Снижение риска CDP12 на 38% (p=0,038)",
+        tox:{lvl:"ok", t:"Гриппоподобный синдром (но реже по частоте инъекций - 1 раз в 2 недели), эритема и зуд в месте укола, головная боль, умеренное повышение печёночных ферментов."}
+      },
+      stats:[
+        {tr:"ADVANCE (Lancet Neurol 2014, 1-й год)",
+         pop:"РРС (RRMS), 48 недель плацебо-контроля, n=1512",
+         drug:"пэгинтерферон бета-1а 125 мкг подкожно 1 раз в 2 недели",
+         ctrl:"плацебо",
+         metrics:[
+           {m:"СЧО (ARR) за 1-й год",
+            lines:[
+              "Группа пэгинтерферона (1 раз в 2 недели): 0,256 обострения в год",
+              "Группа плацебо: 0,397 обострения в год",
+              "Снижение (расчёт): 35,5% по сравнению с плацебо",
+              "Снижение (в статье): 36% (ОР 0,644; 95% ДИ 0,500-0,831; p=0,0007)"
+            ]},
+           {m:"МРТ-активность за 1-й год",
+            lines:[
+              "Новые или увеличившиеся T2-очаги: 3,6 (препарат) и 10,9 (плацебо) → снижение на 67% (p<0,0001)",
+              "Gd+ T1-очаги: относительное снижение числа очагов на 86% (p<0,0001)"
+            ]},
+           {m:"Подтверждённое прогрессирование инвалидизации (CDP)",
+            lines:[
+              "Подтверждённое через 12 недель: доля пациентов 6,8% (препарат) и 10,5% (плацебо)",
+              "Снижение риска (в статье): 38% (ОР 0,62; p=0,0383)"
+            ]}
+         ],
+         u:"https://doi.org/10.1016/S1474-4422(14)70068-7", p:"24794721",
+         pdf:{t:"EMA: Plegridy - Product Information (SmPC), официальный PDF", u:"https://www.ema.europa.eu/en/documents/product-information/plegridy-epar-product-information_en.pdf"}}
+      ],
+      studies:[
+        {t:"ADVANCE. Пэгинтерферон бета-1а против плацебо, 1-й год. Lancet Neurology, 2014", u:"https://doi.org/10.1016/S1474-4422(14)70068-7", p:"24794721", n:"1512 пациентов. Источник числовых данных выше."},
+        {t:"ATTAIN, продление исследования ADVANCE до 4 лет. Ther Adv Neurol Disord, 2018", u:"https://doi.org/10.1177/1756286418791143", p:"30181778", n:"Открытый доступ. Поддержание эффекта при введении 1 раз в 2 недели."}
+      ],
+      docs:[
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по МНН «пэгинтерферон бета-1а»", off:true},
+        {t:"EMA: Plegridy - Product Information (SmPC)", u:"https://www.ema.europa.eu/en/documents/product-information/plegridy-epar-product-information_en.pdf", n:"Официальный регуляторный PDF", pdf:true},
+        {t:"Плегриди п/к, карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/10171/", n:"ЛП-№(009870)-(РГ-RU)"},
+        {t:"Плегриди в/м, карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/4349/", n:"ЛП-№(003419)-(РГ-RU)"}
+      ]
+    },
+    {
+      id:"sampaegifnb", inn:"Сампэгинтерферон бета-1а", brand:"Тенексиа®", maker:"БИОКАД, оригинальный препарат, РФ", tag:"1-я линия", ve:false,
+      klass:"Иммуномодулятор, пролонгированный интерферон",
+      shema:"240 мкг в/м 1 раз в 14 дней.",
+      pokaz:"РРС с обострениями. Включён в клинические рекомендации МЗ РФ.",
+      reg:"ЛП-№(002167)-(РГ-RU)",
+      cmp:{
+        ctrl:"Плацебо (до 20 нед); Авонекс 30 мкг 1 р/нед (до 52 нед)",
+        arr:"СЧО на 2-м году: 0,09 (в дозе 240 мкг) и 0,16 (в дозе 180 мкг)",
+        mri:"Отсутствие отрицательной динамики T2 и Gd+ очагов на 2-м году",
+        cdp:"83,3% пациентов без обострений к 104-й неделе; стабильный балл EDSS",
+        tox:{lvl:"ok", t:"Гриппоподобный синдром (купируется НПВП/парацетамолом), слабость, головная боль, преходящие лабораторные сдвиги (АЛТ, лейкоциты). Местные реакции реже благодаря внутримышечному пути введения."}
+      },
+      stats:[
+        {tr:"BCD-054-2 (NCT02744222, 104 недели)",
+         pop:"РРС (RRMS), 104 недели, n=399 (27 центров в РФ, 3 в Беларуси)",
+         drug:"сампэгинтерферон бета-1а 240 мкг внутримышечно 1 раз в 14 дней",
+         ctrl:"плацебо (до 20 нед); низкодозный интерферон бета-1а 30 мкг в/м (до 52 нед)",
+         metrics:[
+           {m:"СЧО (ARR) на 2-м году терапии (внутригрупповые значения)",
+            lines:[
+              "Группа сампэгинтерферона 240 мкг: 0,09 обострения в год",
+              "Группа сампэгинтерферона 180 мкг: 0,16 обострения в год",
+              "На 2-м году прямого плацебо-контроля не было (этический стандарт продления)"
+            ]},
+           {m:"Доля пациентов без обострений к 104-й неделе",
+            lines:[
+              "Группа 240 мкг: 83,3% пациентов (95 из 114)",
+              "Группа 180 мкг: 77,0% пациентов (87 из 113)"
+            ]},
+           {m:"МРТ-активность и инвалидизация",
+            lines:[
+              "Отрицательной динамики по числу активных очагов на МРТ за 2-й год не зафиксировано",
+              "Балл по шкале EDSS оставался стабильным на протяжении всего 2-го года терапии"
+            ]}
+         ],
+         u:"https://doi.org/10.17116/jnevro202312302152",
+         pdf:{t:"ГРЛС: ОХЛП и инструкция Тенексиа (поиск по реестру)", u:"https://grls.rosminzdrav.ru/"}}
+      ],
+      studies:[
+        {t:"BCD-054-2. Сампэгинтерферон бета-1а, результаты 104 недель. Журнал неврологии и психиатрии им. С.С. Корсакова, 2023", u:"https://doi.org/10.17116/jnevro202312302152", n:"399 пациентов. Источник числовых данных выше."},
+        {t:"BCD-054-2, результаты 52 недель. Журнал неврологии и психиатрии им. С.С. Корсакова, 2019", u:"https://doi.org/10.17116/jnevro201911910100", n:"Первичный анализ: сравнение с плацебо и низкодозным интерфероном бета-1а."},
+        {t:"Клинические рекомендации МЗ РФ «Рассеянный склероз»", u:"https://cr.minzdrav.gov.ru/schema/739_1", n:"Сампэгинтерферон бета-1а включён в рекомендации."}
+      ],
+      docs:[
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по названию «Тенексиа». РУ ЛП-№(002167)-(РГ-RU)", off:true},
+        {t:"Тенексиа (БИОКАД), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/3176/", n:"ЛП-№(002167)-(РГ-RU)"},
+        {t:"Описание ПИТРС на сайте производителя", u:"https://ivlizi.ru/biocad/pitrs", n:"Линейка препаратов BIOCAD при РС"}
+      ]
+    },
+    {
+      id:"glatiramer", inn:"Глатирамера ацетат", brand:"Копаксон®, Тимексон®, Аксоглатиран ФС", maker:"Teva, БИОКАД, Ф-Синтез", tag:"1-я линия", ve:false,
+      klass:"Иммуномодулятор, синтетический полипептид",
+      shema:"20 мг п/к ежедневно или 40 мг п/к 3 раза в неделю.",
+      pokaz:"РРС с обострениями.",
+      cmp:{
+        ctrl:"Плацебо (GALA, CONFIRM); Копаксон-Тева (BCD-063)",
+        arr:"0,331 против 0,505 (GALA 40 мг) → снижение 34%; 0,29 против 0,40 (CONFIRM 20 мг) → снижение 29%",
+        mri:"Gd+: снижение на 44,8%; новые T2: снижение на 34,7% (GALA)",
+        cdp:"Замедление накопления стойкого неврологического дефицита",
+        tox:{lvl:"ok", t:"Реакции в месте инъекции (боль, зуд, липоатрофия), системная постинъекционная реакция (прилив жара, тахикардия, стеснение в груди в течение 15 минут - проходит самостоятельно). Наиболее благоприятный профиль безопасности, разрешён при беременности."}
+      },
+      stats:[
+        {tr:"GALA (Ann Neurol 2013, 12 месяцев)",
+         pop:"РРС (RRMS), 1 год, n=1404",
+         drug:"глатирамера ацетат 40 мг подкожно 3 раза в неделю",
+         ctrl:"плацебо",
+         metrics:[
+           {m:"СЧО (ARR) за 12 месяцев",
+            lines:[
+              "Группа глатирамера ацетата 40 мг: 0,331 обострения в год",
+              "Группа плацебо: 0,505 обострения в год",
+              "Снижение (расчёт): 34,5% по сравнению с плацебо",
+              "Снижение (в статье): 34,0% (p<0,0001)"
+            ]},
+           {m:"МРТ-активность на 6 и 12 месяцах",
+            lines:[
+              "Кумулятивное число Gd+ T1-очагов: снижение на 44,8% (p<0,0001)",
+              "Новые или увеличившиеся T2-очаги: снижение на 34,7% (p<0,0001)"
+            ]}
+         ],
+         u:"https://doi.org/10.1002/ana.23938", p:"23686821",
+         pdf:{t:"ГРЛС: инструкции и ОХЛП препаратов глатирамера ацетата", u:"https://grls.rosminzdrav.ru/"}},
+        {tr:"BCD-063 (российское РКИ эквивалентности Тимексона)",
+         pop:"РРС (RRMS), 48 недель, n=158 (анализ эффективности n=150)",
+         drug:"Тимексон (BCD-063, глатирамера ацетат 20 мг/сут п/к)",
+         ctrl:"Копаксон-Тева 20 мг/сут п/к и плацебо",
+         metrics:[
+           {m:"Число МРТ-подтверждённых обострений на пациента в год",
+            lines:[
+              "Тимексон (BCD-063): 0,098 обострения в год",
+              "Копаксон-Тева: 0,098 обострения в год",
+              "Плацебо: 0,179 обострения в год",
+              "Вывод: терапевтическая эквивалентность доказана, отношение шансов между Тимексоном и Копаксоном составило 1,0"
+            ]}
+         ],
+         u:"https://doi.org/10.17116/jnevro201611610261-67"}
+      ],
+      studies:[
+        {t:"GALA. Глатирамера ацетат 40 мг 3 раза в неделю против плацебо. Annals of Neurology, 2013", u:"https://doi.org/10.1002/ana.23938", p:"23686821", n:"1404 пациента. Обоснование режима 3 раза в неделю."},
+        {t:"CONFIRM. Глатирамера ацетат и диметилфумарат против плацебо. NEJM, 2012", u:"https://doi.org/10.1056/NEJMoa1206328", p:"22992072", n:"Глатирамера ацетат снизил СЧО с 0,40 до 0,29 (на 29%)."},
+        {t:"Исследование РФ BCD-063. Тимексон против Копаксон-Тева и плацебо, 48 недель. Журнал неврологии и психиатрии им. С.С. Корсакова, 2016", u:"https://doi.org/10.17116/jnevro201611610261-67", n:"158 пациентов, РКИ №346 от 10.06.2013."}
+      ],
+      docs:[
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по МНН «глатирамера ацетат»", off:true},
+        {t:"Копаксон-Тева, карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/8481/", n:"ЛП-№(007914)-(РГ-RU)"},
+        {t:"Тимексон (БИОКАД) 20 мг/мл, карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/4498/", n:"ЛП-№(003579)-(РГ-RU)"},
+        {t:"Тимексон (БИОКАД) 40 мг, карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/3588/", n:"ЛП-№(002611)-(РГ-RU)"}
+      ]
+    },
+    {
+      id:"teriflunomide", inn:"Терифлуномид", brand:"Абаджио®, Диссемил®", maker:"Sanofi, БИОКАД, Фармасинтез", tag:"1-я линия", ve:false,
+      klass:"Ингибитор дигидрооротатдегидрогеназы, таблетки",
+      shema:"14 мг внутрь 1 раз в сутки. Нужна контрацепция, при планировании беременности - ускоренное выведение.",
+      pokaz:"РРС с обострениями. Препарат сравнения в исследованиях MIRANTIBUS и ASCLEPIOS.",
+      cmp:{
+        ctrl:"Плацебо (TEMSO, TOWER)",
+        arr:"0,37 против 0,54 (TEMSO) → снижение 31,5%; 0,319 против 0,501 (TOWER) → снижение 36,3%",
+        mri:"Значимое снижение накопления общего объёма очагов T2 и числа Gd+ очагов",
+        cdp:"Снижение риска CDP12 на 30% (TEMSO, ОР 0,70) и на 31% (TOWER, ОР 0,69)",
+        tox:{lvl:"warn", t:"Истончение волос (обратимая алопеция в первые 6 мес), диарея, тошнота, повышение АЛТ/АСТ. Тератогенен (строгая контрацепция, период выведения до 2 лет; при планировании беременности требуется отмывка холестирамином)."}
+      },
+      stats:[
+        {tr:"TEMSO (NEJM 2011, 108 недель)",
+         pop:"РС с обострениями, 108 недель, n=1088",
+         drug:"терифлуномид 14 мг внутрь 1 раз в сутки",
+         ctrl:"плацебо",
+         metrics:[
+           {m:"СЧО (ARR) за 108 недель",
+            lines:[
+              "Группа терифлуномида 14 мг: 0,37 обострения в год",
+              "Группа плацебо: 0,54 обострения в год",
+              "Снижение (расчёт): 31,5% по сравнению с плацебо",
+              "Снижение (в статье): 31,5% (p=0,0002)"
+            ]},
+           {m:"Подтверждённое прогрессирование инвалидизации (CDP12)",
+            lines:[
+              "Снижение риска прогрессирования: 30% по сравнению с плацебо (ОР 0,70; 95% ДИ 0,51-0,97; p=0,03)"
+            ]}
+         ],
+         u:"https://doi.org/10.1056/NEJMoa1014656", p:"21991951",
+         pdf:{t:"EMA: Aubagio - Product Information (SmPC), официальный PDF", u:"https://www.ema.europa.eu/en/documents/product-information/aubagio-epar-product-information_en.pdf"}},
+        {tr:"TOWER (Lancet Neurol 2014)",
+         pop:"РС с обострениями, до 48 недель после последнего включения, n=1169",
+         drug:"терифлуномид 14 мг внутрь 1 раз в сутки",
+         ctrl:"плацебо",
+         metrics:[
+           {m:"СЧО (ARR)",
+            lines:[
+              "Группа терифлуномида 14 мг: 0,319 обострения в год",
+              "Группа плацебо: 0,501 обострения в год",
+              "Снижение (расчёт): 36,3% по сравнению с плацебо",
+              "Снижение (в статье): 36,3% (p=0,0001)"
+            ]},
+           {m:"Подтверждённое прогрессирование инвалидизации (CDP12)",
+            lines:[
+              "Снижение риска прогрессирования: 31,5% (ОР 0,69; p=0,044)"
+            ]}
+         ],
+         u:"https://doi.org/10.1016/S1474-4422(13)70308-9", p:"24461574"}
+      ],
+      studies:[
+        {t:"TEMSO. Терифлуномид против плацебо, 108 недель. NEJM, 2011", u:"https://doi.org/10.1056/NEJMoa1014656", p:"21991951", n:"1088 пациентов. Источник числовых данных выше."},
+        {t:"TOWER. Терифлуномид против плацебо. Lancet Neurology, 2014", u:"https://doi.org/10.1016/S1474-4422(13)70308-9", p:"24461574", n:"1169 пациентов."}
+      ],
+      docs:[
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по МНН «терифлуномид»", off:true},
+        {t:"EMA: Aubagio - Product Information (SmPC)", u:"https://www.ema.europa.eu/en/documents/product-information/aubagio-epar-product-information_en.pdf", n:"Официальный регуляторный PDF ЕС, раздел 5.1", pdf:true},
+        {t:"Абаджио (Sanofi), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/31358/", n:"ЛП-002520"},
+        {t:"Терифлуномид (БИОКАД), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/3750/", n:"ЛП-№(002779)-(РГ-RU)"}
+      ]
+    }
+  ]},
+
+  {g:"ПИТРС 2-й линии и средней эффективности", note:"Применяются при активном РРС, часть препаратов - при ВПРС с активностью.", items:[
+    {
+      id:"dimethylfumarate", inn:"Диметилфумарат", brand:"Текфидера®, Флутерио®", maker:"Biogen, ПСК Фарма, Атолл", tag:"2-я линия", ve:false,
+      klass:"Эфир фумаровой кислоты, капсулы",
+      shema:"120 мг 2 раза в сутки 7 дней, далее 240 мг 2 раза в сутки.",
+      pokaz:"РРС с обострениями. Контроль лимфоцитов из-за риска лимфопении и ПМЛ.",
+      cmp:{
+        ctrl:"Плацебо (DEFINE, CONFIRM); Глатирамера ацетат (CONFIRM)",
+        arr:"0,17 против 0,36 (DEFINE) → снижение 53%; 0,22 против 0,40 (CONFIRM) → снижение 44%",
+        mri:"Gd+: снижение на 90% (DEFINE); новые T2: снижение на 85% (DEFINE) и 71% (CONFIRM)",
+        cdp:"Снижение риска CDP12 на 38% в DEFINE (16% против 27%, p=0,005)",
+        tox:{lvl:"warn", t:"Приливы крови к лицу и телу («флашинг», до 40%), желудочно-кишечные расстройства (боли, диарея, тошнота). Риск стойкой лимфопении и редких случаев ПМЛ при лимфоцитах <0,5×10⁹/л >6 мес (требует регулярного контроля ОАК)."}
+      },
+      stats:[
+        {tr:"DEFINE (NEJM 2012, 2 года)",
+         pop:"РРС (RRMS), 2 года, n=1234",
+         drug:"диметилфумарат 240 мг внутрь 2 раза в сутки",
+         ctrl:"плацебо",
+         metrics:[
+           {m:"СЧО (ARR) за 2 года",
+            lines:[
+              "Группа диметилфумарата (2 р/сут): 0,17 обострения в год",
+              "Группа плацебо: 0,36 обострения в год",
+              "Снижение (расчёт): 52,8% по сравнению с плацебо",
+              "Снижение (в статье): 53% (p<0,001)"
+            ]},
+           {m:"Подтверждённое прогрессирование инвалидизации (CDP12)",
+            lines:[
+              "Доля пациентов с прогрессированием: 16% (препарат) и 27% (плацебо)",
+              "Снижение риска (в статье): 38% (ОР 0,62; p=0,005)"
+            ]},
+           {m:"МРТ-активность за 2 года",
+            lines:[
+              "Новые или увеличившиеся T2-очаги: снижение на 85% (p<0,001)",
+              "Gd+ T1-очаги: снижение на 90% (p<0,001)"
+            ]}
+         ],
+         u:"https://doi.org/10.1056/NEJMoa1114287", p:"22992073",
+         pdf:{t:"EMA: Tecfidera - Product Information (SmPC), официальный PDF", u:"https://www.ema.europa.eu/en/documents/product-information/tecfidera-epar-product-information_en.pdf"}},
+        {tr:"CONFIRM (NEJM 2012, 2 года)",
+         pop:"РРС (RRMS), 2 года, n=1417",
+         drug:"диметилфумарат 240 мг внутрь 2 раза в сутки",
+         ctrl:"плацебо; активный контроль - глатирамера ацетат 20 мг/сут",
+         metrics:[
+           {m:"СЧО (ARR) за 2 года",
+            lines:[
+              "Группа диметилфумарата (2 р/сут): 0,22 обострения в год",
+              "Группа плацебо: 0,40 обострения в год",
+              "Группа глатирамера ацетата: 0,29 обострения в год",
+              "Снижение диметилфумарата к плацебо (расчёт): 45,0% (в статье 44%, p<0,001)"
+            ]}
+         ],
+         u:"https://doi.org/10.1056/NEJMoa1206328", p:"22992072"}
+      ],
+      studies:[
+        {t:"DEFINE. Диметилфумарат против плацебо, 2 года. NEJM, 2012", u:"https://doi.org/10.1056/NEJMoa1114287", p:"22992073", n:"1234 пациента. Источник числовых данных выше."},
+        {t:"CONFIRM. Диметилфумарат и глатирамера ацетат против плацебо. NEJM, 2012", u:"https://doi.org/10.1056/NEJMoa1206328", p:"22992072", n:"1417 пациентов."}
+      ],
+      docs:[
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по МНН «диметилфумарат»", off:true},
+        {t:"EMA: Tecfidera - Product Information (SmPC)", u:"https://www.ema.europa.eu/en/documents/product-information/tecfidera-epar-product-information_en.pdf", n:"Официальный регуляторный PDF ЕС", pdf:true},
+        {t:"Флутерио (ПСК Фарма), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/4386/", n:"ЛП-№(003462)-(РГ-RU)"},
+        {t:"Диметилфумарат (Атолл), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/9559/", n:"ЛП-№(009164)-(РГ-RU)"}
+      ]
+    },
+    {
+      id:"diroximelfumarate", inn:"Дироксимел фумарат", brand:"Вумерити®", maker:"Biogen", tag:"2-я линия", ve:false,
+      klass:"Эфир фумаровой кислоты, пролекарство монометилфумарата",
+      shema:"231 мг 2 раза в сутки внутрь после короткой стартовой дозы.",
+      pokaz:"РРС с обострениями. Переносимость со стороны ЖКТ лучше, чем у диметилфумарата.",
+      cmp:{
+        ctrl:"Биоэквивалентность диметилфумарату (DEFINE/CONFIRM)",
+        arr:"ARR 0,14-0,16 за 2 года в открытом исследовании EVOLVE-MS-1",
+        mri:"Устойчивое подавление активности на МРТ, сопоставимое с диметилфумаратом",
+        cdp:"Замедление инвалидизации эквивалентно диметилфумарату",
+        tox:{lvl:"ok", t:"Приливы крови (флашинг), умеренные боли в животе (частота отмен из-за ЖКТ достоверно ниже, чем у диметилфумарата: <1% против 4-5%). Риск лимфопении требует планового контроля ОАК."}
+      },
+      stats:[
+        {tr:"EVOLVE-MS-1 (Mult Scler 2020, 2023)",
+         pop:"РРС (RRMS), 2 года, n=1057 (открытое исследование оценки безопасности)",
+         drug:"дироксимел фумарат 462 мг в сутки внутрь (2 капсулы 2 раза в день)",
+         ctrl:"исследование одногрупповое; одобрен на основе биоэквивалентности монометилфумарата с диметилфумаратом",
+         metrics:[
+           {m:"СЧО (ARR) в исследовании EVOLVE-MS-1",
+            lines:[
+              "Скорректированная СЧО за 2 года: 0,14-0,16 обострения в год",
+              "Снижение частоты отмен из-за побочных эффектов ЖКТ: <1% пациентов",
+              "Эффективность препарата обоснована данными пивотных РКИ диметилфумарата (DEFINE, CONFIRM)"
+            ]}
+         ],
+         u:"https://doi.org/10.1177/13524585231205708", p:"37905526",
+         pdf:{t:"EMA: Vumerity - Product Information (SmPC), официальный PDF", u:"https://www.ema.europa.eu/en/documents/product-information/vumerity-epar-product-information_en.pdf"}}
+      ],
+      studies:[
+        {t:"EVOLVE-MS-1. Итоговые данные по безопасности и эффективности, 2 года. Mult Scler, 2023", u:"https://doi.org/10.1177/13524585231205708", p:"37905526", n:"1057 пациентов, открытый доступ."}
+      ],
+      docs:[
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: проверка статуса регистрации по МНН «дироксимел фумарат»", off:true},
+        {t:"EMA: Vumerity - Product Information (SmPC)", u:"https://www.ema.europa.eu/en/documents/product-information/vumerity-epar-product-information_en.pdf", n:"Официальный регуляторный PDF ЕС", pdf:true}
+      ]
+    },
+    {
+      id:"fingolimod", inn:"Финголимод", brand:"Гилениа®, Несклер®", maker:"Novartis, ИИХР, БИОКАД", tag:"2-я линия", ve:false,
+      klass:"Модулятор сфингозин-1-фосфатных рецепторов, капсулы",
+      shema:"0,5 мг внутрь 1 раз в сутки. При первой дозе нужен контроль ЭКГ и наблюдение 6 часов.",
+      pokaz:"Высокоактивный РРС, по клиническим рекомендациям применяется с 10 лет.",
+      cmp:{
+        ctrl:"Плацебо (FREEDOMS); Авонекс 30 мкг в/м 1 р/нед (TRANSFORMS)",
+        arr:"0,18 против 0,40 (FREEDOMS) → снижение 54%; 0,16 против 0,33 (TRANSFORMS) → снижение 52%",
+        mri:"Gd+: снижение на 82% (FREEDOMS); новые T2: снижение на 74% (FREEDOMS) и 35% (TRANSFORMS)",
+        cdp:"Снижение риска CDP3 на 30% в FREEDOMS (17,7% против 24,1%, p=0,02)",
+        tox:{lvl:"warn", t:"Брадикардия и AV-блокада при первой дозе (требует 6-часового ЭКГ-мониторинга), макулярный отёк сетчатки (осмотр офтальмолога), лимфопения, герпетические инфекции, повышение АЛТ/АСТ, риск тяжёлого обострения (рикошета) при резкой отмене."}
+      },
+      stats:[
+        {tr:"FREEDOMS (NEJM 2010, 24 месяца)",
+         pop:"РРС (RRMS), 2 года, n=1272",
+         drug:"финголимод 0,5 мг внутрь 1 раз в сутки",
+         ctrl:"плацебо",
+         metrics:[
+           {m:"СЧО (ARR) за 24 месяца",
+            lines:[
+              "Группа финголимода 0,5 мг: 0,18 обострения в год",
+              "Группа плацебо: 0,40 обострения в год",
+              "Снижение (расчёт): 55,0% по сравнению с плацебо",
+              "Снижение (в статье): 54% (p<0,001)"
+            ]},
+           {m:"Подтверждённое прогрессирование инвалидизации (CDP, 3 месяца)",
+            lines:[
+              "Кумулятивная вероятность: 17,7% (препарат) и 24,1% (плацебо)",
+              "Снижение риска (в статье): 30% (ОР 0,70; 95% ДИ 0,52-0,96; p=0,02)"
+            ]},
+           {m:"МРТ-активность",
+            lines:[
+              "Новые или увеличившиеся T2-очаги: 2,5 (препарат) и 9,8 (плацебо) → снижение на 74% (p<0,001)",
+              "Gd+ T1-очаги: 0,2 (препарат) и 1,1 (плацебо) → снижение на 82% (p<0,001)"
+            ]}
+         ],
+         u:"https://doi.org/10.1056/NEJMoa0909494", p:"20089952",
+         pdf:{t:"EMA: Gilenya - Product Information (SmPC), официальный PDF", u:"https://www.ema.europa.eu/en/documents/product-information/gilenya-epar-product-information_en.pdf"}},
+        {tr:"TRANSFORMS (NEJM 2010, 12 месяцев)",
+         pop:"РРС (RRMS), 1 год, n=1292",
+         drug:"финголимод 0,5 мг внутрь 1 раз в сутки",
+         ctrl:"интерферон бета-1а (Авонекс) 30 мкг внутримышечно 1 раз в неделю",
+         metrics:[
+           {m:"СЧО (ARR) за 12 месяцев",
+            lines:[
+              "Группа финголимода 0,5 мг: 0,16 обострения в год",
+              "Группа интерферона бета-1а: 0,33 обострения в год",
+              "Снижение (расчёт): 51,5% по сравнению с интерфероном бета-1а",
+              "Снижение (в статье): 52% (p<0,001)"
+            ]}
+         ],
+         u:"https://doi.org/10.1056/NEJMoa0907839", p:"20089954"}
+      ],
+      studies:[
+        {t:"FREEDOMS. Финголимод против плацебо, 24 месяца. NEJM, 2010", u:"https://doi.org/10.1056/NEJMoa0909494", p:"20089952", n:"1272 пациента. Источник данных выше."},
+        {t:"TRANSFORMS. Финголимод против интерферона бета-1а в/м, 12 месяцев. NEJM, 2010", u:"https://doi.org/10.1056/NEJMoa0907839", p:"20089954", n:"1292 пациента."},
+        {t:"PARADIGMS. Финголимод у детей и подростков против интерферона бета-1а. NEJM, 2018", u:"https://doi.org/10.1056/NEJMoa1800149", p:"30207920", n:"215 пациентов 10-17 лет."}
+      ],
+      docs:[
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по МНН «финголимод»", off:true},
+        {t:"EMA: Gilenya - Product Information (SmPC)", u:"https://www.ema.europa.eu/en/documents/product-information/gilenya-epar-product-information_en.pdf", n:"Официальный регуляторный PDF ЕС", pdf:true},
+        {t:"Гилениа (Novartis), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/15958/", n:"ЛСР-008272/10"},
+        {t:"Несклер (ИИХР), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/11832/", n:"ЛП-№(011978)-(РГ-RU)"}
+      ]
+    },
+    {
+      id:"siponimod", inn:"Сипонимод", brand:"Кайендра®", maker:"Novartis", tag:"2-я линия", ve:false,
+      klass:"Модулятор S1P-рецепторов подтипов 1 и 5, таблетки",
+      shema:"Титрация дозы 5 дней, далее поддерживающая доза внутрь 1 раз в сутки. Требуется генотипирование CYP2C9.",
+      pokaz:"Вторично-прогрессирующий РС с активностью заболевания.",
+      cmp:{
+        ctrl:"Плацебо (EXPAND, медиана 21 мес)",
+        arr:"0,071 против 0,160 при ВПРС → снижение 55,5% (p<0,0001)",
+        mri:"Снижение числа новых/увеличившихся T2-очагов на ~80%; замедление атрофии мозга на 23%",
+        cdp:"Снижение риска CDP3 на 21% (p=0,013) и CDP6 на 26% (p=0,0058)",
+        tox:{lvl:"warn", t:"Брадикардия в начале приёма (требует ступенчатой титрации), лимфопения, макулярный отёк, повышение ферментов печени, артериальная гипертензия. Требуется обязательное генотипирование изофермента CYP2C9 перед началом терапии."}
+      },
+      stats:[
+        {tr:"EXPAND (Lancet 2018, медиана 21 месяц)",
+         pop:"Вторично-прогрессирующий РС (SPMS), n=1651",
+         drug:"сипонимод 2 мг внутрь 1 раз в сутки",
+         ctrl:"плацебо",
+         metrics:[
+           {m:"Подтверждённое прогрессирование инвалидизации (первичная точка)",
+            lines:[
+              "CDP через 3 месяца: 26% (сипонимод) и 32% (плацебо)",
+              "Снижение относительного риска (в статье): 21% (ОР 0,79; 95% ДИ 0,65-0,95; p=0,013)",
+              "CDP через 6 месяцев: снижение риска на 26% (ОР 0,74; p=0,0058)"
+            ]},
+           {m:"СЧО (ARR) при вторично-прогрессирующем РС",
+            lines:[
+              "Группа сипонимода 2 мг: 0,071 обострения в год",
+              "Группа плацебо: 0,160 обострения в год",
+              "Снижение (расчёт): 55,6% по сравнению с плацебо",
+              "Снижение (в статье): 55,5% (p<0,0001)"
+            ]}
+         ],
+         u:"https://doi.org/10.1016/S0140-6736(18)30475-6", p:"29576505",
+         pdf:{t:"EMA: Mayzent - Product Information (SmPC), официальный PDF", u:"https://www.ema.europa.eu/en/documents/product-information/mayzent-epar-product-information_en.pdf"}}
+      ],
+      studies:[
+        {t:"EXPAND. Сипонимод против плацебо при ВПРС. The Lancet, 2018", u:"https://doi.org/10.1016/S0140-6736(18)30475-6", p:"29576505", n:"1651 пациент. Источник числовых данных выше."}
+      ],
+      docs:[
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по МНН «сипонимод»", off:true},
+        {t:"EMA: Mayzent - Product Information (SmPC)", u:"https://www.ema.europa.eu/en/documents/product-information/mayzent-epar-product-information_en.pdf", n:"Официальный регуляторный PDF ЕС", pdf:true},
+        {t:"Кайендра (Novartis), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/5222/", n:"ЛП-№(004355)-(РГ-RU)"}
+      ]
+    },
+    {
+      id:"ozanimod", inn:"Озанимод", brand:"Зепозия®", maker:"Bristol Myers Squibb", tag:"2-я линия", ve:false,
+      klass:"Модулятор S1P-рецепторов подтипов 1 и 5, капсулы",
+      shema:"Титрация 7 дней, далее 0,92 мг внутрь 1 раз в сутки.",
+      pokaz:"РРС с обострениями.",
+      cmp:{
+        ctrl:"Авонекс 30 мкг в/м 1 р/нед (SUNBEAM, RADIANCE)",
+        arr:"0,18 против 0,35 (SUNBEAM) → снижение 48%; 0,17 против 0,28 (RADIANCE) → снижение 38%",
+        mri:"Gd+: снижение на 53-63%; новые T2: снижение на 48% (SUNBEAM) и 42% (RADIANCE)",
+        cdp:"Снижение риска CDP в обоих РКИ, замедление темпов потери серого вещества мозга",
+        tox:{lvl:"warn", t:"Назофарингит, инфекции мочевыводящих путей, головная боль, повышение ферментов печени (АЛТ/АСТ). Меньший риск выраженной брадикардии благодаря плавной титрации стартовой дозы, но требует офтальмологического контроля (риск макулярного отёка)."}
+      },
+      stats:[
+        {tr:"SUNBEAM (Lancet Neurol 2019, ≥12 месяцев) и RADIANCE (24 месяца)",
+         pop:"РРС (RRMS), n=1346 (SUNBEAM) и n=1313 (RADIANCE)",
+         drug:"озанимод 0,92 мг (эквивалент 1 мг) внутрь 1 раз в сутки",
+         ctrl:"интерферон бета-1а (Авонекс) 30 мкг внутримышечно 1 раз в неделю",
+         metrics:[
+           {m:"СЧО (ARR) в исследовании SUNBEAM (≥12 месяцев)",
+            lines:[
+              "Группа озанимода 0,92 мг: 0,18 обострения в год",
+              "Группа интерферона бета-1а: 0,35 обострения в год",
+              "Снижение (расчёт): 48,6% по сравнению с интерфероном бета-1а",
+              "Снижение (в статье): 48% (ОР 0,52; 95% ДИ 0,41-0,66; p<0,0001)"
+            ]},
+           {m:"СЧО (ARR) в исследовании RADIANCE (24 месяца)",
+            lines:[
+              "Группа озанимода 0,92 мг: 0,17 обострения в год",
+              "Группа интерферона бета-1а: 0,28 обострения в год",
+              "Снижение (расчёт): 39,3% по сравнению с интерфероном бета-1а",
+              "Снижение (в статье): 38% (ОР 0,62; p<0,0001)"
+            ]},
+           {m:"МРТ-активность",
+            lines:[
+              "Gd+ T1-очаги: снижение на 63% в SUNBEAM и на 53% в RADIANCE (p<0,0001)",
+              "Новые или увеличившиеся T2-очаги: снижение на 48% в SUNBEAM и на 42% в RADIANCE"
+            ]}
+         ],
+         u:"https://doi.org/10.1016/S1474-4422(19)30239-X", p:"31492651",
+         pdf:{t:"EMA: Zeposia - Product Information (SmPC), официальный PDF", u:"https://www.ema.europa.eu/en/documents/product-information/zeposia-epar-product-information_en.pdf"}}
+      ],
+      studies:[
+        {t:"SUNBEAM. Озанимод против интерферона бета-1а, минимум 12 месяцев. Lancet Neurology, 2019", u:"https://doi.org/10.1016/S1474-4422(19)30239-X", p:"31492651", n:"1346 пациентов. Источник числовых данных выше."},
+        {t:"RADIANCE. Озанимод против интерферона бета-1а, 24 месяца. Lancet Neurology, 2019", u:"https://doi.org/10.1016/S1474-4422(19)30238-8", p:"31492652", n:"1313 пациентов."}
+      ],
+      docs:[
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по МНН «озанимод»", off:true},
+        {t:"EMA: Zeposia - Product Information (SmPC)", u:"https://www.ema.europa.eu/en/documents/product-information/zeposia-epar-product-information_en.pdf", n:"Официальный регуляторный PDF ЕС", pdf:true},
+        {t:"Зепозия (BMS), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/65614/", n:"ЛП-№(008340)-(РГ-RU)"}
+      ]
+    }
+  ]},
+
+  {g:"Остальные ВЭ-ПИТРС", note:"Высокоэффективные препараты при высокой активности заболевания и при неэффективности терапии 1-й линии.", items:[
+    {
+      id:"ofatumumab", inn:"Офатумумаб", brand:"Бонспри®", maker:"Novartis", tag:"ВЭ-ПИТРС", ve:true,
+      klass:"Анти-CD20, подкожное введение, самостоятельные инъекции",
+      shema:"20 мг п/к на 1-й, 2-й и 3-й неделе (нагрузочные дозы), далее 20 мг 1 раз в месяц.",
+      pokaz:"РРС и ВПРС с обострениями при активности заболевания.",
+      reg:"ЛП-№(001332)-(РГ-RU)",
+      cmp:{
+        ctrl:"Терифлуномид 14 мг внутрь 1 р/сут (ASCLEPIOS I/II)",
+        arr:"0,11 против 0,22 (I) и 0,10 против 0,25 (II) → снижение 51-58%",
+        mri:"Gd+: 0,01-0,03 против 0,45-0,51 на скан (снижение 94-97%); новые T2: снижение 82-85%",
+        cdp:"Снижение риска CDW3 на 34% (p=0,002) и CDW6 на 32% (p=0,01)",
+        tox:{lvl:"warn", t:"Реакции в месте инъекции (эритема, боль - около 20%), системные реакции на первую дозу (озноб, слабость, головная боль), назофарингит, инфекции мочевыводящих путей. Постепенное снижение IgM/IgG со временем, реактивация гепатита B."}
+      },
+      stats:[
+        {tr:"ASCLEPIOS I и ASCLEPIOS II (NCT02792218, NCT02792231)",
+         pop:"РС с обострениями (RMS), медиана 1,6 года, n=1882 (927 и 955)",
+         drug:"офатумумаб 20 мг подкожно 1 раз в месяц (после нагрузочных инъекций)",
+         ctrl:"терифлуномид 14 мг внутрь ежедневно",
+         metrics:[
+           {m:"СЧО (ARR) в исследовании ASCLEPIOS I",
+            lines:[
+              "Группа офатумумаба 20 мг: 0,11 обострения в год",
+              "Группа терифлуномида 14 мг: 0,22 обострения в год",
+              "Снижение (расчёт): 50,0% по сравнению с терифлуномидом",
+              "Снижение (в статье): 50,5% (ОР 0,49; 95% ДИ 0,37-0,65; p<0,001)"
+            ]},
+           {m:"СЧО (ARR) в исследовании ASCLEPIOS II",
+            lines:[
+              "Группа офатумумаба 20 мг: 0,10 обострения в год",
+              "Группа терифлуномида 14 мг: 0,25 обострения в год",
+              "Снижение (расчёт): 60,0% по сравнению с терифлуномидом",
+              "Снижение (в статье): 58,5% (ОР 0,42; 95% ДИ 0,31-0,56; p<0,001)"
+            ]},
+           {m:"Gd+ T1-очаги (на скан)",
+            lines:[
+              "ASCLEPIOS I: 0,01 (офатумумаб) и 0,45 (терифлуномид) → снижение на 97,5% (p<0,001)",
+              "ASCLEPIOS II: 0,03 (офатумумаб) и 0,51 (терифлуномид) → снижение на 93,8% (p<0,001)"
+            ]},
+           {m:"Новые или увеличившиеся T2-очаги (в год)",
+            lines:[
+              "ASCLEPIOS I: 0,72 (офатумумаб) и 4,00 (терифлуномид) → снижение на 82% (p<0,001)",
+              "ASCLEPIOS II: 0,64 (офатумумаб) и 4,15 (терифлуномид) → снижение на 85% (p<0,001)"
+            ]},
+           {m:"Подтверждённое нарастание инвалидизации (CDW, объединённый анализ)",
+            lines:[
+              "CDW через 3 месяца: 10,9% (офатумумаб) и 15,0% (терифлуномид) → снижение риска на 34% (ОР 0,66; p=0,002)",
+              "CDW через 6 месяцев: 8,1% (офатумумаб) и 12,0% (терифлуномид) → снижение риска на 32% (ОР 0,68; p=0,01)"
+            ]}
+         ],
+         u:"https://doi.org/10.1056/NEJMoa1917246", p:"32757523",
+         pdf:{t:"EMA: Kesimpta - Product Information (SmPC), официальный PDF", u:"https://www.ema.europa.eu/en/documents/product-information/kesimpta-epar-product-information_en.pdf"}}
+      ],
+      studies:[
+        {t:"ASCLEPIOS I и ASCLEPIOS II. Офатумумаб против терифлуномида. NEJM, 2020", u:"https://doi.org/10.1056/NEJMoa1917246", p:"32757523", n:"1882 пациента. Источник числовых данных выше."},
+        {t:"Данные РФ. Анализ российских пациентов из ASCLEPIOS I и II. Журнал неврологии и психиатрии им. С.С. Корсакова, 2024", u:"https://doi.org/10.17116/jnevro202412407237", n:"Подгруппа из 352 пациентов из России (18,7% участников испытания)."}
+      ],
+      docs:[
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по названию «Бонспри». РУ ЛП-№(001332)-(РГ-RU)", off:true},
+        {t:"EMA: Kesimpta - Product Information (SmPC)", u:"https://www.ema.europa.eu/en/documents/product-information/kesimpta-epar-product-information_en.pdf", n:"Официальный регуляторный PDF ЕС, раздел 5.1", pdf:true},
+        {t:"ОХЛП Бонспри на официальном сайте Novartis Россия, PDF", u:"https://www.novartis.com/ru-ru/sites/novartis_ru/files/2024-01-12-131_Bonspri_20mg_SmPC_5.0_0008_RUr.pdf", n:"Официальная общая характеристика препарата в РФ", pdf:true}
+      ]
+    },
+    {
+      id:"natalizumab", inn:"Натализумаб", brand:"Тизабри®, Эфиктель®", maker:"Biogen, Генериум", tag:"ВЭ-ПИТРС", ve:true,
+      klass:"Анти-альфа4-интегрин, моноклональное антитело",
+      shema:"300 мг в/в 1 раз в 28 дней. Обязателен контроль антител к JC-вирусу и регулярное МРТ из-за риска ПМЛ.",
+      pokaz:"Высокоактивный или быстропрогрессирующий РРС, неэффективность ПИТРС 1-й линии.",
+      cmp:{
+        ctrl:"Плацебо (AFFIRM, 2 года)",
+        arr:"0,23 против 0,73 → снижение 68% (p<0,001)",
+        mri:"T2: 1,9 против 11,0 очагов за 2 года (снижение 83%); Gd+: 0,1 против 1,2 (снижение 92%)",
+        cdp:"Снижение риска CDP12 на 42% за 2 года (17% против 29%, p<0,001)",
+        tox:{lvl:"danger", t:"Высокий риск ПМЛ (прогрессирующей мультифокальной лейкоэнцефалопатии) - смертельно опасной реактивации вируса JC. Риск зависит от титра антител к JCV, длительности терапии >2 лет и предшествующей иммуносупрессии. Синдром отмены/рикошета при резком прекращении."}
+      },
+      stats:[
+        {tr:"AFFIRM (NCT00027300, 2 года)",
+         pop:"РС с обострениями (RRMS), 2 года, n=942",
+         drug:"натализумаб 300 мг внутривенно 1 раз в 4 недели",
+         ctrl:"плацебо",
+         metrics:[
+           {m:"СЧО (ARR) за 2 года",
+            lines:[
+              "Группа натализумаба 300 мг: 0,23 обострения в год",
+              "Группа плацебо: 0,73 обострения в год",
+              "Снижение (расчёт): 68,5% по сравнению с плацебо",
+              "Снижение (в статье): 68% (p<0,001)"
+            ]},
+           {m:"МРТ-активность за 2 года",
+            lines:[
+              "Новые или увеличившиеся T2-очаги за 2 года: 1,9 (препарат) и 11,0 (плацебо) → снижение на 83% (p<0,001)",
+              "Gd+ T1-очаги: 0,1 (препарат) и 1,2 (плацебо) → снижение на 92% (p<0,001)"
+            ]},
+           {m:"Подтверждённое прогрессирование инвалидизации (CDP12)",
+            lines:[
+              "Доля пациентов с прогрессированием за 2 года: 17% (препарат) и 29% (плацебо)",
+              "Снижение относительного риска (в статье): 42% (ОР 0,58; 95% ДИ 0,43-0,77; p<0,001)"
+            ]}
+         ],
+         u:"https://doi.org/10.1056/NEJMoa044397", p:"16510744",
+         pdf:{t:"EMA: Tysabri - Product Information (SmPC), официальный PDF", u:"https://www.ema.europa.eu/en/documents/product-information/tysabri-epar-product-information_en.pdf"}}
+      ],
+      studies:[
+        {t:"AFFIRM. Натализумаб против плацебо, 2 года. NEJM, 2006", u:"https://doi.org/10.1056/NEJMoa044397", p:"16510744", n:"942 пациента. Источник числовых данных выше."},
+        {t:"Исследование РФ. Натализумаб и окрелизумаб при высокоактивном РС в реальной практике. Журнал неврологии и психиатрии им. С.С. Корсакова, 2023", u:"https://doi.org/10.17116/jnevro202312307277", n:"123 пациента Московской области, 77 на натализумабе."}
+      ],
+      docs:[
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по МНН «натализумаб»", off:true},
+        {t:"EMA: Tysabri - Product Information (SmPC)", u:"https://www.ema.europa.eu/en/documents/product-information/tysabri-epar-product-information_en.pdf", n:"Официальный регуляторный PDF ЕС, раздел 5.1", pdf:true},
+        {t:"Тизабри (Biogen), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/8416/", n:"ЛП-№(007827)-(РГ-RU)"},
+        {t:"Эфиктель (Генериум), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/12758/", n:"ЛП-№(013345)-(РГ-RU)"}
+      ]
+    },
+    {
+      id:"cladribine", inn:"Кладрибин", brand:"Мавенклад®", maker:"Merck, ПРОМОМЕД РУС", tag:"ВЭ-ПИТРС", ve:true,
+      klass:"Иммунная реконституция, пуриновый аналог, таблетки",
+      shema:"3,5 мг/кг за 2 года: по 1,75 мг/кг в год, до 10 дней приёма в год. Затем 2 года без терапии.",
+      pokaz:"Высокоактивный РРС с обострениями.",
+      cmp:{
+        ctrl:"Плацебо (CLARITY, 96 недель)",
+        arr:"0,14 против 0,33 → снижение 57,6% (p<0,001)",
+        mri:"Gd+: 0,12 против 0,91 на скан (снижение 86%); активные T2: 0,38 против 1,43 (снижение 73%)",
+        cdp:"Снижение риска CDP12 на 33% (ОР 0,67, p=0,02); без прогрессирования 85,7% против 79,4%",
+        tox:{lvl:"warn", t:"Выраженная лимфопения (целевой фармакодинамический эффект, восстанавливается к началу 2-го года), реактивация герпеса (Herpes zoster), головная боль, тошнота, тератогенность (строгая контрацепция 6 мес после курса). Короткий курс (20 дней за 2 года)."}
+      },
+      stats:[
+        {tr:"CLARITY (NCT00213135, 96 недель)",
+         pop:"РРС (RRMS), 96 недель, n=1326 (кладрибин 3,5 мг/кг n=433, плацебо n=437)",
+         drug:"кладрибин в таблетках, суммарно 3,5 мг/кг за 2 года",
+         ctrl:"плацебо",
+         metrics:[
+           {m:"СЧО (ARR) за 96 недель",
+            lines:[
+              "Группа кладрибина 3,5 мг/кг: 0,14 обострения в год",
+              "Группа плацебо: 0,33 обострения в год",
+              "Снижение (расчёт): 57,6% по сравнению с плацебо",
+              "Снижение (в статье): 57,6% (p<0,001)"
+            ]},
+           {m:"Доля пациентов без обострений за 96 недель",
+            lines:[
+              "Группа кладрибина 3,5 мг/кг: 79,7% пациентов",
+              "Группа плацебо: 60,9% пациентов (p<0,001)"
+            ]},
+           {m:"МРТ-активность на скан за 96 недель",
+            lines:[
+              "Gd+ T1-очаги на скан: 0,12 (препарат) и 0,91 (плацебо) → снижение на 86% (p<0,001)",
+              "Активные T2-очаги на скан: 0,38 (препарат) и 1,43 (плацебо) → снижение на 73% (p<0,001)"
+            ]},
+           {m:"Подтверждённое прогрессирование инвалидизации (CDP12)",
+            lines:[
+              "Доля без прогрессирования за 96 недель: 85,7% (препарат) и 79,4% (плацебо)",
+              "Снижение риска (в статье): 33% (ОР 0,67; 95% ДИ 0,48-0,93; p=0,02)"
+            ]}
+         ],
+         u:"https://doi.org/10.1056/NEJMoa0902533", p:"20089960",
+         pdf:{t:"EMA: Mavenclad - Product Information (SmPC), официальный PDF", u:"https://www.ema.europa.eu/en/documents/product-information/mavenclad-epar-product-information_en.pdf"}}
+      ],
+      studies:[
+        {t:"CLARITY. Кладрибин в таблетках против плацебо, 96 недель. NEJM, 2010", u:"https://doi.org/10.1056/NEJMoa0902533", p:"20089960", n:"1326 пациентов. Источник числовых данных выше."},
+        {t:"Исследование РФ. Опыт применения кладрибина при высокоактивном РС в Московской области. Журнал неврологии и психиатрии им. С.С. Корсакова, 2024", u:"https://doi.org/10.17116/jnevro202412406174", n:"62 пациента. СЧО снизилась с 1,32 до 0,20 через 12 мес и до 0,086 через 24 мес."}
+      ],
+      docs:[
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по МНН «кладрибин»", off:true},
+        {t:"EMA: Mavenclad - Product Information (SmPC)", u:"https://www.ema.europa.eu/en/documents/product-information/mavenclad-epar-product-information_en.pdf", n:"Официальный регуляторный PDF ЕС, раздел 5.1", pdf:true},
+        {t:"Мавенклад (Merck), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/5580/", n:"ЛП-№(004745)-(РГ-RU)"},
+        {t:"Кладрибин (ПРОМОМЕД РУС), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/6857/", n:"ЛП-№(006088)-(РГ-RU)"}
+      ]
+    },
+    {
+      id:"alemtuzumab", inn:"Алемтузумаб", brand:"Лемтрада®", maker:"Sanofi", tag:"ВЭ-ПИТРС", ve:true,
+      klass:"Анти-CD52, иммунная реконституция",
+      shema:"12 мг/сут в/в: 5 дней подряд в 1-й год, 3 дня во 2-й год. Мониторинг крови, почек и щитовидной железы 48 месяцев после последней инфузии.",
+      pokaz:"Высокоактивный РРС при неэффективности других ПИТРС.",
+      cmp:{
+        ctrl:"Интерферон бета-1а 44 мкг п/к 3 р/нед (CARE-MS I, II)",
+        arr:"0,18 против 0,39 (I) → снижение 54,9%; 0,26 против 0,52 (II) → снижение 49,4%",
+        mri:"Доля пациентов без новых T2-очагов: 54% против 32% (II); доля без Gd+: 81,5% против 65,8%",
+        cdp:"Снижение риска CDW6 на 42% у пациентов с неэффективностью терапии (CARE-MS II, p=0,0084)",
+        tox:{lvl:"danger", t:"Крайне высокий риск вторичных аутоиммунных патологий (аутоиммунный тиреоидит до 35-40%, иммунная тромбоцитопения ИТП ~2-3%, гломерулонефрит). Тяжёлые инфузионные реакции (>90%), герпес. Обязателен ежемесячный контроль ОАК, креатинина и ТТГ 48 месяцев после инфузии."}
+      },
+      stats:[
+        {tr:"CARE-MS I (ранее не получавшие терапии) и CARE-MS II (после неэффективной терапии)",
+         pop:"РРС (RRMS), 2 года, n=581 (CARE-MS I) и n=840 (CARE-MS II)",
+         drug:"алемтузумаб 12 мг/сут внутривенно (5 дней в 1-й год, 3 дня во 2-й год)",
+         ctrl:"интерферон бета-1а 44 мкг подкожно 3 раза в неделю",
+         metrics:[
+           {m:"СЧО (ARR) в исследовании CARE-MS I (ранее нелеченые)",
+            lines:[
+              "Группа алемтузумаба 12 мг: 0,18 обострения в год",
+              "Группа интерферона бета-1а 44 мкг: 0,39 обострения в год",
+              "Снижение (расчёт): 53,8% по сравнению с интерфероном бета-1а",
+              "Снижение (в статье): 54,9% (ОР 0,45; 95% ДИ 0,32-0,63; p<0,0001)"
+            ]},
+           {m:"СЧО (ARR) в исследовании CARE-MS II (после предшествующей терапии)",
+            lines:[
+              "Группа алемтузумаба 12 мг: 0,26 обострения в год",
+              "Группа интерферона бета-1а 44 мкг: 0,52 обострения в год",
+              "Снижение (расчёт): 50,0% по сравнению с интерфероном бета-1а",
+              "Снижение (в статье): 49,4% (ОР 0,51; 95% ДИ 0,39-0,65; p<0,0001)"
+            ]},
+           {m:"Подтверждённое нарастание инвалидизации (CDW, 6 месяцев)",
+            lines:[
+              "CARE-MS I: 8% (алемтузумаб) и 11% (контроль), p=0,22 (различие не достигло значимости)",
+              "CARE-MS II: 13% (алемтузумаб) и 21% (контроль) → снижение риска на 42% (ОР 0,58; p=0,0084)"
+            ]}
+         ],
+         u:"https://doi.org/10.1016/S0140-6736(12)61769-3", p:"23122652",
+         pdf:{t:"EMA: Lemtrada - Product Information (SmPC), официальный PDF", u:"https://www.ema.europa.eu/en/documents/product-information/lemtrada-epar-product-information_en.pdf"}}
+      ],
+      studies:[
+        {t:"CARE-MS I. Алемтузумаб против интерферона бета-1а у ранее нелеченных пациентов. The Lancet, 2012", u:"https://doi.org/10.1016/S0140-6736(12)61769-3", p:"23122652", n:"581 пациент. Источник числовых данных выше."},
+        {t:"CARE-MS II. Алемтузумаб после неэффективной терапии. The Lancet, 2012", u:"https://doi.org/10.1016/S0140-6736(12)61768-1", p:"23122650", n:"840 пациентов."},
+        {t:"CAMMS223. Алемтузумаб против интерферона бета-1а при раннем РС. NEJM, 2008", u:"https://doi.org/10.1056/NEJMoa0802670", p:"18946064", n:"334 пациента, 2-я фаза."}
+      ],
+      docs:[
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по МНН «алемтузумаб»", off:true},
+        {t:"EMA: Lemtrada - Product Information (SmPC)", u:"https://www.ema.europa.eu/en/documents/product-information/lemtrada-epar-product-information_en.pdf", n:"Официальный регуляторный PDF ЕС, раздел 5.1", pdf:true},
+        {t:"Лемтрада (Sanofi), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/5121/", n:"ЛП-№(004242)-(РГ-RU)"}
+      ]
+    }
+  ]},
+
+  {g:"Резервная терапия и особые случаи", note:"Назначаются только врачебной комиссией при отсутствии альтернатив.", items:[
+    {
+      id:"mitoxantrone", inn:"Митоксантрон", brand:"Онкотрон®, Митоксантрон-ЛЭНС", maker:"различные производители", tag:"Резерв", ve:false,
+      klass:"Цитостатик, антрацендион",
+      shema:"12 мг/м² в/в 1 раз в 3 месяца. Кумулятивная доза ограничена, нужен контроль фракции выброса сердца.",
+      pokaz:"Высокоактивный РРС или ВПРС при отсутствии альтернатив. Повышает риск кардиотоксичности и лейкозов.",
+      cmp:{
+        ctrl:"Плацебо (MIMS, 2 года)",
+        arr:"Отношение числа обострений 0,38 → снижение ~62% (p=0,0002)",
+        mri:"Снижение числа Gd+ очагов на ~90%",
+        cdp:"Замедление ухудшения балла EDSS (p=0,019); доля без обострений 57% против 37%",
+        tox:{lvl:"danger", t:"Тяжёлая кардиотоксичность (необратимая сердечная недостаточность при кумулятивной дозе >100-140 мг/м²), вторичный острый миелоидный лейкоз (до 0,8%), стойкая аменорея/бесплодие, выраженная миелосупрессия."}
+      },
+      stats:[
+        {tr:"MIMS (Lancet 2002, 24 месяца)",
+         pop:"Прогрессирующий РС с обострениями или ВПРС, 2 года, n=194",
+         drug:"митоксантрон 12 мг/м² внутривенно 1 раз в 3 месяца",
+         ctrl:"плацебо",
+         metrics:[
+           {m:"Частота подтверждённых обострений за 2 года",
+            lines:[
+              "Отношение общего числа обострений: 0,38 (95% ДИ 0,18-0,59)",
+              "Снижение частоты обострений (в статье): около 62% по сравнению с плацебо (p=0,0002)",
+              "Доля пациентов без обострений за 24 месяца: 57% (митоксантрон) и 37% (плацебо), p=0,019"
+            ]},
+           {m:"Прогрессирование инвалидизации по шкале EDSS",
+            lines:[
+              "Статистически достоверное замедление нарастания EDSS по сравнению с плацебо (p=0,0194)"
+            ]}
+         ],
+         u:"https://doi.org/10.1016/S0140-6736(02)12023-X", p:"12504397",
+         pdf:{t:"ГРЛС: ОХЛП и инструкции препаратов митоксантрона", u:"https://grls.rosminzdrav.ru/"}}
+      ],
+      studies:[
+        {t:"MIMS. Митоксантрон против плацебо при прогрессирующем РС. The Lancet, 2002", u:"https://doi.org/10.1016/S0140-6736(02)12023-X", p:"12504397", n:"194 пациента. Источник числовых данных выше."},
+        {t:"Риск вторичного острого лейкоза после терапии митоксантроном. Mult Scler, 2002", u:"https://doi.org/10.1191/1352458502ms836oa", p:"12356214", n:"Ключевая работа по токсичности."}
+      ],
+      docs:[
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по МНН «митоксантрон»", off:true},
+        {t:"Онкотрон (Baxter), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/2077/", n:"ЛП-№(000976)-(РГ-RU)"},
+        {t:"Митоксантрон-ЛЭНС (ВЕРОФАРМ), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/110502/", n:"Р N000458/01"}
+      ]
+    },
+    {
+      id:"rituximab", inn:"Ритуксимаб", brand:"Мабтера®, Ацеллбия®", maker:"Roche, БИОКАД и другие", tag:"Резерв", ve:false,
+      klass:"Анти-CD20. При РС применяется вне зарегистрированных показаний, по решению врачебной комиссии",
+      shema:"Схема определяется врачебной комиссией, обычно в/в 1 раз в 6 месяцев.",
+      pokaz:"Отдельные случаи анти-B-клеточной терапии при РС. Показание «рассеянный склероз» в инструкции отсутствует.",
+      cmp:{
+        ctrl:"Плацебо (HERMES 2-я фаза; OLYMPUS при ППРС)",
+        arr:"СЧО на 24 неделе: 0,37 против 0,84 (расчётное снижение ~56%, p=0,04)",
+        mri:"Gd+: снижение общего числа очагов на 91% к 24 неделе (p<0,001)",
+        cdp:"В исследовании OLYMPUS при ППРС первичная точка в общей группе не достигнута",
+        tox:{lvl:"warn", t:"Инфузионные реакции (озноб, сыпь, гипотензия), инфекции дыхательных путей, гипогаммаглобулинемия при длительном лечении, реактивация гепатита B. Применение при РС строго off-label (по решению ВК)."}
+      },
+      stats:[
+        {tr:"HERMES (NEJM 2008, 48 недель)",
+         pop:"РРС (RRMS), 48 недель, n=104",
+         drug:"ритуксимаб 1000 мг внутривенно в дни 1 и 15",
+         ctrl:"плацебо",
+         metrics:[
+           {m:"МРТ-активность на 24 неделе",
+            lines:[
+              "Общее число Gd+ T1-очагов на неделях 12, 16, 20 и 24: снижение на 91% по сравнению с плацебо (p<0,001)"
+            ]},
+           {m:"СЧО (ARR) к 24 неделе",
+            lines:[
+              "Группа ритуксимаба: 0,37 обострения в год",
+              "Группа плацебо: 0,84 обострения в год",
+              "Снижение (расчётное значение на основе данных исследования): ~56,0% (p=0,04)"
+            ]},
+           {m:"Официальный статус",
+            lines:[
+              "Показание «рассеянный склероз» в официальную инструкцию препарата не входит",
+              "Применение при РС возможно только по решению врачебной комиссии (off-label)"
+            ]}
+         ],
+         u:"https://doi.org/10.1056/NEJMoa0706383", p:"18272891",
+         pdf:{t:"ГРЛС: ОХЛП ритуксимаба (показания не включают РС)", u:"https://grls.rosminzdrav.ru/"}}
+      ],
+      studies:[
+        {t:"HERMES. Ритуксимаб против плацебо при РРС, 48 недель. NEJM, 2008", u:"https://doi.org/10.1056/NEJMoa0706383", p:"18272891", n:"104 пациента. Доказал ключевую роль B-клеток при РС."},
+        {t:"OLYMPUS. Ритуксимаб против плацебо при ППРС. Annals of Neurology, 2009", u:"https://doi.org/10.1002/ana.21867", p:"19847908", n:"439 пациентов."}
+      ],
+      docs:[
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по МНН «ритуксимаб». Показание «РС» в инструкции отсутствует", off:true},
+        {t:"Мабтера (Roche), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/5232/", n:"ЛП-№(004365)-(РГ-RU)"},
+        {t:"Ацеллбия (БИОКАД), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/30799/", n:"ЛП-№(006574)-(РГ-RU)"}
+      ]
+    },
+    {
+      id:"ahsct", inn:"Аутологичная трансплантация ГСК", brand:"АутоТГСК, высокодозная иммуносупрессия", maker:"федеральные центры по направлению", tag:"Резерв", ve:true,
+      klass:"Иммунная реконституция. Не лекарственный препарат, а метод лечения",
+      shema:"Мобилизация стволовых клеток, кондиционирование, аутотрансплантация в профильном стационаре.",
+      pokaz:"Агрессивный РС, резистентный к ПИТРС. Решение принимается комиссией с участием гематолога.",
+      cmp:{
+        ctrl:"Продолжение стандартной терапии ПИТРС (MIST)",
+        arr:"Значительное падение частоты рецидивов по сравнению с продолжением ПИТРС",
+        mri:"Глубокое подавление активности воспаления на МРТ головного и спинного мозга",
+        cdp:"Прогрессирование через 1 год: 5,8% (ТГСК) против 66,7% (ПИТРС), ОР 0,07 (p<0,001)",
+        tox:{lvl:"danger", t:"Высокая токсичность процедуры кондиционирования: цитопения, нейтропеническая лихорадка, тяжёлые оппортунистические инфекции, раннее бесплодие, риск смертности, связанной с трансплантацией (в современных центрах <1%)."}
+      },
+      stats:[
+        {tr:"MIST (JAMA 2019, РКИ трансплантации против ПИТРС)",
+         pop:"РРС с активностью на фоне ПИТРС, n=110",
+         drug:"немиелоаблативная аутологичная трансплантация ГСК",
+         ctrl:"продолжение стандартной терапии ПИТРС (смена препарата)",
+         metrics:[
+           {m:"Прогрессирование заболевания (первичная точка)",
+            lines:[
+              "Прогрессирование через 1 год: 3 из 52 пациентов на АутоТГСК (5,8%)",
+              "Прогрессирование через 1 год: 34 из 51 пациента на продолжении ПИТРС (66,7%)",
+              "Снижение риска прогрессирования: ОР 0,07 (95% ДИ 0,02-0,24; p<0,001)"
+            ]},
+           {m:"Статус метода",
+            lines:[
+              "Не является фармакологическим препаратом (нет регистрационного удостоверения)",
+              "Проводится в федеральных гематологических центрах по решению врачебной комиссии"
+            ]}
+         ],
+         u:"https://doi.org/10.1001/jama.2018.18743", p:"30644983",
+         pdf:{t:"Клинические рекомендации МЗ РФ «Рассеянный склероз»", u:"https://cr.minzdrav.gov.ru/schema/739_1"}}
+      ],
+      studies:[
+        {t:"MIST. Немиелоаблативная АутоТГСК против продолжения ПИТРС. JAMA, 2019", u:"https://doi.org/10.1001/jama.2018.18743", p:"30644983", n:"110 пациентов. Полный текст в открытом доступе."}
+      ],
+      docs:[
+        {t:"Клинические рекомендации МЗ РФ «Рассеянный склероз»", u:"https://cr.minzdrav.gov.ru/schema/739_1", n:"Разделы об агрессивном и резистентном течении заболевания", off:true}
+      ]
+    }
+  ]}
+];
+
+const state = {f:'all', q:''};
+const list = document.getElementById('list');
+
+function badge(tag){
+  const map = {'ВЭ-ПИТРС':['ve-soft','ve'],'2-я линия':['accent-soft','accent'],'1-я линия':['ok-soft','ok'],'Резерв':['warn-soft','warn']};
+  const m = map[tag] || ['accent-soft','accent'];
+  return '<span class="text-[11px] font-semibold px-2 py-0.5 rounded-full whitespace-nowrap" style="background:var(--'+m[0]+');color:var(--'+m[1]+')">'+tag+'</span>';
+}
+function pill(label,val){
+  if(!val) return '';
+  return '<div class="px-3 py-2 rounded-xl sub"><div class="text-[11px] uppercase tracking-wide muted">'+label+'</div><div class="text-[13.5px] mt-0.5">'+val+'</div></div>';
+}
+
+/* Форматирование блока «Эффективность по РКИ» с выводом каждой записи с новой строки */
+function statsBlock(arr){
+  if(!arr || !arr.length) return '';
+  let h = '<div class="mt-3"><div class="text-[12px] font-semibold uppercase tracking-wide muted">📊 Эффективность по РКИ</div><div class="mt-1.5 space-y-2.5">';
+  arr.forEach(function(s){
+    h += '<div class="px-3 py-2.5 rounded-xl sub" style="border-left:3px solid var(--accent)">'
+      + '<div class="text-[13.5px] font-semibold">'+s.tr+'</div>'
+      + '<div class="text-[12px] muted mt-0.5">'+s.pop+'</div>'
+      + '<div class="mt-2 space-y-2">';
+    (s.metrics||[]).forEach(function(m){
+      h += '<div class="p-2 rounded-lg bg-[var(--panel)] border bd">'
+        + '<div class="text-[12px] font-semibold" style="color:var(--accent)">' + m.m + '</div>'
+        + '<ul class="mt-1 space-y-0.5 text-[12.5px] pl-2" style="border-left:2px solid var(--line-2)">';
+      m.lines.forEach(function(ln){
+        h += '<li>' + ln + '</li>';
+      });
+      h += '</ul></div>';
+    });
+    h += '</div>'
+      + '<div class="mt-2 pt-2 text-[12px] muted" style="border-top:1px solid var(--line)">'
+      + '<div><b>Группа лечения:</b> ' + s.drug + '</div>'
+      + '<div class="mt-0.5"><b>Контрольная группа:</b> ' + s.ctrl + '</div>'
+      + '</div>'
+      + '<div class="mt-2 flex flex-wrap gap-1.5 items-center">'
+      + '<a class="src" href="' + s.u + '" target="_blank" rel="noopener">Первоисточник (DOI)</a>'
+      + (s.p ? '<a class="src" href="https://pubmed.ncbi.nlm.nih.gov/' + s.p + '/" target="_blank" rel="noopener">PMID ' + s.p + '</a>' : '')
+      + (s.pdf ? '<a class="pdfb" href="' + s.pdf.u + '" target="_blank" rel="noopener">' + s.pdf.t + '</a>' : '')
+      + '</div></div>';
+  });
+  return h + '</div></div>';
+}
+
+function rows(title,arr,icon){
+  if(!arr || !arr.length) return '';
+  let h = '<div class="mt-3"><div class="text-[12px] font-semibold uppercase tracking-wide muted">'+icon+' '+title+'</div><ul class="mt-1.5 space-y-2.5">';
+  arr.forEach(function(x){
+    h += '<li class="text-[13.5px] leading-snug pl-3" style="border-left:2px solid '+(x.off?'var(--ok)':'var(--line-2)')+'">'
+      + '<a class="lnk font-medium" href="'+x.u+'" target="_blank" rel="noopener">'+x.t+'</a>'
+      + (x.off ? ' <span class="pdfb">первоисточник</span>' : '')
+      + (x.pdf ? ' <span class="pdfb">PDF</span>' : '')
+      + (x.n ? '<div class="muted text-[12.5px] mt-0.5">'+x.n+'</div>' : '')
+      + (x.p ? '<div class="mt-1"><a class="src" href="https://pubmed.ncbi.nlm.nih.gov/'+x.p+'/" target="_blank" rel="noopener">PMID '+x.p+'</a></div>' : '')
+      + '</li>';
+  });
+  return h + '</ul></div>';
+}
+
+/*
+  Снижение СЧО относительно плацебо (отсутствия терапии) для сводной таблицы.
+  kind: 'direct' - плацебо-контролируемое РКИ; 'nma' - объединенный NMA; 'indirect' - косвенный расчёт по цепочке; 'none' - оценка к плацебо невозможна.
+  Цепочки: RR(препарат к контролю) × RR(контроль к плацебо). Опорные RR к плацебо: ИФН бета-1а 44 мкг п/к 0,68 (PRISMS); ИФН бета-1а 30 мкг в/м 0,68 (MSCRG); терифлуномид 14 мг ≈0,66 (TEMSO/TOWER).
+*/
+const PLACEBO = {
+  ocrelizumab:{kind:'nma', v:'≈63-67%',
+    how:'NMA Samjoo 2021: снижение на 67% к плацебо; NMA 2023: RR 0,28-0,34 для всех mAb. Косвенный расчёт по цепочке: 0,55 (OPERA, к ИФН 44 мкг) × 0,68 (PRISMS) = 0,37 → ≈63%.'},
+  divozilimab:{kind:'indirect', v:'≈75-77% (КОСВЕННО, широкий ДИ)',
+    how:'Прямого сравнения с плацебо нет. Цепочка: 0,346 (MIRANTIBUS, к терифлуномиду; 95% ДИ 0,20-0,59) × 0,66 = 0,23 → ≈77%. Российский NMA (PMID 40047834): к натализумабу 0,4, к финголимоду 0,4, к кладрибину 0,5, к окрелизумабу/офатумумабу/алемтузумабу 0,7; различия с другими mAb статистически не значимы. Одно РКИ, n=338 - оценка менее устойчива, чем у препаратов с несколькими РКИ.'},
+  ifnb1a:{kind:'direct', v:'32% (44 мкг п/к); 32% (30 мкг в/м)',
+    how:'PRISMS: 1,73 против 2,56 обострения за 2 года (RR 0,68). MSCRG 1996 (Авонекс): 0,61 против 0,90 в год (RR 0,68).'},
+  ifnb1b:{kind:'direct', v:'34%',
+    how:'IFNB MS Study Group 1993: 0,84 против 1,27 в год (RR 0,66). В BEYOND эквивалентен глатирамера ацетату.'},
+  pegifnb:{kind:'direct', v:'36%',
+    how:'ADVANCE, 1-й год: 0,256 против 0,397 (RR 0,644; p=0,0007).'},
+  sampaegifnb:{kind:'none', v:'к плацебо не рассчитывается',
+    how:'В BCD-054-2 плацебо-группа завершила участие на 20-й неделе; сопоставимый годовой СЧО к плацебо не публиковался. Доступно только сравнение с низкодозным ИФН бета-1а 30 мкг (превосходство по первичной точке, 52 нед). Класс препарата - интерферон бета, ожидаемый диапазон класса 30-36% к плацебо, но это предположение, а не данные РКИ.'},
+  glatiramer:{kind:'direct', v:'29% (20 мг); 34% (40 мг)',
+    how:'CONFIRM: 0,29 против 0,40 (20 мг ежедневно). GALA: 0,331 против 0,505 (40 мг 3 раза в неделю).'},
+  teriflunomide:{kind:'direct', v:'31-36%',
+    how:'TEMSO: 0,37 против 0,54 (RR 0,685). TOWER: 0,319 против 0,501 (RR 0,637).'},
+  dimethylfumarate:{kind:'direct', v:'44-53%',
+    how:'DEFINE: 0,17 против 0,36 (RR 0,47). CONFIRM: 0,22 против 0,40 (RR 0,56).'},
+  diroximelfumarate:{kind:'none', v:'= диметилфумарат (44-53%)',
+    how:'Собственных плацебо-контролируемых РКИ нет; зарегистрирован по биоэквивалентности активного метаболита (монометилфумарат) диметилфумарату. Эффект к плацебо принимается равным DEFINE/CONFIRM.'},
+  fingolimod:{kind:'direct', v:'54%',
+    how:'FREEDOMS: 0,18 против 0,40 (RR 0,45). Проверка цепочкой через TRANSFORMS: 0,48 (к ИФН 30 мкг) × 0,68 = 0,33 → ≈67%; расхождение отражает разные популяции РКИ.'},
+  siponimod:{kind:'direct', v:'55,5% (при ВПРС)',
+    how:'EXPAND: 0,071 против 0,160 (RR 0,445). Популяция - вторично-прогрессирующий РС, с РРС-исследованиями напрямую не сопоставимо.'},
+  ozanimod:{kind:'nma', v:'≈55-58%',
+    how:'NMA Samjoo 2021: снижение на 55% к плацебо; NMA 2023: RR 0,43. Косвенный расчёт: SUNBEAM 0,52 × 0,68 = 0,35 (≈65%); RADIANCE 0,62 × 0,68 = 0,42 (≈58%).'},
+  ofatumumab:{kind:'nma', v:'≈70%',
+    how:'NMA Samjoo 2021: снижение на 70% к плацебо; NMA 2023: RR ≈0,28-0,31 (в тройке лучших по СЧО). Косвенный расчёт: 0,455 (среднее ASCLEPIOS I/II, к терифлуномиду) × 0,66 = 0,30 → ≈70%.'},
+  natalizumab:{kind:'direct', v:'68%',
+    how:'AFFIRM: 0,23 против 0,73 (RR 0,32). NMA 2023 подтверждает: RR 0,28-0,34.'},
+  cladribine:{kind:'direct', v:'58%',
+    how:'CLARITY: 0,14 против 0,33 (RR 0,42). NMA Samjoo 2021: 58%.'},
+  alemtuzumab:{kind:'nma', v:'≈66-72%',
+    how:'NMA 2023: RR ≈0,28 (лучший результат по СЧО среди всех ПИТРС). Косвенный расчёт: CARE-MS I 0,45 × 0,68 = 0,31 (≈69%); CARE-MS II 0,51 × 0,68 = 0,35 (≈65%).'},
+  mitoxantrone:{kind:'direct', v:'≈62%',
+    how:'MIMS: отношение общего числа обострений 0,38 (95% ДИ 0,18-0,59) к плацебо, популяция ВПРС/прогрессирующе-ремиттирующий РС, 2 года.'},
+  rituximab:{kind:'direct', v:'≈56% (24 нед, 2-я фаза)',
+    how:'HERMES: 0,37 против 0,84 к 24-й неделе (p=0,04). Небольшое исследование 2-й фазы (n=104); показание при РС не зарегистрировано.'},
+  ahsct:{kind:'none', v:'к плацебо не рассчитывается',
+    how:'MIST сравнивал трансплантацию с продолжением ПИТРС, плацебо-контроль этически невозможен. Первичная точка - прогрессирование: 5,8% против 66,7% за 1 год.'}
+};
+
+/* Построение строк сводной сравнительной таблицы */
+function renderCmpTable(){
+  const tbody = document.getElementById('cmp-tbody');
+  if(!tbody) return;
+  const kindBadge = {direct:'<span class="pdfb">прямое РКИ к плацебо</span>', nma:'<span class="src">объединенный NMA</span>', indirect:'<span class="warnb">косвенный расчёт</span>', none:'<span class="warnb">нет оценки к плацебо</span>'};
+  let html = '';
+  DATA.forEach(function(gr){
+    gr.items.forEach(function(it){
+      if(!it.cmp) return;
+      const c = it.cmp;
+      const p = PLACEBO[it.id] || {kind:'none', v:'нет данных', how:''};
+      const toxBadge = c.tox.lvl === 'danger'
+        ? '<span class="dangerb">Высокая тяжесть</span>'
+        : (c.tox.lvl === 'warn' ? '<span class="warnb">Умеренная (контроль)</span>' : '<span class="pdfb">Низкая / умеренная</span>');
+      html += '<tr>'
+        + '<td><b>' + it.inn + '</b><div class="muted text-[11.5px]">' + it.brand + '</div><div class="mt-1">' + badge(it.tag) + '</div></td>'
+        + '<td><b style="color:var(--accent);font-size:13px">' + p.v + '</b><div class="mt-1">' + (kindBadge[p.kind] || '') + '</div></td>'
+        + '<td class="muted text-[11.5px] leading-snug">' + p.how + '<div class="mt-1.5" style="color:var(--txt)"><b>Прямое РКИ:</b> ' + c.arr + '</div><div class="mt-0.5">Контроль: ' + c.ctrl + '</div></td>'
+        + '<td>' + c.mri + '</td>'
+        + '<td>' + c.cdp + '</td>'
+        + '<td><div class="mb-1">' + toxBadge + '</div><div class="text-[12px] muted leading-snug">' + c.tox.t + '</div></td>'
+        + '</tr>';
+    });
+  });
+  tbody.innerHTML = html;
+}
+
+function render(){
+  let html = '', shown = 0;
+  const q = state.q.trim().toLowerCase();
+  DATA.forEach(function(gr){
+    const items = gr.items.filter(function(it){
+      if(state.f !== 'all'){
+        if(state.f === 'ВЭ-ПИТРС'){ if(!it.ve) return false; }
+        else if(it.tag !== state.f) return false;
+      }
+      if(q){
+        let hay = [it.inn,it.brand,it.maker,it.klass,it.shema,it.pokaz,it.reg||'',gr.g].join(' ');
+        (it.stats||[]).forEach(function(s){
+          hay += ' '+s.tr+' '+s.pop+' '+s.drug+' '+s.ctrl;
+          (s.metrics||[]).forEach(function(m){ hay += ' '+m.m+' '+m.lines.join(' '); });
+        });
+        (it.studies||[]).forEach(function(s){ hay += ' '+s.t+' '+(s.n||''); });
+        (it.docs||[]).forEach(function(s){ hay += ' '+s.t; });
+        if(hay.toLowerCase().indexOf(q) === -1) return false;
+      }
+      return true;
+    });
+    if(!items.length) return;
+    shown += items.length;
+    html += '<section><div class="flex items-baseline gap-2 flex-wrap px-1">'
+         +  '<h2 class="font-bold text-[14.5px]">'+gr.g+'</h2><span class="text-[12px] muted">'+items.length+'</span></div>'
+         +  (gr.note ? '<p class="text-[12.5px] muted px-1 mt-0.5">'+gr.note+'</p>' : '')
+         +  '<div class="mt-2.5 space-y-2.5">';
+    items.forEach(function(it){
+      const st = it.ve ? 'var(--ve)' : 'var(--accent)';
+      html += '<article class="acc card overflow-hidden" id="'+it.id+'">'
+        + '<button class="w-full text-left px-4 py-3.5 flex items-start gap-3" aria-expanded="false" aria-controls="'+it.id+'-body">'
+        + '<span class="mt-1 shrink-0 w-2 h-2 rounded-full" style="background:'+st+'"></span>'
+        + '<span class="flex-1 min-w-0">'
+        + '<span class="block font-semibold text-[15px] leading-snug">'+it.inn+' <span class="muted font-normal">/</span> '+it.brand+'</span>'
+        + '<span class="block text-[12.5px] muted mt-0.5">'+it.klass+'</span>'
+        + '<span class="flex flex-wrap gap-1.5 mt-2">'+badge(it.tag)
+        + (it.ve ? '<span class="text-[11px] font-semibold px-2 py-0.5 rounded-full" style="background:var(--ve-soft);color:var(--ve)">Высокоэффективный</span>' : '')
+        + (it.reg ? '<span class="text-[11px] px-2 py-0.5 rounded-full sub muted">РУ: '+it.reg+'</span>' : '')
+        + '</span></span>'
+        + '<svg class="chev shrink-0 mt-1" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>'
+        + '</button>'
+        + '<div class="acc-body" id="'+it.id+'-body"><div><div class="px-4 pb-4 pt-0.5 border-t bd">'
+        + '<div class="grid sm:grid-cols-2 gap-2 mt-3">'
+        + pill('Схема введения', it.shema) + pill('Показания', it.pokaz)
+        + pill('Производитель', it.maker) + (it.reg ? pill('Регистрационное удостоверение', it.reg) : '')
+        + '</div>'
+        + statsBlock(it.stats)
+        + rows('Клинические исследования', it.studies, '🧪')
+        + rows('Регистрация в РФ и официальные документы', it.docs, '📄')
+        + '</div></div></div></article>';
+    });
+    html += '</div></section>';
+  });
+  list.innerHTML = html;
+  document.getElementById('empty').classList.toggle('hidden', shown > 0);
+}
+
+document.addEventListener('click', function(e){
+  const head = e.target.closest('button[aria-expanded]');
+  if(head){
+    const card = head.closest('.acc');
+    const open = card.classList.toggle('open');
+    head.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if(open) history.replaceState(null, '', '#' + card.id);
+  }
+});
+document.getElementById('q').addEventListener('input', function(e){ state.q = e.target.value; render(); });
+document.getElementById('filters').addEventListener('click', function(e){
+  const b = e.target.closest('button[data-f]'); if(!b) return;
+  state.f = b.dataset.f;
+  document.querySelectorAll('#filters button').forEach(function(x){ x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+  render();
+});
+const tgl = document.getElementById('toggleAll');
+tgl.addEventListener('click', function(){
+  const all = Array.prototype.slice.call(document.querySelectorAll('.acc'));
+  const anyClosed = all.some(function(c){ return !c.classList.contains('open'); });
+  all.forEach(function(c){
+    c.classList.toggle('open', anyClosed);
+    c.querySelector('button[aria-expanded]').setAttribute('aria-expanded', anyClosed ? 'true' : 'false');
+  });
+  tgl.textContent = anyClosed ? 'Свернуть всё' : 'Развернуть всё';
+});
+document.getElementById('theme').addEventListener('click', function(){
+  document.documentElement.classList.toggle('dark');
+  const d = document.documentElement.classList.contains('dark');
+  localStorage.setItem('pitrs-theme', d ? 'dark' : 'light');
+  document.getElementById('theme').textContent = d ? '☀️' : '🌙';
+});
+if(document.documentElement.classList.contains('dark')){
+  document.getElementById('theme').textContent = '☀️';
+}
+render();
+renderCmpTable();
+if(location.hash){
+  const el = document.getElementById(location.hash.slice(1));
+  if(el && el.classList.contains('acc')){
+    el.classList.add('open');
+    el.querySelector('button[aria-expanded]').setAttribute('aria-expanded','true');
+    setTimeout(function(){ el.scrollIntoView({block:'start', behavior:'smooth'}); }, 120);
+  }
+}
+</script>
+</body>
+</html>
