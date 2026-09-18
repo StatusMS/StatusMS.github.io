@@ -39,7 +39,6 @@ if(localStorage.getItem('pitrs-theme')==='dark')document.documentElement.classLi
   .chev{transition:transform .28s ease}
   .acc.open .chev{transform:rotate(180deg)}
   .acc.open{border-color:var(--accent)}
-  .acc{scroll-margin-top:170px}
   a.lnk{color:var(--accent);text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--accent) 40%,transparent)}
   a.lnk:active{opacity:.7}
   input,button{font:inherit}
@@ -58,6 +57,7 @@ if(localStorage.getItem('pitrs-theme')==='dark')document.documentElement.classLi
      Работает через класс .open (добавляется при раскрытии аккордеона), не затрагивая другие карточки. */
   #comparison-table.open{position:relative;left:50%;transform:translateX(-50%);width:min(1360px,calc(100vw - 40px));transition:width .28s ease}
   @media (max-width:700px){#comparison-table.open{left:auto;transform:none;width:auto}}
+  .acc{scroll-margin-top:24px}
   @media print{
     .no-print{display:none!important}
     .acc-body{grid-template-rows:1fr!important}
@@ -68,7 +68,7 @@ if(localStorage.getItem('pitrs-theme')==='dark')document.documentElement.classLi
 </head>
 <body class="min-h-screen">
 
-<header class="sticky top-0 z-30 backdrop-blur-md no-print" style="background:color-mix(in srgb,var(--bg) 88%,transparent);border-bottom:1px solid var(--line)">
+<header class="no-print" style="background:var(--panel);border-bottom:1px solid var(--line)">
   <div class="max-w-3xl mx-auto px-4 pt-3 pb-2">
     <div class="flex items-start gap-3">
       <div class="flex-1 min-w-0">
@@ -1537,6 +1537,7 @@ if(document.documentElement.classList.contains('dark')){
 }
 render();
 renderCmpTable();
+
 if(location.hash){
   const el = document.getElementById(location.hash.slice(1));
   if(el && el.classList.contains('acc')){
