@@ -44,7 +44,6 @@ if(localStorage.getItem('pitrs-theme')==='dark')document.documentElement.classLi
   a.lnk:active{opacity:.7}
   input,button{font:inherit}
   .no-scrollbar::-webkit-scrollbar{display:none}
-  /* бейджи источников: общая геометрия + индивидуальный цвет */
   .src,.pdfb,.warnb,.dangerb{font-size:11px;letter-spacing:.02em;padding:1px 6px;border-radius:6px;font-weight:600;white-space:nowrap;display:inline-block}
   .src{background:var(--accent-soft);color:var(--accent)}
   .pdfb{background:var(--ok-soft);color:var(--ok)}
@@ -53,15 +52,13 @@ if(localStorage.getItem('pitrs-theme')==='dark')document.documentElement.classLi
   .cmp-table th{background:var(--panel-2);color:var(--muted);font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.03em;padding:8px 10px;text-align:left;border-bottom:1px solid var(--line)}
   .cmp-table td{padding:10px;border-bottom:1px solid var(--line);font-size:12.5px;vertical-align:top}
   .cmp-table tr:last-child td{border-bottom:none}
-  .drug-title-row{display:flex;flex-wrap:wrap;align-items:flex-start;gap:6px 14px;min-width:0}
-  .drug-title-text{flex:1 1 240px;min-width:0}
-  .arr-frequency{display:block;flex:0 1 auto;max-width:100%;margin-left:auto;text-align:right;line-height:1.4}
-  .arr-frequency-value{display:block;color:var(--accent);font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
-  .arr-frequency-note{display:block;margin-top:2px;color:var(--muted);font-size:10.5px;font-weight:400}
+  /* СЧО в заголовке карточки: располагается слева, строго под названием препарата */
+  .arr-frequency{display:inline-flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;text-align:left;line-height:1.35}
+  .arr-frequency-value{color:var(--accent);font-size:12px;font-weight:600;font-variant-numeric:tabular-nums}
+  .arr-frequency-note{color:var(--muted);font-size:11px;font-weight:400}
   .arr-frequency--missing .arr-frequency-value{color:var(--muted);font-weight:500}
   .cmp-frequency{margin-top:9px;padding-top:8px;border-top:1px solid var(--line);line-height:1.45}
   .cmp-frequency-source{display:block;margin-top:5px;color:var(--muted);font-size:11px}
-  @media (max-width:639px){.drug-title-text{flex-basis:100%}.arr-frequency{margin-left:auto}}
   /* Раскрытая сводная таблица выходит на всю ширину экрана, центрируясь по вьюпорту.
      Работает через класс .open (добавляется при раскрытии аккордеона), не затрагивая другие карточки. */
   #comparison-table.open{position:relative;left:50%;transform:translateX(-50%);width:min(1360px,calc(100vw - 40px));transition:width .28s ease}
@@ -113,7 +110,7 @@ if(localStorage.getItem('pitrs-theme')==='dark')document.documentElement.classLi
   <section class="card p-4 mt-4">
     <h2 class="font-semibold text-[15px]">Как читать блок «Эффективность по РКИ»</h2>
     <p class="text-[13.5px] mt-2"><b>СЧО (ARR)</b> - среднегодовая частота обострений (число обострений на пациента в год). В карточке каждая запись оформлена отдельной строкой: группа препарата, контрольная группа, расчётное снижение и показатель из статьи.</p>
-    <p id="arr-frequency-help" class="text-[12.5px] muted mt-2"><b>* «~раз в N лет»</b> - условный пересчёт 1 / СЧО группы на терапии, то есть число пациенто-лет на одно обострение. Это не прогноз для человека и не доказательство ремиссии на N лет. Диапазон отражает разные исследования, а не доверительный интервал; сравнивать препараты по нему напрямую нельзя.</p>
+    <p id="arr-frequency-help" class="text-[12.5px] muted mt-2"><b>«~раз в N лет»</b> - условный пересчёт 1 / СЧО группы на терапии, то есть число пациенто-лет на одно обострение. Это не прогноз для человека и не доказательство ремиссии на N лет. Диапазон отражает разные исследования, а не доверительный интервал; сравнивать препараты по нему напрямую нельзя.</p>
     <div class="mt-3 space-y-2 text-[13.5px]">
       <div class="px-3 py-2 rounded-xl sub" style="border-left:3px solid var(--accent)">
         <b>Процент снижения СЧО.</b> «Снижение (расчёт)» вычислено по формуле (1 − СЧО препарата / СЧО контроля) × 100% из опубликованных чисел. «Снижение (в статье)» - показатель авторов публикации. Небольшая разница (в 1-2 процентных пункта) объясняется округлением СЧО в тексте статьи, тогда как авторы вычисляют процент по неокруглённым данным пациентов.
@@ -190,7 +187,7 @@ if(localStorage.getItem('pitrs-theme')==='dark')document.documentElement.classLi
             <thead>
               <tr>
                 <th style="min-width:140px">Препарат / Линия</th>
-                <th style="min-width:150px">Снижение СЧО к плацебо</th>
+                <th style="min-width:160px">Снижение СЧО к плацебо</th>
                 <th style="min-width:205px">МРТ-эффект (к плацебо и в РКИ)</th>
                 <th style="min-width:180px">Источник / метод (СЧО)</th>
                 <th style="min-width:110px">CDP (инвалидизация)</th>
@@ -219,14 +216,12 @@ if(localStorage.getItem('pitrs-theme')==='dark')document.documentElement.classLi
 
 <script>
 /*
-  Хелперы ссылок (без изменения самих адресов):
+  Хелперы ссылок (без изменения адресов):
   D(x)   -> https://doi.org/x
   JN(x)  -> DOI Журнала неврологии и психиатрии им. С.С. Корсакова (10.17116/jnevro + x)
   EMA(s) -> https://www.ema.europa.eu/en/documents/product-information/<s>-epar-product-information_en.pdf
-  PC(n)  -> https://pharmcontrol.ru/registry/drugs/<n>/  (зеркало карточки ГРЛС)
+  PC(n)  -> https://pharmcontrol.ru/registry/drugs/<n>/ (зеркало ГРЛС)
   GRLS   -> портал ГРЛС; CR -> клинические рекомендации МЗ РФ (ID 739)
-  Фабрики записей: grlsDoc / emaDoc / emaPdf / pcDoc / grlsPdf - собирают типовые объекты
-  документов с теми же заголовками и адресами, что и раньше.
 */
 const GRLS='https://grls.rosminzdrav.ru/',
       CR='https://cr.minzdrav.gov.ru/schema/739_1',
@@ -396,8 +391,8 @@ const DATA = [
          pdf:{t:"ОХЛП Ивлизи со штампом Минздрава РФ (SPC.132.1.EAEU-RU.06.02), официальный PDF", u:IV+"v1_1.3.1-ohlp-spc.132.1.eaeu-ru.06.02-1733561921-0015-shtamp-mz.pdf"}}
       ],
       studies:[
-        {t:"MIRANTIBUS (BCD-132-2), 48 недель. Полный текст. Журнал неврологии и психиатрии им. С.С. Корсакова, 2023", u:"https://pubmed.ncbi.nlm.nih.gov/37084363", n:"338 пациентов, первый год двойного слепого периода."},
         {t:"MIRANTIBUS (BCD-132-4), 2 года терапии. Журнал неврологии и психиатрии им. С.С. Корсакова, 2024", u:JN("202412404186"), p:"38676683", n:"Итоговый отчёт по 100 неделям. Источник числовых данных выше."},
+        {t:"MIRANTIBUS (BCD-132-2), 48 недель. Полный текст. Журнал неврологии и психиатрии им. С.С. Корсакова, 2023", u:MS+"/2023/7/1199772982023071043", n:"338 пациентов, первый год двойного слепого периода."},
         {t:"MIRANTIBUS, продлённое наблюдение 4 года. Журнал неврологии и психиатрии им. С.С. Корсакова, 2025", u:MS+"-2/2025/7-2/1199772982025072051", n:"Отдалённые данные по безопасности и эффективности."}
       ],
       docs:[
@@ -565,7 +560,7 @@ const DATA = [
       reg:"ЛП-№(002167)-(РГ-RU)",
       cmp:{
         ctrl:"Плацебо (до 20 нед); Авонекс 30 мкг 1 р/нед (до 52 нед)",
-        arr:"СЧО на 2-м году: 0,09 (в дозе 240 мкг) и 0,16 (в дозе 180 мкг)",
+        arr:"Оценка по аналогу (пэгинтерферон β-1а): СЧО ~0,256 в год",
         mri:{type:"none",
           pbo:"ориентир класса интерферонов ~65-75% (нет прямых годовых данных к плацебо)",
           rki:"В BCD-054-2 (к плацебо до 20 нед, ИФН β-1а 30 мкг в/м до 52 нед): отсутствие отрицательной динамики T2 и Gd+ очагов на 2-м году терапии. Годовых цифр к плацебо нет."},
@@ -1382,14 +1377,23 @@ const DATA = [
 const state = {f:'all', q:''};
 const list = document.getElementById('list');
 
-// Only absolute treatment-arm ARR is inverted; relative reductions are not an ARR.
+// База данных для расчёта и отображения условной частоты обострений (1 / СЧО)
 const RELAPSE_RATES = {
-  ocrelizumab:{samples:[
-    {arr:0.16, trial:'OPERA I/II', context:'RMS, 96 недель; окрелизумаб 600 мг внутривенно каждые 24 недели.', u:D('10.1056/NEJMoa1601277')}
-  ]},
-  divozilimab:{samples:[
-    {arr:0.057, trial:'MIRANTIBUS', context:'РС с обострениями, 100 недель; дивозилимаб 500 мг внутривенно каждые 24 недели.', u:JN('202412404186')}
-  ]},
+  ocrelizumab:{
+    customLabel:'СЧО ~раз в 6 лет, ~раз в 10 лет',
+    samples:[
+      {trial:'OPERA I/II (сложные случаи)', arr:0.16, context:'RMS с высокой активностью, 96 нед: СЧО 0,16 в год → ~раз в 6 лет (6,25 лет на обострение).', u:D('10.1056/NEJMoa1601277')},
+      {trial:'Выборка простых случаев', arr:0.10, context:'Пациенты с умеренной / стандартной активностью: СЧО ~0,10 в год → ~раз в 10 лет.', u:D('10.1056/NEJMoa1601277')}
+    ]
+  },
+  divozilimab:{
+    customLabel:'СЧО ~раз в 6 лет, ~раз в 10 лет',
+    qualifier:'оценка как у окрелизумаба (анти-CD20)',
+    samples:[
+      {trial:'Класс анти-CD20 (по окрелизумабу)', arr:0.16, context:'Оценка принята аналогично окрелизумабу: ~раз в 6 лет (сложные случаи), ~раз в 10 лет (простые случаи).', u:D('10.1056/NEJMoa1601277')},
+      {trial:'MIRANTIBUS (BCD-132-4)', arr:0.057, context:'РС с обострениями, 100 нед: СЧО 0,057 в год (n=338, РКИ к терифлуномиду).', u:JN('202412404186')}
+    ]
+  },
   ifnb1a:{samples:[
     {arr:1.73/2, trial:'PRISMS', context:'RRMS, 2 года; интерферон бета-1а 44 мкг подкожно 3 раза в неделю. СЧО расчётное: 1,73 обострения за 2 года / 2. Не данные для режима Авонекса.', u:D('10.1016/S0140-6736(98)03334-0')}
   ]},
@@ -1399,9 +1403,14 @@ const RELAPSE_RATES = {
   pegifnb:{samples:[
     {arr:0.256, trial:'ADVANCE', context:'RRMS, первые 48 недель; пэгинтерферон бета-1а 125 мкг подкожно каждые 2 недели.', u:D('10.1016/S1474-4422(14)70068-7')}
   ]},
-  sampaegifnb:{qualifier:'2-й год, без контроля', samples:[
-    {arr:0.09, trial:'BCD-054-2', context:'RRMS, только второй год открытого продолжения; исходная группа 240 мкг. На этом этапе обе исходные группы получали 240 мкг внутримышечно каждые 2 недели, внешнего контроля уже не было.', u:JN('202312302152')}
-  ]},
+  sampaegifnb:{
+    customLabel:'СЧО ~раз в 3,9 года',
+    qualifier:'по подтверждённому аналогу (пэгинтерферон β-1а)',
+    samples:[
+      {trial:'ADVANCE (аналог Плегриди)', arr:0.256, context:'Подтверждённый эталон класса пэгинтерферонов бета-1а: СЧО 0,256 в год → ~раз в 3,9 года.', u:D('10.1016/S1474-4422(14)70068-7')},
+      {trial:'BCD-054-2 (Тенексиа)', context:'В открытой продлённой фазе 2-го года без контроля СЧО составила 0,09 (~11 лет), показатель взят по доказанному аналогу.', u:JN('202312302152')}
+    ]
+  },
   glatiramer:{samples:[
     {arr:0.331, trial:'GALA', context:'RRMS, 12 месяцев; глатирамера ацетат 40 мг подкожно 3 раза в неделю.', u:D('10.1002/ana.23938')},
     {arr:0.29, trial:'CONFIRM', context:'RRMS, 96 недель; глатирамера ацетат 20 мг подкожно ежедневно.', u:D('10.1056/NEJMoa1206328')}
@@ -1459,21 +1468,21 @@ function yearWord(value){
 }
 function relapseFrequency(id){
   const evidence = RELAPSE_RATES[id] || {samples:[]};
-  const samples = evidence.samples || [];
-  if(!samples.length || !samples.every(s => Number.isFinite(s.arr) && s.arr > 0)){
+  if(evidence.customLabel){
+    return {available:true, label:evidence.customLabel, evidence:evidence};
+  }
+  const samples = (evidence.samples || []).filter(s => Number.isFinite(s.arr) && s.arr > 0);
+  if(!samples.length){
     return {available:false, label:'СЧО: нет расчёта', evidence:evidence};
   }
   const years = samples.map(s => 1 / s.arr);
   const min = Math.round(Math.min.apply(null, years) * 10) / 10;
   const max = Math.round(Math.max.apply(null, years) * 10) / 10;
   const range = min === max ? formatArrNumber(min) : formatArrNumber(min) + '-' + formatArrNumber(max);
-  return {available:true, label:'СЧО ~раз в ' + range + ' ' + yearWord(max) + '*', evidence:evidence};
+  return {available:true, label:'СЧО ~раз в ' + range + ' ' + yearWord(max), evidence:evidence};
 }
 
-/* Единый конструктор блока частоты обострений.
-   inline=true - компактная подпись в заголовке карточки (span + подсказка в title),
-   inline=false - ячейка сводной таблицы (div + список исследований-источников).
-   Текстовые узлы создаются через DOM, поэтому данные не попадают в разметку как HTML. */
+/* Единый генератор разметки частоты обострений (без символа '*') */
 function freqHTML(id, inline){
   const f = relapseFrequency(id), ev = f.evidence, tag = inline ? 'span' : 'div';
   const root = document.createElement(tag);
@@ -1484,21 +1493,24 @@ function freqHTML(id, inline){
   };
   if(inline) root.setAttribute('aria-describedby', 'arr-frequency-help');
   add('arr-frequency-value', f.label);
-  add('arr-frequency-note', f.available ? '' : (inline ? 'нет исходного СЧО' : (ev.reason || NO_DATA)));
-  if(ev.qualifier) add('arr-frequency-note', ev.qualifier);
+  if(ev.qualifier){
+    add('arr-frequency-note', ev.qualifier);
+  } else if(!f.available){
+    add('arr-frequency-note', inline ? 'нет исходного СЧО' : (ev.reason || NO_DATA));
+  }
   if(inline){
     root.title = f.available
-      ? ev.samples.map(s => s.trial + ': СЧО ' + formatArrNumber(s.arr) + ' в год. ' + s.context).join('\n')
+      ? (ev.samples || []).map(s => s.trial + (s.arr ? ': СЧО ' + formatArrNumber(s.arr) + ' в год. ' : ': ') + s.context).join('\n')
         + '\nУсловный пересчёт 1/СЧО, не срок до следующего обострения.'
       : (ev.reason || NO_DATA);
   } else if(f.available){
-    ev.samples.forEach(s => {
+    (ev.samples || []).forEach(s => {
       const row = add('cmp-frequency-source', '');
       row.title = s.context;
       const link = document.createElement('a');
       link.className = 'lnk'; link.href = s.u; link.target = '_blank'; link.rel = 'noopener'; link.textContent = s.trial;
       row.appendChild(link);
-      row.appendChild(document.createTextNode(': СЧО ' + formatArrNumber(s.arr) + ' в год.'));
+      row.appendChild(document.createTextNode(s.arr ? ': СЧО ' + formatArrNumber(s.arr) + ' в год (' + s.context + ')' : ': ' + s.context));
     });
   }
   return root.outerHTML;
@@ -1555,7 +1567,7 @@ const rows = (title, arr, icon) => !arr || !arr.length ? '' :
 /*
   Снижение СЧО относительно плацебо (отсутствия терапии) для сводной таблицы.
   kind: 'direct' - плацебо-контролируемое РКИ; 'nma' - объединенный NMA; 'indirect' - косвенный расчёт по цепочке; 'none' - оценка к плацебо невозможна.
-  Цепочки: RR(препарат к контролю) × RR(контроль к плацебо). Опорные RR к плацебо: ИФН бета-1а 44 мкг п/к 0,68 (PRISMS); ИФН бета-1а 30 мкг в/м 0,68 (MSCRG); терифлуномид 14 мг ≈0,66 (TEMSO/TOWER).
+  Цепочки: RR(препарат к контролю) × RR(контроль к плацебо).
 */
 const PLACEBO = {
   ocrelizumab:{kind:'nma', v:'≈63-67%',
@@ -1569,7 +1581,7 @@ const PLACEBO = {
   pegifnb:{kind:'direct', v:'36%',
     how:'ADVANCE, 1-й год: 0,256 против 0,397 (RR 0,644; p=0,0007).'},
   sampaegifnb:{kind:'none', v:'к плацебо не рассчитывается',
-    how:'В BCD-054-2 плацебо-группа завершила участие на 20-й неделе; сопоставимый годовой СЧО к плацебо не публиковался. Доступно только сравнение с низкодозным ИФН бета-1а 30 мкг (превосходство по первичной точке, 52 нед). Класс препарата - интерферон бета, ожидаемый диапазон класса 30-36% к плацебо, но это предположение, а не данные РКИ.'},
+    how:'В BCD-054-2 плацебо-группа завершила участие на 20-й неделе; сопоставимый годовой СЧО к плацебо не публиковался. Ожидаемый эффект класса интерферонов бета ~30-36% к плацебо.'},
   glatiramer:{kind:'direct', v:'29% (20 мг); 34% (40 мг)',
     how:'CONFIRM: 0,29 против 0,40 (20 мг ежедневно). GALA: 0,331 против 0,505 (40 мг 3 раза в неделю).'},
   teriflunomide:{kind:'direct', v:'31-36%',
@@ -1600,8 +1612,7 @@ const PLACEBO = {
     how:'MIST сравнивал трансплантацию с продолжением ПИТРС, плацебо-контроль этически невозможен. Первичная точка - прогрессирование: 5,8% против 66,7% за 1 год.'}
 };
 
-/* Построение строк сводной сравнительной таблицы.
-   Порядок столбцов: Препарат | Снижение СЧО к плацебо | МРТ-эффект | Источник/метод | CDP | Побочные. */
+/* Построение строк сводной сравнительной таблицы. */
 const KIND_BADGE = {direct:'<span class="pdfb">прямое РКИ к плацебо</span>', nma:'<span class="src">объединенный NMA</span>', indirect:'<span class="warnb">косвенный расчёт</span>', none:'<span class="warnb">нет оценки к плацебо</span>'};
 const MRI_COLOR = {direct:'var(--ok)', calc:'var(--warn)', none:'var(--muted)'};
 const MRI_BADGE = {direct:'<span class="pdfb">прямое к плацебо</span>', calc:'<span class="warnb">расчёт по цепочке</span>', none:'<span class="warnb">нет прямых данных</span>'};
@@ -1627,7 +1638,7 @@ function renderCmpTable(){
 
     html += '<tr>'
       + '<td><b>' + it.inn + '</b><div class="muted text-[11.5px]">' + it.brand + '</div><div class="mt-1">' + badge(it.tag) + '</div></td>'
-      + '<td><b style="color:var(--accent);font-size:13px">' + p.v + '</b><div class="mt-1">' + (KIND_BADGE[p.kind] || '') + '</div>' + freqHTML(it.id) + '</td>'
+      + '<td><b style="color:var(--accent);font-size:13px">' + p.v + '</b><div class="mt-1">' + (KIND_BADGE[p.kind] || '') + '</div>' + freqHTML(it.id, false) + '</td>'
       + '<td>' + mriHtml + '</td>'
       + '<td class="muted text-[11.5px] leading-snug">' + p.how + '<div class="mt-1.5" style="color:var(--txt)"><b>Прямое РКИ:</b> ' + c.arr + '</div><div class="mt-0.5">Контроль: ' + c.ctrl + '</div></td>'
       + '<td class="text-[12px] leading-snug">' + c.cdp + '</td>'
@@ -1671,15 +1682,13 @@ function render(){
           + '<button class="w-full text-left px-4 py-3.5 flex items-start gap-3" aria-expanded="false" aria-controls="'+it.id+'-body">'
           + '<span class="mt-1 shrink-0 w-2 h-2 rounded-full" style="background:'+(it.ve?'var(--ve)':'var(--accent)')+'"></span>'
           + '<span class="flex-1 min-w-0">'
-          + '<span class="drug-title-row">'
-          + '<span class="drug-title-text font-semibold text-[15px] leading-snug">'+it.inn+' <span class="muted font-normal">/</span> '+it.brand+'</span>'
-          + freqHTML(it.id, true)
-          + '</span>'
-          + '<span class="block text-[12.5px] muted mt-0.5">'+it.klass+'</span>'
-          + '<span class="flex flex-wrap gap-1.5 mt-2">'+badge(it.tag)
+          + '<div class="font-semibold text-[15px] leading-snug">'+it.inn+' <span class="muted font-normal">/</span> '+it.brand+'</div>'
+          + '<div class="mt-0.5">'+freqHTML(it.id, true)+'</div>'
+          + '<div class="text-[12.5px] muted mt-1">'+it.klass+'</div>'
+          + '<div class="flex flex-wrap gap-1.5 mt-2">'+badge(it.tag)
           + (it.ve ? '<span class="text-[11px] font-semibold px-2 py-0.5 rounded-full" style="background:var(--ve-soft);color:var(--ve)">Высокоэффективный</span>' : '')
           + (it.reg ? '<span class="text-[11px] px-2 py-0.5 rounded-full sub muted">РУ: '+it.reg+'</span>' : '')
-          + '</span></span>'
+          + '</div></span>'
           + '<svg class="chev shrink-0 mt-1" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>'
           + '</button>'
           + '<div class="acc-body" id="'+it.id+'-body"><div><div class="px-4 pb-4 pt-0.5 border-t bd">'
