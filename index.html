@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v02 -->
+<!-- v03 -->
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
@@ -44,11 +44,13 @@ if(localStorage.getItem('pitrs-theme')==='dark')document.documentElement.classLi
   a.lnk:active{opacity:.7}
   input,button{font:inherit}
   .no-scrollbar::-webkit-scrollbar{display:none}
-  .src,.pdfb,.warnb,.dangerb{font-size:11px;letter-spacing:.02em;padding:1px 6px;border-radius:6px;font-weight:600;white-space:nowrap;display:inline-block}
-  .src{background:var(--accent-soft);color:var(--accent)}
-  .pdfb{background:var(--ok-soft);color:var(--ok)}
-  .warnb{background:var(--warn-soft);color:var(--warn)}
-  .dangerb{background:var(--danger-soft);color:var(--danger)}
+  .src{font-size:11px;letter-spacing:.02em;padding:1px 6px;border-radius:6px;background:var(--accent-soft);color:var(--accent);font-weight:600;white-space:nowrap;display:inline-block}
+  .pdfb{font-size:11px;letter-spacing:.02em;padding:1px 6px;border-radius:6px;background:var(--ok-soft);color:var(--ok);font-weight:600;white-space:nowrap;display:inline-block}
+  .warnb{font-size:11px;letter-spacing:.02em;padding:1px 6px;border-radius:6px;background:var(--warn-soft);color:var(--warn);font-weight:600;white-space:nowrap;display:inline-block}
+  .dangerb{font-size:11px;letter-spacing:.02em;padding:1px 6px;border-radius:6px;background:var(--danger-soft);color:var(--danger);font-weight:600;white-space:nowrap;display:inline-block}
+  .k{font-size:11.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.02em}
+  .stat-grid{display:grid;grid-template-columns:1fr;gap:6px}
+  @media (min-width:640px){.stat-grid{grid-template-columns:repeat(2,1fr)}}
   .cmp-table th{background:var(--panel-2);color:var(--muted);font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.03em;padding:8px 10px;text-align:left;border-bottom:1px solid var(--line)}
   .cmp-table td{padding:10px;border-bottom:1px solid var(--line);font-size:12.5px;vertical-align:top}
   .cmp-table tr:last-child td{border-bottom:none}
@@ -216,28 +218,6 @@ if(localStorage.getItem('pitrs-theme')==='dark')document.documentElement.classLi
 
 <script>
 /*
-  Хелперы ссылок (без изменения адресов):
-  D(x)   -> https://doi.org/x
-  JN(x)  -> DOI Журнала неврологии и психиатрии им. С.С. Корсакова (10.17116/jnevro + x)
-  EMA(s) -> https://www.ema.europa.eu/en/documents/product-information/<s>-epar-product-information_en.pdf
-  PC(n)  -> https://pharmcontrol.ru/registry/drugs/<n>/ (зеркало ГРЛС)
-  GRLS   -> портал ГРЛС; CR -> клинические рекомендации МЗ РФ (ID 739)
-*/
-const GRLS='https://grls.rosminzdrav.ru/',
-      CR='https://cr.minzdrav.gov.ru/schema/739_1',
-      IV='https://ivlizi.ru/',
-      MS='https://www.mediasphera.ru/issues/zhurnal-nevrologii-i-psikhiatrii-im-s-s-korsakova',
-      D=x=>'https://doi.org/'+x,
-      JN=x=>D('10.17116/jnevro'+x),
-      EMA=s=>'https://www.ema.europa.eu/en/documents/product-information/'+s+'-epar-product-information_en.pdf',
-      PC=n=>'https://pharmcontrol.ru/registry/drugs/'+n+'/',
-      grlsDoc=n=>({t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ",u:GRLS,n:n,off:true}),
-      emaDoc=(name,n)=>({t:"EMA: "+name+" - Product Information (SmPC)",u:EMA(name.toLowerCase()),n:n,pdf:true}),
-      emaPdf=(name,tail)=>({t:"EMA: "+name+" - Product Information (SmPC), официальный PDF"+(tail||''),u:EMA(name.toLowerCase())}),
-      pcDoc=(t,id,n)=>({t:t+", карточка в реестре",u:PC(id),n:n}),
-      grlsPdf=t=>({t:"ГРЛС: "+t,u:GRLS});
-
-/*
   Формат объекта stats:
   tr: название исследования
   pop: популяция / срок / N
@@ -302,8 +282,8 @@ const DATA = [
               "Подтверждённое через 24 недели: 6,9% (окрелизумаб) и 10,5% (контроль) → снижение риска на 40% (ОР 0,60; p=0,002)"
             ]}
          ],
-         u:D("10.1056/NEJMoa1601277"), p:"28002679",
-         pdf:emaPdf("Ocrevus"," регулятора ЕС")},
+         u:"https://doi.org/10.1056/NEJMoa1601277", p:"28002679",
+         pdf:{t:"EMA: Ocrevus - Product Information (SmPC), официальный PDF регулятора ЕС", u:"https://www.ema.europa.eu/en/documents/product-information/ocrevus-epar-product-information_en.pdf"}},
         {tr:"ORATORIO (NCT01194570)",
          pop:"Первично-прогрессирующий РС (PPMS), 120 недель, n=732",
          drug:"окрелизумаб 600 мг внутривенно 1 раз в 24 недели",
@@ -321,18 +301,18 @@ const DATA = [
               "Различие между группами: p<0,001"
             ]}
          ],
-         u:D("10.1056/NEJMoa1606468"), p:"28002688",
+         u:"https://doi.org/10.1056/NEJMoa1606468", p:"28002688",
          pdf:{t:"EMA: Ocrevus - EPAR summary, официальный PDF регулятора ЕС", u:"https://www.ema.europa.eu/en/documents/overview/ocrevus-epar-summary-public_en.pdf"}}
       ],
       studies:[
-        {t:"OPERA I и OPERA II. Окрелизумаб против интерферона бета-1а при РС с обострениями, 96 недель. NEJM, 2017", u:D("10.1056/NEJMoa1601277"), p:"28002679", n:"1656 пациентов. Первичная точка - СЧО."},
-        {t:"ORATORIO. Окрелизумаб против плацебо при ППРС, 120 недель. NEJM, 2017", u:D("10.1056/NEJMoa1606468"), p:"28002688", n:"732 пациента. Первый препарат с доказанной эффективностью при ППРС."},
-        {t:"Исследование РФ. Окрелизумаб и натализумаб при высокоактивном РС в реальной практике. Журнал неврологии и психиатрии им. С.С. Корсакова, 2023", u:JN("202312307277"), n:"123 пациента Московской области, 46 на окрелизумабе. Наблюдательное исследование."}
+        {t:"OPERA I и OPERA II. Окрелизумаб против интерферона бета-1а при РС с обострениями, 96 недель. NEJM, 2017", u:"https://doi.org/10.1056/NEJMoa1601277", p:"28002679", n:"1656 пациентов. Первичная точка - СЧО."},
+        {t:"ORATORIO. Окрелизумаб против плацебо при ППРС, 120 недель. NEJM, 2017", u:"https://doi.org/10.1056/NEJMoa1606468", p:"28002688", n:"732 пациента. Первый препарат с доказанной эффективностью при ППРС."},
+        {t:"Исследование РФ. Окрелизумаб и натализумаб при высокоактивном РС в реальной практике. Журнал неврологии и психиатрии им. С.С. Корсакова, 2023", u:"https://doi.org/10.17116/jnevro202312307277", n:"123 пациента Московской области, 46 на окрелизумабе. Наблюдательное исследование."}
       ],
       docs:[
-        grlsDoc("Первоисточник РФ: поиск по названию «Окревус» или МНН «окрелизумаб»"),
-        emaDoc("Ocrevus","Официальный регуляторный PDF ЕС, раздел 5.1 содержит сводные таблицы OPERA и ORATORIO"),
-        {t:"Карточка препарата в реестре (зеркало ГРЛС)", u:PC(60010), n:"ЛП-№(003473)-(РГ-RU)"},
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по названию «Окревус» или МНН «окрелизумаб»", off:true},
+        {t:"EMA: Ocrevus - Product Information (SmPC)", u:"https://www.ema.europa.eu/en/documents/product-information/ocrevus-epar-product-information_en.pdf", n:"Официальный регуляторный PDF ЕС, раздел 5.1 содержит сводные таблицы OPERA и ORATORIO", pdf:true},
+        {t:"Карточка препарата в реестре (зеркало ГРЛС)", u:"https://pharmcontrol.ru/registry/drugs/60010/", n:"ЛП-№(003473)-(РГ-RU)"},
         {t:"Страница препарата на сайте производителя", u:"https://med.roche.ru/diseases/neurology/multiplesclerosis/", n:"Материалы Roche для специалистов"}
       ]
     },
@@ -387,20 +367,20 @@ const DATA = [
               "В подгруппе ВПРС за 2 года на дивозилимабе не зафиксировано ни одного случая подтверждённого нарастания EDSS"
             ]}
          ],
-         u:JN("202412404186"), p:"38676683",
-         pdf:{t:"ОХЛП Ивлизи со штампом Минздрава РФ (SPC.132.1.EAEU-RU.06.02), официальный PDF", u:IV+"v1_1.3.1-ohlp-spc.132.1.eaeu-ru.06.02-1733561921-0015-shtamp-mz.pdf"}}
+         u:"https://doi.org/10.17116/jnevro202412404186", p:"38676683",
+         pdf:{t:"ОХЛП Ивлизи со штампом Минздрава РФ (SPC.132.1.EAEU-RU.06.02), официальный PDF", u:"https://ivlizi.ru/v1_1.3.1-ohlp-spc.132.1.eaeu-ru.06.02-1733561921-0015-shtamp-mz.pdf"}}
       ],
       studies:[
-        {t:"MIRANTIBUS (BCD-132-4), 2 года терапии. Журнал неврологии и психиатрии им. С.С. Корсакова, 2024", u:JN("202412404186"), p:"38676683", n:"Итоговый отчёт по 100 неделям. Источник числовых данных выше."},
-        {t:"MIRANTIBUS (BCD-132-2), 48 недель. Полный текст. Журнал неврологии и психиатрии им. С.С. Корсакова, 2023", u:MS+"/2023/7/1199772982023071043", n:"338 пациентов, первый год двойного слепого периода."},
-        {t:"MIRANTIBUS, продлённое наблюдение 4 года. Журнал неврологии и психиатрии им. С.С. Корсакова, 2025", u:MS+"-2/2025/7-2/1199772982025072051", n:"Отдалённые данные по безопасности и эффективности."}
+        {t:"MIRANTIBUS (BCD-132-4), 2 года терапии. Журнал неврологии и психиатрии им. С.С. Корсакова, 2024", u:"https://doi.org/10.17116/jnevro202412404186", p:"38676683", n:"Итоговый отчёт по 100 неделям. Источник числовых данных выше."},
+        {t:"MIRANTIBUS (BCD-132-2), 48 недель. Полный текст. Журнал неврологии и психиатрии им. С.С. Корсакова, 2023", u:"https://www.mediasphera.ru/issues/zhurnal-nevrologii-i-psikhiatrii-im-s-s-korsakova/2023/7/1199772982023071043", n:"338 пациентов, первый год двойного слепого периода."},
+        {t:"MIRANTIBUS, продлённое наблюдение 4 года. Журнал неврологии и психиатрии им. С.С. Корсакова, 2025", u:"https://www.mediasphera.ru/issues/zhurnal-nevrologii-i-psikhiatrii-im-s-s-korsakova-2/2025/7-2/1199772982025072051", n:"Отдалённые данные по безопасности и эффективности."}
       ],
       docs:[
-        grlsDoc("Первоисточник РФ: поиск по названию «Ивлизи». РУ ЛП-№(002035)-(РГ-RU)"),
-        {t:"ОХЛП Ивлизи со штампом МЗ РФ, версия SPC.132.1.EAEU-RU.06.02", u:IV+"v1_1.3.1-ohlp-spc.132.1.eaeu-ru.06.02-1733561921-0015-shtamp-mz.pdf", n:"Официальный PDF, разделы 4.1, 4.2 и 5.1", pdf:true},
-        {t:"ОХЛП Ивлизи от 10.03.2025", u:IV+"05SPC_10032025.pdf", n:"Актуальная редакция ОХЛП производителя", pdf:true},
-        {t:"Карточка препарата в реестре (зеркало ГРЛС)", u:PC(57522), n:"ЛП-№(002035)-(РГ-RU)"},
-        {t:"Листок-вкладыш, информация для пациента", u:IV+"docs/supplement", n:"Показания, схема, предостережения"}
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по названию «Ивлизи». РУ ЛП-№(002035)-(РГ-RU)", off:true},
+        {t:"ОХЛП Ивлизи со штампом МЗ РФ, версия SPC.132.1.EAEU-RU.06.02", u:"https://ivlizi.ru/v1_1.3.1-ohlp-spc.132.1.eaeu-ru.06.02-1733561921-0015-shtamp-mz.pdf", n:"Официальный PDF, разделы 4.1, 4.2 и 5.1", pdf:true},
+        {t:"ОХЛП Ивлизи от 10.03.2025", u:"https://ivlizi.ru/05SPC_10032025.pdf", n:"Актуальная редакция ОХЛП производителя", pdf:true},
+        {t:"Карточка препарата в реестре (зеркало ГРЛС)", u:"https://pharmcontrol.ru/registry/drugs/57522/", n:"ЛП-№(002035)-(РГ-RU)"},
+        {t:"Листок-вкладыш, информация для пациента", u:"https://ivlizi.ru/docs/supplement", n:"Показания, схема, предостережения"}
       ]
     }
   ]},
@@ -439,18 +419,18 @@ const DATA = [
               "Снижение числа активных T2-очагов (в статье): 78% (p<0,0001)"
             ]}
          ],
-         u:D("10.1016/S0140-6736(98)03334-0"), p:"9820297",
-         pdf:emaPdf("Rebif")}
+         u:"https://doi.org/10.1016/S0140-6736(98)03334-0", p:"9820297",
+         pdf:{t:"EMA: Rebif - Product Information (SmPC), официальный PDF", u:"https://www.ema.europa.eu/en/documents/product-information/rebif-epar-product-information_en.pdf"}}
       ],
       studies:[
-        {t:"PRISMS. Интерферон бета-1а подкожно против плацебо, 2 года. The Lancet, 1998", u:D("10.1016/S0140-6736(98)03334-0"), p:"9820297", n:"560 пациентов. Базовое исследование эффективности подкожного интерферона бета-1а."}
+        {t:"PRISMS. Интерферон бета-1а подкожно против плацебо, 2 года. The Lancet, 1998", u:"https://doi.org/10.1016/S0140-6736(98)03334-0", p:"9820297", n:"560 пациентов. Базовое исследование эффективности подкожного интерферона бета-1а."}
       ],
       docs:[
-        grlsDoc("Первоисточник РФ: поиск по МНН «интерферон бета-1а»"),
-        emaDoc("Rebif","Официальный регуляторный PDF ЕС"),
-        pcDoc("Тебериф (БИОКАД)",7030,"ЛП-№(006268)-(РГ-RU)"),
-        pcDoc("Ребиф",6843,"ЛП-№(006073)-(РГ-RU)"),
-        pcDoc("Авонекс",78939,"ЛСР-000008")
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по МНН «интерферон бета-1а»", off:true},
+        {t:"EMA: Rebif - Product Information (SmPC)", u:"https://www.ema.europa.eu/en/documents/product-information/rebif-epar-product-information_en.pdf", n:"Официальный регуляторный PDF ЕС", pdf:true},
+        {t:"Тебериф (БИОКАД), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/7030/", n:"ЛП-№(006268)-(РГ-RU)"},
+        {t:"Ребиф, карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/6843/", n:"ЛП-№(006073)-(РГ-RU)"},
+        {t:"Авонекс, карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/78939/", n:"ЛСР-000008"}
       ]
     },
     {
@@ -487,17 +467,17 @@ const DATA = [
               "Вывод исследования: статистически значимых различий по частоте обострений между препаратами нет (ОР 1,01)"
             ]}
          ],
-         u:D("10.1016/S1474-4422(09)70226-1"), p:"19729344",
-         pdf:emaPdf("Betaferon")}
+         u:"https://doi.org/10.1016/S1474-4422(09)70226-1", p:"19729344",
+         pdf:{t:"EMA: Betaferon - Product Information (SmPC), официальный PDF", u:"https://www.ema.europa.eu/en/documents/product-information/betaferon-epar-product-information_en.pdf"}}
       ],
       studies:[
-        {t:"BEYOND. Интерферон бета-1б 250 и 500 мкг против глатирамера ацетата. Lancet Neurology, 2009", u:D("10.1016/S1474-4422(09)70226-1"), p:"19729344", n:"2244 пациента. Прямое сравнение двух препаратов 1-й линии."}
+        {t:"BEYOND. Интерферон бета-1б 250 и 500 мкг против глатирамера ацетата. Lancet Neurology, 2009", u:"https://doi.org/10.1016/S1474-4422(09)70226-1", p:"19729344", n:"2244 пациента. Прямое сравнение двух препаратов 1-й линии."}
       ],
       docs:[
-        grlsDoc("Первоисточник РФ: поиск по МНН «интерферон бета-1b»"),
-        emaDoc("Betaferon","Официальный регуляторный PDF"),
-        pcDoc("Инфибета (АО Генериум)",7612,"ЛП-№(006888)-(РГ-RU)"),
-        pcDoc("Бетаферон",95255,"П N012097/01")
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по МНН «интерферон бета-1b»", off:true},
+        {t:"EMA: Betaferon - Product Information (SmPC)", u:"https://www.ema.europa.eu/en/documents/product-information/betaferon-epar-product-information_en.pdf", n:"Официальный регуляторный PDF", pdf:true},
+        {t:"Инфибета (АО Генериум), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/7612/", n:"ЛП-№(006888)-(РГ-RU)"},
+        {t:"Бетаферон, карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/95255/", n:"П N012097/01"}
       ]
     },
     {
@@ -538,18 +518,18 @@ const DATA = [
               "Снижение риска (в статье): 38% (ОР 0,62; p=0,0383)"
             ]}
          ],
-         u:D("10.1016/S1474-4422(14)70068-7"), p:"24794721",
-         pdf:emaPdf("Plegridy")}
+         u:"https://doi.org/10.1016/S1474-4422(14)70068-7", p:"24794721",
+         pdf:{t:"EMA: Plegridy - Product Information (SmPC), официальный PDF", u:"https://www.ema.europa.eu/en/documents/product-information/plegridy-epar-product-information_en.pdf"}}
       ],
       studies:[
-        {t:"ADVANCE. Пэгинтерферон бета-1а против плацебо, 1-й год. Lancet Neurology, 2014", u:D("10.1016/S1474-4422(14)70068-7"), p:"24794721", n:"1512 пациентов. Источник числовых данных выше."},
-        {t:"ATTAIN, продление исследования ADVANCE до 4 лет. Ther Adv Neurol Disord, 2018", u:D("10.1177/1756286418791143"), p:"30181778", n:"Открытый доступ. Поддержание эффекта при введении 1 раз в 2 недели."}
+        {t:"ADVANCE. Пэгинтерферон бета-1а против плацебо, 1-й год. Lancet Neurology, 2014", u:"https://doi.org/10.1016/S1474-4422(14)70068-7", p:"24794721", n:"1512 пациентов. Источник числовых данных выше."},
+        {t:"ATTAIN, продление исследования ADVANCE до 4 лет. Ther Adv Neurol Disord, 2018", u:"https://doi.org/10.1177/1756286418791143", p:"30181778", n:"Открытый доступ. Поддержание эффекта при введении 1 раз в 2 недели."}
       ],
       docs:[
-        grlsDoc("Первоисточник РФ: поиск по МНН «пэгинтерферон бета-1а»"),
-        emaDoc("Plegridy","Официальный регуляторный PDF"),
-        pcDoc("Плегриди п/к",10171,"ЛП-№(009870)-(РГ-RU)"),
-        pcDoc("Плегриди в/м",4349,"ЛП-№(003419)-(РГ-RU)")
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по МНН «пэгинтерферон бета-1а»", off:true},
+        {t:"EMA: Plegridy - Product Information (SmPC)", u:"https://www.ema.europa.eu/en/documents/product-information/plegridy-epar-product-information_en.pdf", n:"Официальный регуляторный PDF", pdf:true},
+        {t:"Плегриди п/к, карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/10171/", n:"ЛП-№(009870)-(РГ-RU)"},
+        {t:"Плегриди в/м, карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/4349/", n:"ЛП-№(003419)-(РГ-RU)"}
       ]
     },
     {
@@ -590,18 +570,18 @@ const DATA = [
               "Балл по шкале EDSS оставался стабильным на протяжении всего 2-го года терапии"
             ]}
          ],
-         u:JN("202312302152"),
-         pdf:grlsPdf("ОХЛП и инструкция Тенексиа (поиск по реестру)")}
+         u:"https://doi.org/10.17116/jnevro202312302152",
+         pdf:{t:"ГРЛС: ОХЛП и инструкция Тенексиа (поиск по реестру)", u:"https://grls.rosminzdrav.ru/"}}
       ],
       studies:[
-        {t:"BCD-054-2. Сампэгинтерферон бета-1а, результаты 104 недель. Журнал неврологии и психиатрии им. С.С. Корсакова, 2023", u:JN("202312302152"), n:"399 пациентов. Источник числовых данных выше."},
-        {t:"BCD-054-2, результаты 52 недель. Журнал неврологии и психиатрии им. С.С. Корсакова, 2019", u:JN("201911910100"), n:"Первичный анализ: сравнение с плацебо и низкодозным интерфероном бета-1а."},
-        {t:"Клинические рекомендации МЗ РФ «Рассеянный склероз»", u:CR, n:"Сампэгинтерферон бета-1а включён в рекомендации."}
+        {t:"BCD-054-2. Сампэгинтерферон бета-1а, результаты 104 недель. Журнал неврологии и психиатрии им. С.С. Корсакова, 2023", u:"https://doi.org/10.17116/jnevro202312302152", n:"399 пациентов. Источник числовых данных выше."},
+        {t:"BCD-054-2, результаты 52 недель. Журнал неврологии и психиатрии им. С.С. Корсакова, 2019", u:"https://doi.org/10.17116/jnevro201911910100", n:"Первичный анализ: сравнение с плацебо и низкодозным интерфероном бета-1а."},
+        {t:"Клинические рекомендации МЗ РФ «Рассеянный склероз»", u:"https://cr.minzdrav.gov.ru/schema/739_1", n:"Сампэгинтерферон бета-1а включён в рекомендации."}
       ],
       docs:[
-        grlsDoc("Первоисточник РФ: поиск по названию «Тенексиа». РУ ЛП-№(002167)-(РГ-RU)"),
-        pcDoc("Тенексиа (БИОКАД)",3176,"ЛП-№(002167)-(РГ-RU)"),
-        {t:"Описание ПИТРС на сайте производителя", u:IV+"biocad/pitrs", n:"Линейка препаратов BIOCAD при РС"}
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по названию «Тенексиа». РУ ЛП-№(002167)-(РГ-RU)", off:true},
+        {t:"Тенексиа (БИОКАД), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/3176/", n:"ЛП-№(002167)-(РГ-RU)"},
+        {t:"Описание ПИТРС на сайте производителя", u:"https://ivlizi.ru/biocad/pitrs", n:"Линейка препаратов BIOCAD при РС"}
       ]
     },
     {
@@ -637,8 +617,8 @@ const DATA = [
               "Новые или увеличившиеся T2-очаги: снижение на 34,7% (p<0,0001)"
             ]}
          ],
-         u:D("10.1002/ana.23938"), p:"23686821",
-         pdf:grlsPdf("инструкции и ОХЛП препаратов глатирамера ацетата")},
+         u:"https://doi.org/10.1002/ana.23938", p:"23686821",
+         pdf:{t:"ГРЛС: инструкции и ОХЛП препаратов глатирамера ацетата", u:"https://grls.rosminzdrav.ru/"}},
         {tr:"BCD-063 (российское РКИ эквивалентности Тимексона)",
          pop:"РРС (RRMS), 48 недель, n=158 (анализ эффективности n=150)",
          drug:"Тимексон (BCD-063, глатирамера ацетат 20 мг/сут п/к)",
@@ -652,18 +632,18 @@ const DATA = [
               "Вывод: терапевтическая эквивалентность доказана, отношение шансов между Тимексоном и Копаксоном составило 1,0"
             ]}
          ],
-         u:JN("201611610261-67")}
+         u:"https://doi.org/10.17116/jnevro201611610261-67"}
       ],
       studies:[
-        {t:"GALA. Глатирамера ацетат 40 мг 3 раза в неделю против плацебо. Annals of Neurology, 2013", u:D("10.1002/ana.23938"), p:"23686821", n:"1404 пациента. Обоснование режима 3 раза в неделю."},
-        {t:"CONFIRM. Глатирамера ацетат и диметилфумарат против плацебо. NEJM, 2012", u:D("10.1056/NEJMoa1206328"), p:"22992072", n:"Глатирамера ацетат снизил СЧО с 0,40 до 0,29 (на 29%)."},
-        {t:"Исследование РФ BCD-063. Тимексон против Копаксон-Тева и плацебо, 48 недель. Журнал неврологии и психиатрии им. С.С. Корсакова, 2016", u:JN("201611610261-67"), n:"158 пациентов, РКИ №346 от 10.06.2013."}
+        {t:"GALA. Глатирамера ацетат 40 мг 3 раза в неделю против плацебо. Annals of Neurology, 2013", u:"https://doi.org/10.1002/ana.23938", p:"23686821", n:"1404 пациента. Обоснование режима 3 раза в неделю."},
+        {t:"CONFIRM. Глатирамера ацетат и диметилфумарат против плацебо. NEJM, 2012", u:"https://doi.org/10.1056/NEJMoa1206328", p:"22992072", n:"Глатирамера ацетат снизил СЧО с 0,40 до 0,29 (на 29%)."},
+        {t:"Исследование РФ BCD-063. Тимексон против Копаксон-Тева и плацебо, 48 недель. Журнал неврологии и психиатрии им. С.С. Корсакова, 2016", u:"https://doi.org/10.17116/jnevro201611610261-67", n:"158 пациентов, РКИ №346 от 10.06.2013."}
       ],
       docs:[
-        grlsDoc("Первоисточник РФ: поиск по МНН «глатирамера ацетат»"),
-        pcDoc("Копаксон-Тева",8481,"ЛП-№(007914)-(РГ-RU)"),
-        pcDoc("Тимексон (БИОКАД) 20 мг/мл",4498,"ЛП-№(003579)-(РГ-RU)"),
-        pcDoc("Тимексон (БИОКАД) 40 мг",3588,"ЛП-№(002611)-(РГ-RU)")
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по МНН «глатирамера ацетат»", off:true},
+        {t:"Копаксон-Тева, карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/8481/", n:"ЛП-№(007914)-(РГ-RU)"},
+        {t:"Тимексон (БИОКАД) 20 мг/мл, карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/4498/", n:"ЛП-№(003579)-(РГ-RU)"},
+        {t:"Тимексон (БИОКАД) 40 мг, карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/3588/", n:"ЛП-№(002611)-(РГ-RU)"}
       ]
     },
     {
@@ -698,8 +678,8 @@ const DATA = [
               "Снижение риска прогрессирования: 30% по сравнению с плацебо (ОР 0,70; 95% ДИ 0,51-0,97; p=0,03)"
             ]}
          ],
-         u:D("10.1056/NEJMoa1014656"), p:"21991951",
-         pdf:emaPdf("Aubagio")},
+         u:"https://doi.org/10.1056/NEJMoa1014656", p:"21991951",
+         pdf:{t:"EMA: Aubagio - Product Information (SmPC), официальный PDF", u:"https://www.ema.europa.eu/en/documents/product-information/aubagio-epar-product-information_en.pdf"}},
         {tr:"TOWER (Lancet Neurol 2014)",
          pop:"РС с обострениями, до 48 недель после последнего включения, n=1169",
          drug:"терифлуномид 14 мг внутрь 1 раз в сутки",
@@ -717,17 +697,17 @@ const DATA = [
               "Снижение риска прогрессирования: 31,5% (ОР 0,69; p=0,044)"
             ]}
          ],
-         u:D("10.1016/S1474-4422(13)70308-9"), p:"24461574"}
+         u:"https://doi.org/10.1016/S1474-4422(13)70308-9", p:"24461574"}
       ],
       studies:[
-        {t:"TEMSO. Терифлуномид против плацебо, 108 недель. NEJM, 2011", u:D("10.1056/NEJMoa1014656"), p:"21991951", n:"1088 пациентов. Источник числовых данных выше."},
-        {t:"TOWER. Терифлуномид против плацебо. Lancet Neurology, 2014", u:D("10.1016/S1474-4422(13)70308-9"), p:"24461574", n:"1169 пациентов."}
+        {t:"TEMSO. Терифлуномид против плацебо, 108 недель. NEJM, 2011", u:"https://doi.org/10.1056/NEJMoa1014656", p:"21991951", n:"1088 пациентов. Источник числовых данных выше."},
+        {t:"TOWER. Терифлуномид против плацебо. Lancet Neurology, 2014", u:"https://doi.org/10.1016/S1474-4422(13)70308-9", p:"24461574", n:"1169 пациентов."}
       ],
       docs:[
-        grlsDoc("Первоисточник РФ: поиск по МНН «терифлуномид»"),
-        emaDoc("Aubagio","Официальный регуляторный PDF ЕС, раздел 5.1"),
-        pcDoc("Абаджио (Sanofi)",31358,"ЛП-002520"),
-        pcDoc("Терифлуномид (БИОКАД)",3750,"ЛП-№(002779)-(РГ-RU)")
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по МНН «терифлуномид»", off:true},
+        {t:"EMA: Aubagio - Product Information (SmPC)", u:"https://www.ema.europa.eu/en/documents/product-information/aubagio-epar-product-information_en.pdf", n:"Официальный регуляторный PDF ЕС, раздел 5.1", pdf:true},
+        {t:"Абаджио (Sanofi), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/31358/", n:"ЛП-002520"},
+        {t:"Терифлуномид (БИОКАД), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/3750/", n:"ЛП-№(002779)-(РГ-RU)"}
       ]
     }
   ]},
@@ -771,8 +751,8 @@ const DATA = [
               "Gd+ T1-очаги: снижение на 90% (p<0,001)"
             ]}
          ],
-         u:D("10.1056/NEJMoa1114287"), p:"22992073",
-         pdf:emaPdf("Tecfidera")},
+         u:"https://doi.org/10.1056/NEJMoa1114287", p:"22992073",
+         pdf:{t:"EMA: Tecfidera - Product Information (SmPC), официальный PDF", u:"https://www.ema.europa.eu/en/documents/product-information/tecfidera-epar-product-information_en.pdf"}},
         {tr:"CONFIRM (NEJM 2012, 2 года)",
          pop:"РРС (RRMS), 2 года, n=1417",
          drug:"диметилфумарат 240 мг внутрь 2 раза в сутки",
@@ -786,17 +766,17 @@ const DATA = [
               "Снижение диметилфумарата к плацебо (расчёт): 45,0% (в статье 44%, p<0,001)"
             ]}
          ],
-         u:D("10.1056/NEJMoa1206328"), p:"22992072"}
+         u:"https://doi.org/10.1056/NEJMoa1206328", p:"22992072"}
       ],
       studies:[
-        {t:"DEFINE. Диметилфумарат против плацебо, 2 года. NEJM, 2012", u:D("10.1056/NEJMoa1114287"), p:"22992073", n:"1234 пациента. Источник числовых данных выше."},
-        {t:"CONFIRM. Диметилфумарат и глатирамера ацетат против плацебо. NEJM, 2012", u:D("10.1056/NEJMoa1206328"), p:"22992072", n:"1417 пациентов."}
+        {t:"DEFINE. Диметилфумарат против плацебо, 2 года. NEJM, 2012", u:"https://doi.org/10.1056/NEJMoa1114287", p:"22992073", n:"1234 пациента. Источник числовых данных выше."},
+        {t:"CONFIRM. Диметилфумарат и глатирамера ацетат против плацебо. NEJM, 2012", u:"https://doi.org/10.1056/NEJMoa1206328", p:"22992072", n:"1417 пациентов."}
       ],
       docs:[
-        grlsDoc("Первоисточник РФ: поиск по МНН «диметилфумарат»"),
-        emaDoc("Tecfidera","Официальный регуляторный PDF ЕС"),
-        pcDoc("Флутерио (ПСК Фарма)",4386,"ЛП-№(003462)-(РГ-RU)"),
-        pcDoc("Диметилфумарат (Атолл)",9559,"ЛП-№(009164)-(РГ-RU)")
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по МНН «диметилфумарат»", off:true},
+        {t:"EMA: Tecfidera - Product Information (SmPC)", u:"https://www.ema.europa.eu/en/documents/product-information/tecfidera-epar-product-information_en.pdf", n:"Официальный регуляторный PDF ЕС", pdf:true},
+        {t:"Флутерио (ПСК Фарма), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/4386/", n:"ЛП-№(003462)-(РГ-RU)"},
+        {t:"Диметилфумарат (Атолл), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/9559/", n:"ЛП-№(009164)-(РГ-RU)"}
       ]
     },
     {
@@ -826,15 +806,15 @@ const DATA = [
               "Эффективность препарата обоснована данными пивотных РКИ диметилфумарата (DEFINE, CONFIRM)"
             ]}
          ],
-         u:D("10.1177/13524585231205708"), p:"37905526",
-         pdf:emaPdf("Vumerity")}
+         u:"https://doi.org/10.1177/13524585231205708", p:"37905526",
+         pdf:{t:"EMA: Vumerity - Product Information (SmPC), официальный PDF", u:"https://www.ema.europa.eu/en/documents/product-information/vumerity-epar-product-information_en.pdf"}}
       ],
       studies:[
-        {t:"EVOLVE-MS-1. Итоговые данные по безопасности и эффективности, 2 года. Mult Scler, 2023", u:D("10.1177/13524585231205708"), p:"37905526", n:"1057 пациентов, открытый доступ."}
+        {t:"EVOLVE-MS-1. Итоговые данные по безопасности и эффективности, 2 года. Mult Scler, 2023", u:"https://doi.org/10.1177/13524585231205708", p:"37905526", n:"1057 пациентов, открытый доступ."}
       ],
       docs:[
-        grlsDoc("Первоисточник РФ: проверка статуса регистрации по МНН «дироксимел фумарат»"),
-        emaDoc("Vumerity","Официальный регуляторный PDF ЕС")
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: проверка статуса регистрации по МНН «дироксимел фумарат»", off:true},
+        {t:"EMA: Vumerity - Product Information (SmPC)", u:"https://www.ema.europa.eu/en/documents/product-information/vumerity-epar-product-information_en.pdf", n:"Официальный регуляторный PDF ЕС", pdf:true}
       ]
     },
     {
@@ -875,8 +855,8 @@ const DATA = [
               "Gd+ T1-очаги: 0,2 (препарат) и 1,1 (плацебо) → снижение на 82% (p<0,001)"
             ]}
          ],
-         u:D("10.1056/NEJMoa0909494"), p:"20089952",
-         pdf:emaPdf("Gilenya")},
+         u:"https://doi.org/10.1056/NEJMoa0909494", p:"20089952",
+         pdf:{t:"EMA: Gilenya - Product Information (SmPC), официальный PDF", u:"https://www.ema.europa.eu/en/documents/product-information/gilenya-epar-product-information_en.pdf"}},
         {tr:"TRANSFORMS (NEJM 2010, 12 месяцев)",
          pop:"РРС (RRMS), 1 год, n=1292",
          drug:"финголимод 0,5 мг внутрь 1 раз в сутки",
@@ -890,18 +870,18 @@ const DATA = [
               "Снижение (в статье): 52% (p<0,001)"
             ]}
          ],
-         u:D("10.1056/NEJMoa0907839"), p:"20089954"}
+         u:"https://doi.org/10.1056/NEJMoa0907839", p:"20089954"}
       ],
       studies:[
-        {t:"FREEDOMS. Финголимод против плацебо, 24 месяца. NEJM, 2010", u:D("10.1056/NEJMoa0909494"), p:"20089952", n:"1272 пациента. Источник данных выше."},
-        {t:"TRANSFORMS. Финголимод против интерферона бета-1а в/м, 12 месяцев. NEJM, 2010", u:D("10.1056/NEJMoa0907839"), p:"20089954", n:"1292 пациента."},
-        {t:"PARADIGMS. Финголимод у детей и подростков против интерферона бета-1а. NEJM, 2018", u:D("10.1056/NEJMoa1800149"), p:"30207920", n:"215 пациентов 10-17 лет."}
+        {t:"FREEDOMS. Финголимод против плацебо, 24 месяца. NEJM, 2010", u:"https://doi.org/10.1056/NEJMoa0909494", p:"20089952", n:"1272 пациента. Источник данных выше."},
+        {t:"TRANSFORMS. Финголимод против интерферона бета-1а в/м, 12 месяцев. NEJM, 2010", u:"https://doi.org/10.1056/NEJMoa0907839", p:"20089954", n:"1292 пациента."},
+        {t:"PARADIGMS. Финголимод у детей и подростков против интерферона бета-1а. NEJM, 2018", u:"https://doi.org/10.1056/NEJMoa1800149", p:"30207920", n:"215 пациентов 10-17 лет."}
       ],
       docs:[
-        grlsDoc("Первоисточник РФ: поиск по МНН «финголимод»"),
-        emaDoc("Gilenya","Официальный регуляторный PDF ЕС"),
-        pcDoc("Гилениа (Novartis)",15958,"ЛСР-008272/10"),
-        pcDoc("Несклер (ИИХР)",11832,"ЛП-№(011978)-(РГ-RU)")
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по МНН «финголимод»", off:true},
+        {t:"EMA: Gilenya - Product Information (SmPC)", u:"https://www.ema.europa.eu/en/documents/product-information/gilenya-epar-product-information_en.pdf", n:"Официальный регуляторный PDF ЕС", pdf:true},
+        {t:"Гилениа (Novartis), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/15958/", n:"ЛСР-008272/10"},
+        {t:"Несклер (ИИХР), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/11832/", n:"ЛП-№(011978)-(РГ-RU)"}
       ]
     },
     {
@@ -938,16 +918,16 @@ const DATA = [
               "Снижение (в статье): 55,5% (p<0,0001)"
             ]}
          ],
-         u:D("10.1016/S0140-6736(18)30475-6"), p:"29576505",
-         pdf:emaPdf("Mayzent")}
+         u:"https://doi.org/10.1016/S0140-6736(18)30475-6", p:"29576505",
+         pdf:{t:"EMA: Mayzent - Product Information (SmPC), официальный PDF", u:"https://www.ema.europa.eu/en/documents/product-information/mayzent-epar-product-information_en.pdf"}}
       ],
       studies:[
-        {t:"EXPAND. Сипонимод против плацебо при ВПРС. The Lancet, 2018", u:D("10.1016/S0140-6736(18)30475-6"), p:"29576505", n:"1651 пациент. Источник числовых данных выше."}
+        {t:"EXPAND. Сипонимод против плацебо при ВПРС. The Lancet, 2018", u:"https://doi.org/10.1016/S0140-6736(18)30475-6", p:"29576505", n:"1651 пациент. Источник числовых данных выше."}
       ],
       docs:[
-        grlsDoc("Первоисточник РФ: поиск по МНН «сипонимод»"),
-        emaDoc("Mayzent","Официальный регуляторный PDF ЕС"),
-        pcDoc("Кайендра (Novartis)",5222,"ЛП-№(004355)-(РГ-RU)")
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по МНН «сипонимод»", off:true},
+        {t:"EMA: Mayzent - Product Information (SmPC)", u:"https://www.ema.europa.eu/en/documents/product-information/mayzent-epar-product-information_en.pdf", n:"Официальный регуляторный PDF ЕС", pdf:true},
+        {t:"Кайендра (Novartis), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/5222/", n:"ЛП-№(004355)-(РГ-RU)"}
       ]
     },
     {
@@ -990,17 +970,17 @@ const DATA = [
               "Новые или увеличившиеся T2-очаги: снижение на 48% в SUNBEAM и на 42% в RADIANCE"
             ]}
          ],
-         u:D("10.1016/S1474-4422(19)30239-X"), p:"31492651",
-         pdf:emaPdf("Zeposia")}
+         u:"https://doi.org/10.1016/S1474-4422(19)30239-X", p:"31492651",
+         pdf:{t:"EMA: Zeposia - Product Information (SmPC), официальный PDF", u:"https://www.ema.europa.eu/en/documents/product-information/zeposia-epar-product-information_en.pdf"}}
       ],
       studies:[
-        {t:"SUNBEAM. Озанимод против интерферона бета-1а, минимум 12 месяцев. Lancet Neurology, 2019", u:D("10.1016/S1474-4422(19)30239-X"), p:"31492651", n:"1346 пациентов. Источник числовых данных выше."},
-        {t:"RADIANCE. Озанимод против интерферона бета-1а, 24 месяца. Lancet Neurology, 2019", u:D("10.1016/S1474-4422(19)30238-8"), p:"31492652", n:"1313 пациентов."}
+        {t:"SUNBEAM. Озанимод против интерферона бета-1а, минимум 12 месяцев. Lancet Neurology, 2019", u:"https://doi.org/10.1016/S1474-4422(19)30239-X", p:"31492651", n:"1346 пациентов. Источник числовых данных выше."},
+        {t:"RADIANCE. Озанимод против интерферона бета-1а, 24 месяца. Lancet Neurology, 2019", u:"https://doi.org/10.1016/S1474-4422(19)30238-8", p:"31492652", n:"1313 пациентов."}
       ],
       docs:[
-        grlsDoc("Первоисточник РФ: поиск по МНН «озанимод»"),
-        emaDoc("Zeposia","Официальный регуляторный PDF ЕС"),
-        pcDoc("Зепозия (BMS)",65614,"ЛП-№(008340)-(РГ-RU)")
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по МНН «озанимод»", off:true},
+        {t:"EMA: Zeposia - Product Information (SmPC)", u:"https://www.ema.europa.eu/en/documents/product-information/zeposia-epar-product-information_en.pdf", n:"Официальный регуляторный PDF ЕС", pdf:true},
+        {t:"Зепозия (BMS), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/65614/", n:"ЛП-№(008340)-(РГ-RU)"}
       ]
     }
   ]},
@@ -1057,16 +1037,16 @@ const DATA = [
               "CDW через 6 месяцев: 8,1% (офатумумаб) и 12,0% (терифлуномид) → снижение риска на 32% (ОР 0,68; p=0,01)"
             ]}
          ],
-         u:D("10.1056/NEJMoa1917246"), p:"32757523",
-         pdf:emaPdf("Kesimpta")}
+         u:"https://doi.org/10.1056/NEJMoa1917246", p:"32757523",
+         pdf:{t:"EMA: Kesimpta - Product Information (SmPC), официальный PDF", u:"https://www.ema.europa.eu/en/documents/product-information/kesimpta-epar-product-information_en.pdf"}}
       ],
       studies:[
-        {t:"ASCLEPIOS I и ASCLEPIOS II. Офатумумаб против терифлуномида. NEJM, 2020", u:D("10.1056/NEJMoa1917246"), p:"32757523", n:"1882 пациента. Источник числовых данных выше."},
-        {t:"Данные РФ. Анализ российских пациентов из ASCLEPIOS I и II. Журнал неврологии и психиатрии им. С.С. Корсакова, 2024", u:JN("202412407237"), n:"Подгруппа из 352 пациентов из России (18,7% участников испытания)."}
+        {t:"ASCLEPIOS I и ASCLEPIOS II. Офатумумаб против терифлуномида. NEJM, 2020", u:"https://doi.org/10.1056/NEJMoa1917246", p:"32757523", n:"1882 пациента. Источник числовых данных выше."},
+        {t:"Данные РФ. Анализ российских пациентов из ASCLEPIOS I и II. Журнал неврологии и психиатрии им. С.С. Корсакова, 2024", u:"https://doi.org/10.17116/jnevro202412407237", n:"Подгруппа из 352 пациентов из России (18,7% участников испытания)."}
       ],
       docs:[
-        grlsDoc("Первоисточник РФ: поиск по названию «Бонспри». РУ ЛП-№(001332)-(РГ-RU)"),
-        emaDoc("Kesimpta","Официальный регуляторный PDF ЕС, раздел 5.1"),
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по названию «Бонспри». РУ ЛП-№(001332)-(РГ-RU)", off:true},
+        {t:"EMA: Kesimpta - Product Information (SmPC)", u:"https://www.ema.europa.eu/en/documents/product-information/kesimpta-epar-product-information_en.pdf", n:"Официальный регуляторный PDF ЕС, раздел 5.1", pdf:true},
         {t:"ОХЛП Бонспри на официальном сайте Novartis Россия, PDF", u:"https://www.novartis.com/ru-ru/sites/novartis_ru/files/2024-01-12-131_Bonspri_20mg_SmPC_5.0_0008_RUr.pdf", n:"Официальная общая характеристика препарата в РФ", pdf:true}
       ]
     },
@@ -1108,18 +1088,18 @@ const DATA = [
               "Снижение относительного риска (в статье): 42% (ОР 0,58; 95% ДИ 0,43-0,77; p<0,001)"
             ]}
          ],
-         u:D("10.1056/NEJMoa044397"), p:"16510744",
-         pdf:emaPdf("Tysabri")}
+         u:"https://doi.org/10.1056/NEJMoa044397", p:"16510744",
+         pdf:{t:"EMA: Tysabri - Product Information (SmPC), официальный PDF", u:"https://www.ema.europa.eu/en/documents/product-information/tysabri-epar-product-information_en.pdf"}}
       ],
       studies:[
-        {t:"AFFIRM. Натализумаб против плацебо, 2 года. NEJM, 2006", u:D("10.1056/NEJMoa044397"), p:"16510744", n:"942 пациента. Источник числовых данных выше."},
-        {t:"Исследование РФ. Натализумаб и окрелизумаб при высокоактивном РС в реальной практике. Журнал неврологии и психиатрии им. С.С. Корсакова, 2023", u:JN("202312307277"), n:"123 пациента Московской области, 77 на натализумабе."}
+        {t:"AFFIRM. Натализумаб против плацебо, 2 года. NEJM, 2006", u:"https://doi.org/10.1056/NEJMoa044397", p:"16510744", n:"942 пациента. Источник числовых данных выше."},
+        {t:"Исследование РФ. Натализумаб и окрелизумаб при высокоактивном РС в реальной практике. Журнал неврологии и психиатрии им. С.С. Корсакова, 2023", u:"https://doi.org/10.17116/jnevro202312307277", n:"123 пациента Московской области, 77 на натализумабе."}
       ],
       docs:[
-        grlsDoc("Первоисточник РФ: поиск по МНН «натализумаб»"),
-        emaDoc("Tysabri","Официальный регуляторный PDF ЕС, раздел 5.1"),
-        pcDoc("Тизабри (Biogen)",8416,"ЛП-№(007827)-(РГ-RU)"),
-        pcDoc("Эфиктель (Генериум)",12758,"ЛП-№(013345)-(РГ-RU)")
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по МНН «натализумаб»", off:true},
+        {t:"EMA: Tysabri - Product Information (SmPC)", u:"https://www.ema.europa.eu/en/documents/product-information/tysabri-epar-product-information_en.pdf", n:"Официальный регуляторный PDF ЕС, раздел 5.1", pdf:true},
+        {t:"Тизабри (Biogen), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/8416/", n:"ЛП-№(007827)-(РГ-RU)"},
+        {t:"Эфиктель (Генериум), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/12758/", n:"ЛП-№(013345)-(РГ-RU)"}
       ]
     },
     {
@@ -1165,18 +1145,18 @@ const DATA = [
               "Снижение риска (в статье): 33% (ОР 0,67; 95% ДИ 0,48-0,93; p=0,02)"
             ]}
          ],
-         u:D("10.1056/NEJMoa0902533"), p:"20089960",
-         pdf:emaPdf("Mavenclad")}
+         u:"https://doi.org/10.1056/NEJMoa0902533", p:"20089960",
+         pdf:{t:"EMA: Mavenclad - Product Information (SmPC), официальный PDF", u:"https://www.ema.europa.eu/en/documents/product-information/mavenclad-epar-product-information_en.pdf"}}
       ],
       studies:[
-        {t:"CLARITY. Кладрибин в таблетках против плацебо, 96 недель. NEJM, 2010", u:D("10.1056/NEJMoa0902533"), p:"20089960", n:"1326 пациентов. Источник числовых данных выше."},
-        {t:"Исследование РФ. Опыт применения кладрибина при высокоактивном РС в Московской области. Журнал неврологии и психиатрии им. С.С. Корсакова, 2024", u:JN("202412406174"), n:"62 пациента. СЧО снизилась с 1,32 до 0,20 через 12 мес и до 0,086 через 24 мес."}
+        {t:"CLARITY. Кладрибин в таблетках против плацебо, 96 недель. NEJM, 2010", u:"https://doi.org/10.1056/NEJMoa0902533", p:"20089960", n:"1326 пациентов. Источник числовых данных выше."},
+        {t:"Исследование РФ. Опыт применения кладрибина при высокоактивном РС в Московской области. Журнал неврологии и психиатрии им. С.С. Корсакова, 2024", u:"https://doi.org/10.17116/jnevro202412406174", n:"62 пациента. СЧО снизилась с 1,32 до 0,20 через 12 мес и до 0,086 через 24 мес."}
       ],
       docs:[
-        grlsDoc("Первоисточник РФ: поиск по МНН «кладрибин»"),
-        emaDoc("Mavenclad","Официальный регуляторный PDF ЕС, раздел 5.1"),
-        pcDoc("Мавенклад (Merck)",5580,"ЛП-№(004745)-(РГ-RU)"),
-        pcDoc("Кладрибин (ПРОМОМЕД РУС)",6857,"ЛП-№(006088)-(РГ-RU)")
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по МНН «кладрибин»", off:true},
+        {t:"EMA: Mavenclad - Product Information (SmPC)", u:"https://www.ema.europa.eu/en/documents/product-information/mavenclad-epar-product-information_en.pdf", n:"Официальный регуляторный PDF ЕС, раздел 5.1", pdf:true},
+        {t:"Мавенклад (Merck), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/5580/", n:"ЛП-№(004745)-(РГ-RU)"},
+        {t:"Кладрибин (ПРОМОМЕД РУС), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/6857/", n:"ЛП-№(006088)-(РГ-RU)"}
       ]
     },
     {
@@ -1219,18 +1199,18 @@ const DATA = [
               "CARE-MS II: 13% (алемтузумаб) и 21% (контроль) → снижение риска на 42% (ОР 0,58; p=0,0084)"
             ]}
          ],
-         u:D("10.1016/S0140-6736(12)61769-3"), p:"23122652",
-         pdf:emaPdf("Lemtrada")}
+         u:"https://doi.org/10.1016/S0140-6736(12)61769-3", p:"23122652",
+         pdf:{t:"EMA: Lemtrada - Product Information (SmPC), официальный PDF", u:"https://www.ema.europa.eu/en/documents/product-information/lemtrada-epar-product-information_en.pdf"}}
       ],
       studies:[
-        {t:"CARE-MS I. Алемтузумаб против интерферона бета-1а у ранее нелеченных пациентов. The Lancet, 2012", u:D("10.1016/S0140-6736(12)61769-3"), p:"23122652", n:"581 пациент. Источник числовых данных выше."},
-        {t:"CARE-MS II. Алемтузумаб после неэффективной терапии. The Lancet, 2012", u:D("10.1016/S0140-6736(12)61768-1"), p:"23122650", n:"840 пациентов."},
-        {t:"CAMMS223. Алемтузумаб против интерферона бета-1а при раннем РС. NEJM, 2008", u:D("10.1056/NEJMoa0802670"), p:"18946064", n:"334 пациента, 2-я фаза."}
+        {t:"CARE-MS I. Алемтузумаб против интерферона бета-1а у ранее нелеченных пациентов. The Lancet, 2012", u:"https://doi.org/10.1016/S0140-6736(12)61769-3", p:"23122652", n:"581 пациент. Источник числовых данных выше."},
+        {t:"CARE-MS II. Алемтузумаб после неэффективной терапии. The Lancet, 2012", u:"https://doi.org/10.1016/S0140-6736(12)61768-1", p:"23122650", n:"840 пациентов."},
+        {t:"CAMMS223. Алемтузумаб против интерферона бета-1а при раннем РС. NEJM, 2008", u:"https://doi.org/10.1056/NEJMoa0802670", p:"18946064", n:"334 пациента, 2-я фаза."}
       ],
       docs:[
-        grlsDoc("Первоисточник РФ: поиск по МНН «алемтузумаб»"),
-        emaDoc("Lemtrada","Официальный регуляторный PDF ЕС, раздел 5.1"),
-        pcDoc("Лемтрада (Sanofi)",5121,"ЛП-№(004242)-(РГ-RU)")
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по МНН «алемтузумаб»", off:true},
+        {t:"EMA: Lemtrada - Product Information (SmPC)", u:"https://www.ema.europa.eu/en/documents/product-information/lemtrada-epar-product-information_en.pdf", n:"Официальный регуляторный PDF ЕС, раздел 5.1", pdf:true},
+        {t:"Лемтрада (Sanofi), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/5121/", n:"ЛП-№(004242)-(РГ-RU)"}
       ]
     }
   ]},
@@ -1267,17 +1247,17 @@ const DATA = [
               "Статистически достоверное замедление нарастания EDSS по сравнению с плацебо (p=0,0194)"
             ]}
          ],
-         u:D("10.1016/S0140-6736(02)12023-X"), p:"12504397",
-         pdf:grlsPdf("ОХЛП и инструкции препаратов митоксантрона")}
+         u:"https://doi.org/10.1016/S0140-6736(02)12023-X", p:"12504397",
+         pdf:{t:"ГРЛС: ОХЛП и инструкции препаратов митоксантрона", u:"https://grls.rosminzdrav.ru/"}}
       ],
       studies:[
-        {t:"MIMS. Митоксантрон против плацебо при прогрессирующем РС. The Lancet, 2002", u:D("10.1016/S0140-6736(02)12023-X"), p:"12504397", n:"194 пациента. Источник числовых данных выше."},
-        {t:"Риск вторичного острого лейкоза после терапии митоксантроном. Mult Scler, 2002", u:D("10.1191/1352458502ms836oa"), p:"12356214", n:"Ключевая работа по токсичности."}
+        {t:"MIMS. Митоксантрон против плацебо при прогрессирующем РС. The Lancet, 2002", u:"https://doi.org/10.1016/S0140-6736(02)12023-X", p:"12504397", n:"194 пациента. Источник числовых данных выше."},
+        {t:"Риск вторичного острого лейкоза после терапии митоксантроном. Mult Scler, 2002", u:"https://doi.org/10.1191/1352458502ms836oa", p:"12356214", n:"Ключевая работа по токсичности."}
       ],
       docs:[
-        grlsDoc("Первоисточник РФ: поиск по МНН «митоксантрон»"),
-        pcDoc("Онкотрон (Baxter)",2077,"ЛП-№(000976)-(РГ-RU)"),
-        pcDoc("Митоксантрон-ЛЭНС (ВЕРОФАРМ)",110502,"Р N000458/01")
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по МНН «митоксантрон»", off:true},
+        {t:"Онкотрон (Baxter), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/2077/", n:"ЛП-№(000976)-(РГ-RU)"},
+        {t:"Митоксантрон-ЛЭНС (ВЕРОФАРМ), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/110502/", n:"Р N000458/01"}
       ]
     },
     {
@@ -1316,17 +1296,17 @@ const DATA = [
               "Применение при РС возможно только по решению врачебной комиссии (off-label)"
             ]}
          ],
-         u:D("10.1056/NEJMoa0706383"), p:"18272891",
-         pdf:grlsPdf("ОХЛП ритуксимаба (показания не включают РС)")}
+         u:"https://doi.org/10.1056/NEJMoa0706383", p:"18272891",
+         pdf:{t:"ГРЛС: ОХЛП ритуксимаба (показания не включают РС)", u:"https://grls.rosminzdrav.ru/"}}
       ],
       studies:[
-        {t:"HERMES. Ритуксимаб против плацебо при РРС, 48 недель. NEJM, 2008", u:D("10.1056/NEJMoa0706383"), p:"18272891", n:"104 пациента. Доказал ключевую роль B-клеток при РС."},
-        {t:"OLYMPUS. Ритуксимаб против плацебо при ППРС. Annals of Neurology, 2009", u:D("10.1002/ana.21867"), p:"19847908", n:"439 пациентов."}
+        {t:"HERMES. Ритуксимаб против плацебо при РРС, 48 недель. NEJM, 2008", u:"https://doi.org/10.1056/NEJMoa0706383", p:"18272891", n:"104 пациента. Доказал ключевую роль B-клеток при РС."},
+        {t:"OLYMPUS. Ритуксимаб против плацебо при ППРС. Annals of Neurology, 2009", u:"https://doi.org/10.1002/ana.21867", p:"19847908", n:"439 пациентов."}
       ],
       docs:[
-        grlsDoc("Первоисточник РФ: поиск по МНН «ритуксимаб». Показание «РС» в инструкции отсутствует"),
-        pcDoc("Мабтера (Roche)",5232,"ЛП-№(004365)-(РГ-RU)"),
-        pcDoc("Ацеллбия (БИОКАД)",30799,"ЛП-№(006574)-(РГ-RU)")
+        {t:"ГРЛС - государственный реестр лекарственных средств МЗ РФ", u:"https://grls.rosminzdrav.ru/", n:"Первоисточник РФ: поиск по МНН «ритуксимаб». Показание «РС» в инструкции отсутствует", off:true},
+        {t:"Мабтера (Roche), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/5232/", n:"ЛП-№(004365)-(РГ-RU)"},
+        {t:"Ацеллбия (БИОКАД), карточка в реестре", u:"https://pharmcontrol.ru/registry/drugs/30799/", n:"ЛП-№(006574)-(РГ-RU)"}
       ]
     },
     {
@@ -1361,14 +1341,14 @@ const DATA = [
               "Проводится в федеральных гематологических центрах по решению врачебной комиссии"
             ]}
          ],
-         u:D("10.1001/jama.2018.18743"), p:"30644983",
-         pdf:{t:"Клинические рекомендации МЗ РФ «Рассеянный склероз»", u:CR}}
+         u:"https://doi.org/10.1001/jama.2018.18743", p:"30644983",
+         pdf:{t:"Клинические рекомендации МЗ РФ «Рассеянный склероз»", u:"https://cr.minzdrav.gov.ru/schema/739_1"}}
       ],
       studies:[
-        {t:"MIST. Немиелоаблативная АутоТГСК против продолжения ПИТРС. JAMA, 2019", u:D("10.1001/jama.2018.18743"), p:"30644983", n:"110 пациентов. Полный текст в открытом доступе."}
+        {t:"MIST. Немиелоаблативная АутоТГСК против продолжения ПИТРС. JAMA, 2019", u:"https://doi.org/10.1001/jama.2018.18743", p:"30644983", n:"110 пациентов. Полный текст в открытом доступе."}
       ],
       docs:[
-        {t:"Клинические рекомендации МЗ РФ «Рассеянный склероз»", u:CR, n:"Разделы об агрессивном и резистентном течении заболевания", off:true}
+        {t:"Клинические рекомендации МЗ РФ «Рассеянный склероз»", u:"https://cr.minzdrav.gov.ru/schema/739_1", n:"Разделы об агрессивном и резистентном течении заболевания", off:true}
       ]
     }
   ]}
@@ -1381,85 +1361,127 @@ const list = document.getElementById('list');
 const RELAPSE_RATES = {
   ocrelizumab:{
     customLabel:'СЧО ~раз в 6 лет, ~раз в 10 лет',
+    qualifier:'сложные случаи 6 лет, простые 10 лет',
     samples:[
-      {trial:'OPERA I/II (сложные случаи)', arr:0.16, context:'RMS с высокой активностью, 96 нед: СЧО 0,16 в год → ~раз в 6 лет (6,25 лет на обострение).', u:D('10.1056/NEJMoa1601277')},
-      {trial:'Выборка простых случаев', arr:0.10, context:'Пациенты с умеренной / стандартной активностью: СЧО ~0,10 в год → ~раз в 10 лет.', u:D('10.1056/NEJMoa1601277')}
+      {trial:'OPERA I/II (сложные случаи)', arr:0.16, context:'RMS с высокой активностью, 96 нед: СЧО 0,16 в год → ~раз в 6 лет (1 / 0,16 = 6,25).', u:'https://doi.org/10.1056/NEJMoa1601277'},
+      {trial:'Выборка простых случаев', arr:0.10, context:'Пациенты с умеренной / стандартной активностью: СЧО ~0,10 в год → ~раз в 10 лет.', u:'https://doi.org/10.1056/NEJMoa1601277'}
     ]
   },
   divozilimab:{
     customLabel:'СЧО ~раз в 6 лет, ~раз в 10 лет',
     qualifier:'оценка как у окрелизумаба (анти-CD20)',
     samples:[
-      {trial:'Класс анти-CD20 (по окрелизумабу)', arr:0.16, context:'Оценка принята аналогично окрелизумабу: ~раз в 6 лет (сложные случаи), ~раз в 10 лет (простые случаи).', u:D('10.1056/NEJMoa1601277')},
-      {trial:'MIRANTIBUS (BCD-132-4)', arr:0.057, context:'РС с обострениями, 100 нед: СЧО 0,057 в год (n=338, РКИ к терифлуномиду).', u:JN('202412404186')}
+      {trial:'Класс анти-CD20 (по окрелизумабу)', arr:0.16, context:'Оценка принята аналогично окрелизумабу: сложные случаи ~раз в 6 лет (1 / 0,16), простые ~раз в 10 лет (СЧО ~0,10).', u:'https://doi.org/10.1056/NEJMoa1601277'},
+      {trial:'MIRANTIBUS (BCD-132-4)', arr:0.057, context:'РС с обострениями, 100 нед: СЧО 0,057 в год (n=338, РКИ к терифлуномиду).', u:'https://doi.org/10.17116/jnevro202412404186'}
     ]
   },
-  ifnb1a:{samples:[
-    {arr:1.73/2, trial:'PRISMS', context:'RRMS, 2 года; интерферон бета-1а 44 мкг подкожно 3 раза в неделю. СЧО расчётное: 1,73 обострения за 2 года / 2. Не данные для режима Авонекса.', u:D('10.1016/S0140-6736(98)03334-0')}
-  ]},
-  ifnb1b:{samples:[
-    {arr:0.84, trial:'IFNB MS, 1993', context:'RRMS, 2 года; интерферон бета-1б 250 мкг подкожно через день. Отдельное исследование, не BEYOND.', u:D('10.1212/WNL.43.4.655')}
-  ]},
-  pegifnb:{samples:[
-    {arr:0.256, trial:'ADVANCE', context:'RRMS, первые 48 недель; пэгинтерферон бета-1а 125 мкг подкожно каждые 2 недели.', u:D('10.1016/S1474-4422(14)70068-7')}
-  ]},
+  ifnb1a:{
+    customLabel:'СЧО ~раз в 3-3,4 года',
+    qualifier:'по современным РКИ (OPERA / TRANSFORMS)',
+    samples:[
+      {trial:'OPERA I/II (Ребиф 44 мкг)', arr:0.29, context:'Современное РКИ, 96 нед: группа интерферона бета-1а 44 мкг п/к 3 р/нед имела СЧО 0,29 в год → ~раз в 3,4 года.', u:'https://doi.org/10.1056/NEJMoa1601277'},
+      {trial:'TRANSFORMS (Авонекс 30 мкг)', arr:0.33, context:'Современное РКИ, 1 год: группа интерферона бета-1а 30 мкг в/м 1 р/нед имела СЧО 0,33 в год → ~раз в 3,0 года.', u:'https://doi.org/10.1056/NEJMoa0907839'},
+      {trial:'PRISMS (1998, 44 мкг)', arr:1.73/2, context:'Раннее РКИ 1990-х с высокой исходной активностью пациентов: СЧО ~0,87 в год → ~раз в 1,2 года.', u:'https://doi.org/10.1016/S0140-6736(98)03334-0'}
+    ]
+  },
+  ifnb1b:{
+    customLabel:'СЧО ~раз в 3 года',
+    qualifier:'по прямому сравнительному РКИ BEYOND',
+    samples:[
+      {trial:'BEYOND (2009, Бетаферон 250 мкг)', arr:0.33, context:'Крупнейшее прямое РКИ (n=2244): СЧО в группе интерферона бета-1б 250 мкг через день составила ~0,33 в год (эквивалентно глатирамера ацетату) → ~раз в 3,0 года.', u:'https://doi.org/10.1016/S1474-4422(09)70226-1'},
+      {trial:'IFNB MS Study Group (1993)', arr:0.84, context:'Раннее РКИ 1993 года с высокой исходной активностью когорты: СЧО 0,84 в год → ~раз в 1,2 года.', u:'https://doi.org/10.1212/WNL.43.4.655'}
+    ]
+  },
+  pegifnb:{
+    samples:[
+      {arr:0.256, trial:'ADVANCE', context:'RRMS, первые 48 недель; пэгинтерферон бета-1а 125 мкг подкожно каждые 2 недели.', u:'https://doi.org/10.1016/S1474-4422(14)70068-7'}
+    ]
+  },
   sampaegifnb:{
     customLabel:'СЧО ~раз в 3,9 года',
     qualifier:'по подтверждённому аналогу (пэгинтерферон β-1а)',
     samples:[
-      {trial:'ADVANCE (аналог Плегриди)', arr:0.256, context:'Подтверждённый эталон класса пэгинтерферонов бета-1а: СЧО 0,256 в год → ~раз в 3,9 года.', u:D('10.1016/S1474-4422(14)70068-7')},
-      {trial:'BCD-054-2 (Тенексиа)', context:'В открытой продлённой фазе 2-го года без контроля СЧО составила 0,09 (~11 лет), показатель взят по доказанному аналогу.', u:JN('202312302152')}
+      {trial:'ADVANCE (аналог Плегриди)', arr:0.256, context:'Подтверждённый эталон класса пэгинтерферонов бета-1а: СЧО 0,256 в год → ~раз в 3,9 года.', u:'https://doi.org/10.1016/S1474-4422(14)70068-7'},
+      {trial:'BCD-054-2 (Тенексиа)', context:'В открытой продлённой фазе 2-го года без контроля СЧО составила 0,09 (~11 лет); показатель взят по доказанному аналогу.', u:'https://doi.org/10.17116/jnevro202312302152'}
     ]
   },
-  glatiramer:{samples:[
-    {arr:0.331, trial:'GALA', context:'RRMS, 12 месяцев; глатирамера ацетат 40 мг подкожно 3 раза в неделю.', u:D('10.1002/ana.23938')},
-    {arr:0.29, trial:'CONFIRM', context:'RRMS, 96 недель; глатирамера ацетат 20 мг подкожно ежедневно.', u:D('10.1056/NEJMoa1206328')}
-  ]},
-  teriflunomide:{samples:[
-    {arr:0.37, trial:'TEMSO', context:'РС с обострениями, 108 недель; терифлуномид 14 мг внутрь ежедневно.', u:D('10.1056/NEJMoa1014656')},
-    {arr:0.319, trial:'TOWER', context:'РС с обострениями, переменная длительность наблюдения; терифлуномид 14 мг внутрь ежедневно.', u:D('10.1016/S1474-4422(13)70308-9')}
-  ]},
-  dimethylfumarate:{samples:[
-    {arr:0.17, trial:'DEFINE', context:'RRMS, 96 недель; диметилфумарат 240 мг внутрь 2 раза в сутки.', u:D('10.1056/NEJMoa1114287')},
-    {arr:0.22, trial:'CONFIRM', context:'RRMS, 96 недель; диметилфумарат 240 мг внутрь 2 раза в сутки.', u:D('10.1056/NEJMoa1206328')}
-  ]},
-  diroximelfumarate:{qualifier:'без контрольной группы', samples:[
-    {arr:0.13, trial:'EVOLVE-MS-1, 2023', context:'RRMS, 96 недель; открытое одногрупповое исследование. Скорректированное СЧО 0,13, 95% ДИ 0,11-0,15; не сравнительное РКИ.', u:D('10.1177/13524585231205708')}
-  ]},
-  fingolimod:{samples:[
-    {arr:0.18, trial:'FREEDOMS', context:'RRMS, 24 месяца; финголимод 0,5 мг внутрь ежедневно.', u:D('10.1056/NEJMoa0909494')},
-    {arr:0.16, trial:'TRANSFORMS', context:'RRMS, 12 месяцев; финголимод 0,5 мг внутрь ежедневно.', u:D('10.1056/NEJMoa0907839')}
-  ]},
-  siponimod:{qualifier:'ВПРС, не РРС', samples:[
-    {arr:0.071, trial:'EXPAND', context:'SPMS (ВПРС), медиана наблюдения 21 месяц; сипонимод 2 мг внутрь ежедневно. Нельзя сопоставлять с РРС по абсолютному СЧО.', u:D('10.1016/S0140-6736(18)30475-6')}
-  ]},
-  ozanimod:{samples:[
-    {arr:0.18, trial:'SUNBEAM', context:'РС с обострениями, не менее 12 месяцев; озанимод 1 мг гидрохлорида (0,92 мг основания) внутрь ежедневно.', u:D('10.1016/S1474-4422(19)30239-X')},
-    {arr:0.17, trial:'RADIANCE', context:'РС с обострениями, 24 месяца; озанимод 1 мг гидрохлорида (0,92 мг основания) внутрь ежедневно.', u:D('10.1016/S1474-4422(19)30238-8')}
-  ]},
-  ofatumumab:{samples:[
-    {arr:0.11, trial:'ASCLEPIOS I', context:'RMS, медиана наблюдения 1,6 года для двух исследований; офатумумаб 20 мг подкожно каждые 4 недели после нагрузочных доз.', u:D('10.1056/NEJMoa1917246')},
-    {arr:0.10, trial:'ASCLEPIOS II', context:'RMS, медиана наблюдения 1,6 года для двух исследований; офатумумаб 20 мг подкожно каждые 4 недели после нагрузочных доз.', u:D('10.1056/NEJMoa1917246')}
-  ]},
-  natalizumab:{samples:[
-    {arr:0.23, trial:'AFFIRM', context:'RRMS, 2 года; натализумаб 300 мг внутривенно каждые 4 недели.', u:D('10.1056/NEJMoa044397')}
-  ]},
-  cladribine:{samples:[
-    {arr:0.14, trial:'CLARITY', context:'RRMS, 96 недель; кладрибин внутрь, суммарно 3,5 мг/кг за 2 года.', u:D('10.1056/NEJMoa0902533')}
-  ]},
-  alemtuzumab:{samples:[
-    {arr:0.18, trial:'CARE-MS I', context:'Ранее нелеченые пациенты с RRMS, 2 года; алемтузумаб 12 мг внутривенно, 5 дней в первом и 3 дня во втором году.', u:D('10.1016/S0140-6736(12)61769-3')},
-    {arr:0.26, trial:'CARE-MS II', context:'RRMS с недостаточным ответом на терапию, 2 года; алемтузумаб 12 мг внутривенно, 5 дней в первом и 3 дня во втором году.', u:D('10.1016/S0140-6736(12)61768-1')}
-  ]},
+  glatiramer:{
+    samples:[
+      {arr:0.331, trial:'GALA', context:'RRMS, 12 месяцев; глатирамера ацетат 40 мг подкожно 3 раза в неделю.', u:'https://doi.org/10.1002/ana.23938'},
+      {arr:0.29, trial:'CONFIRM', context:'RRMS, 96 недель; глатирамера ацетат 20 мг подкожно ежедневно.', u:'https://doi.org/10.1056/NEJMoa1206328'}
+    ]
+  },
+  teriflunomide:{
+    samples:[
+      {arr:0.37, trial:'TEMSO', context:'РС с обострениями, 108 недель; терифлуномид 14 мг внутрь ежедневно.', u:'https://doi.org/10.1056/NEJMoa1014656'},
+      {arr:0.319, trial:'TOWER', context:'РС с обострениями, переменная длительность наблюдения; терифлуномид 14 мг внутрь ежедневно.', u:'https://doi.org/10.1016/S1474-4422(13)70308-9'}
+    ]
+  },
+  dimethylfumarate:{
+    samples:[
+      {arr:0.17, trial:'DEFINE', context:'RRMS, 96 недель; диметилфумарат 240 мг внутрь 2 раза в сутки.', u:'https://doi.org/10.1056/NEJMoa1114287'},
+      {arr:0.22, trial:'CONFIRM', context:'RRMS, 96 недель; диметилфумарат 240 мг внутрь 2 раза в сутки.', u:'https://doi.org/10.1056/NEJMoa1206328'}
+    ]
+  },
+  diroximelfumarate:{
+    customLabel:'СЧО ~раз в 4,5-5,9 года',
+    qualifier:'по аналогу (диметилфумарат)',
+    samples:[
+      {trial:'DEFINE (аналог)', arr:0.17, context:'Подтверждённый эталон: диметилфумарат 240 мг 2 р/сут, СЧО 0,17 в год → ~раз в 5,9 года.', u:'https://doi.org/10.1056/NEJMoa1114287'},
+      {trial:'CONFIRM (аналог)', arr:0.22, context:'Диметилфумарат 240 мг 2 р/сут, СЧО 0,22 в год → ~раз в 4,5 года.', u:'https://doi.org/10.1056/NEJMoa1206328'},
+      {trial:'EVOLVE-MS-1 (2023)', arr:0.13, context:'Собственное исследование без контроля: СЧО 0,13 → ~7,7 года; для подписи взят доказанный аналог.', u:'https://doi.org/10.1177/13524585231205708'}
+    ]
+  },
+  fingolimod:{
+    samples:[
+      {arr:0.18, trial:'FREEDOMS', context:'RRMS, 24 месяца; финголимод 0,5 мг внутрь ежедневно.', u:'https://doi.org/10.1056/NEJMoa0909494'},
+      {arr:0.16, trial:'TRANSFORMS', context:'RRMS, 12 месяцев; финголимод 0,5 мг внутрь ежедневно.', u:'https://doi.org/10.1056/NEJMoa0907839'}
+    ]
+  },
+  siponimod:{
+    qualifier:'ВПРС, не РРС - не сравнивать',
+    samples:[
+      {arr:0.071, trial:'EXPAND', context:'SPMS (ВПРС), медиана наблюдения 21 месяц; сипонимод 2 мг внутрь ежедневно. Нельзя сопоставлять с РРС по абсолютному СЧО.', u:'https://doi.org/10.1016/S0140-6736(18)30475-6'}
+    ]
+  },
+  ozanimod:{
+    samples:[
+      {arr:0.18, trial:'SUNBEAM', context:'РС с обострениями, не менее 12 месяцев; озанимод 1 мг гидрохлорида (0,92 мг основания) внутрь ежедневно.', u:'https://doi.org/10.1016/S1474-4422(19)30239-X'},
+      {arr:0.17, trial:'RADIANCE', context:'РС с обострениями, 24 месяца; озанимод 1 мг гидрохлорида (0,92 мг основания) внутрь ежедневно.', u:'https://doi.org/10.1016/S1474-4422(19)30238-8'}
+    ]
+  },
+  ofatumumab:{
+    samples:[
+      {arr:0.11, trial:'ASCLEPIOS I', context:'RMS, медиана наблюдения 1,6 года для двух исследований; офатумумаб 20 мг подкожно каждые 4 недели после нагрузочных доз.', u:'https://doi.org/10.1056/NEJMoa1917246'},
+      {arr:0.10, trial:'ASCLEPIOS II', context:'RMS, медиана наблюдения 1,6 года для двух исследований; офатумумаб 20 мг подкожно каждые 4 недели после нагрузочных доз.', u:'https://doi.org/10.1056/NEJMoa1917246'}
+    ]
+  },
+  natalizumab:{
+    samples:[
+      {arr:0.23, trial:'AFFIRM', context:'RRMS, 2 года; натализумаб 300 мг внутривенно каждые 4 недели.', u:'https://doi.org/10.1056/NEJMoa044397'}
+    ]
+  },
+  cladribine:{
+    samples:[
+      {arr:0.14, trial:'CLARITY', context:'RRMS, 96 недель; кладрибин внутрь, суммарно 3,5 мг/кг за 2 года.', u:'https://doi.org/10.1056/NEJMoa0902533'}
+    ]
+  },
+  alemtuzumab:{
+    samples:[
+      {arr:0.18, trial:'CARE-MS I', context:'Ранее нелеченые пациенты с RRMS, 2 года; алемтузумаб 12 мг внутривенно, 5 дней в первом и 3 дня во втором году.', u:'https://doi.org/10.1016/S0140-6736(12)61769-3'},
+      {arr:0.26, trial:'CARE-MS II', context:'RRMS с недостаточным ответом на терапию, 2 года; алемтузумаб 12 мг внутривенно, 5 дней в первом и 3 дня во втором году.', u:'https://doi.org/10.1016/S0140-6736(12)61768-1'}
+    ]
+  },
   mitoxantrone:{samples:[], reason:'Нет подтверждённого абсолютного СЧО для этой подписи. Относительный эффект из MIMS нельзя подставить в формулу 1/СЧО.'},
   rituximab:{qualifier:'24 недели, II фаза', samples:[
-    {arr:0.37, trial:'HERMES', context:'RRMS, анализ на 24-й неделе исследования II фазы; ритуксимаб 1000 мг внутривенно в дни 1 и 15. Не прогноз на годы.', u:D('10.1056/NEJMoa0706383')}
+    {arr:0.37, trial:'HERMES', context:'RRMS, анализ на 24-й неделе исследования II фазы; ритуксимаб 1000 мг внутривенно в дни 1 и 15. Не прогноз на годы.', u:'https://doi.org/10.1056/NEJMoa0706383'}
   ]},
   ahsct:{samples:[], reason:'Нет подтверждённого абсолютного СЧО для этой подписи. Доля пациентов с прогрессированием из MIST не является СЧО.'}
 };
 
-const NO_DATA='Нет данных для расчёта.';
-const formatArrNumber=v=>String(Math.round(v*1000)/1000).replace('.',',');
+function formatArrNumber(value){
+  return String(Math.round(value * 1000) / 1000).replace('.', ',');
+}
 function yearWord(value){
   if(!Number.isInteger(value)) return 'года';
   const lastTwo = value % 100, last = value % 10;
@@ -1471,103 +1493,151 @@ function relapseFrequency(id){
   if(evidence.customLabel){
     return {available:true, label:evidence.customLabel, evidence:evidence};
   }
-  const samples = (evidence.samples || []).filter(s => Number.isFinite(s.arr) && s.arr > 0);
+  const samples = (evidence.samples || []).filter(function(s){ return Number.isFinite(s.arr) && s.arr > 0; });
   if(!samples.length){
     return {available:false, label:'СЧО: нет расчёта', evidence:evidence};
   }
-  const years = samples.map(s => 1 / s.arr);
+  const years = samples.map(function(s){ return 1 / s.arr; });
   const min = Math.round(Math.min.apply(null, years) * 10) / 10;
   const max = Math.round(Math.max.apply(null, years) * 10) / 10;
   const range = min === max ? formatArrNumber(min) : formatArrNumber(min) + '-' + formatArrNumber(max);
   return {available:true, label:'СЧО ~раз в ' + range + ' ' + yearWord(max), evidence:evidence};
 }
 
-/* Единый генератор разметки частоты обострений (без символа '*') */
-function freqHTML(id, inline){
-  const f = relapseFrequency(id), ev = f.evidence, tag = inline ? 'span' : 'div';
-  const root = document.createElement(tag);
-  root.className = (inline ? 'arr-frequency' : 'cmp-frequency') + (f.available ? '' : ' arr-frequency--missing');
-  const add = (cls, txt) => {
-    const e = document.createElement(tag);
-    e.className = cls; e.textContent = txt; root.appendChild(e); return e;
-  };
-  if(inline) root.setAttribute('aria-describedby', 'arr-frequency-help');
-  add('arr-frequency-value', f.label);
-  if(ev.qualifier){
-    add('arr-frequency-note', ev.qualifier);
+// Text nodes keep tooltips and source labels separate from the existing HTML data.
+function frequencyBadge(id){
+  const f = relapseFrequency(id);
+  const root = document.createElement('span');
+  root.className = 'arr-frequency' + (f.available ? '' : ' arr-frequency--missing');
+  root.setAttribute('aria-describedby', 'arr-frequency-help');
+  const value = document.createElement('span');
+  value.className = 'arr-frequency-value';
+  value.textContent = f.label;
+  root.appendChild(value);
+  if(f.evidence.qualifier){
+    const qualifier = document.createElement('span');
+    qualifier.className = 'arr-frequency-note';
+    qualifier.textContent = f.evidence.qualifier;
+    root.appendChild(qualifier);
   } else if(!f.available){
-    add('arr-frequency-note', inline ? 'нет исходного СЧО' : (ev.reason || NO_DATA));
+    const note = document.createElement('span');
+    note.className = 'arr-frequency-note';
+    note.textContent = 'нет исходного СЧО';
+    root.appendChild(note);
   }
-  if(inline){
-    root.title = f.available
-      ? (ev.samples || []).map(s => s.trial + (s.arr ? ': СЧО ' + formatArrNumber(s.arr) + ' в год. ' : ': ') + s.context).join('\n')
-        + '\nУсловный пересчёт 1/СЧО, не срок до следующего обострения.'
-      : (ev.reason || NO_DATA);
-  } else if(f.available){
-    (ev.samples || []).forEach(s => {
-      const row = add('cmp-frequency-source', '');
-      row.title = s.context;
-      const link = document.createElement('a');
-      link.className = 'lnk'; link.href = s.u; link.target = '_blank'; link.rel = 'noopener'; link.textContent = s.trial;
-      row.appendChild(link);
-      row.appendChild(document.createTextNode(s.arr ? ': СЧО ' + formatArrNumber(s.arr) + ' в год (' + s.context + ')' : ': ' + s.context));
+  root.title = f.available ? (f.evidence.samples || []).map(function(s){
+    return s.trial + (s.arr ? ': СЧО ' + formatArrNumber(s.arr) + ' в год. ' : ': ') + s.context;
+  }).join('\n') + '\nУсловный пересчёт 1/СЧО, не срок до следующего обострения.' : f.evidence.reason || 'Нет данных для расчёта.';
+  return root.outerHTML;
+}
+
+function frequencyTableCell(id){
+  const f = relapseFrequency(id);
+  const root = document.createElement('div');
+  root.className = 'cmp-frequency' + (f.available ? '' : ' arr-frequency--missing');
+  const heading = document.createElement('div');
+  heading.className = 'k';
+  heading.textContent = '';
+  root.appendChild(heading);
+  const value = document.createElement('div');
+  value.className = 'arr-frequency-value';
+  value.textContent = f.label;
+  root.appendChild(value);
+  if(f.evidence.qualifier){
+    const qualifier = document.createElement('div');
+    qualifier.className = 'arr-frequency-note';
+    qualifier.textContent = f.evidence.qualifier;
+    root.appendChild(qualifier);
+  } else if(!f.available){
+    const note = document.createElement('div');
+    note.className = 'arr-frequency-note';
+    note.textContent = f.evidence.reason || 'Нет данных для расчёта.';
+    root.appendChild(note);
+  }
+  if(f.available){
+    (f.evidence.samples || []).forEach(function(s){
+      const source = document.createElement('div');
+      source.className = 'cmp-frequency-source';
+      source.title = s.context;
+      if(s.u){
+        const link = document.createElement('a');
+        link.className = 'lnk';
+        link.href = s.u;
+        link.target = '_blank';
+        link.rel = 'noopener';
+        link.textContent = s.trial;
+        source.appendChild(link);
+        source.appendChild(document.createTextNode(s.arr ? ': СЧО ' + formatArrNumber(s.arr) + ' в год (' + s.context + ')' : ': ' + s.context));
+      } else {
+        source.textContent = s.trial + ': ' + s.context;
+      }
+      root.appendChild(source);
     });
   }
   return root.outerHTML;
 }
-
-const A=(cls,href,text)=>'<a class="'+cls+'" href="'+href+'" target="_blank" rel="noopener">'+text+'</a>';
-const pmidLink=p=>A('src','https://pubmed.ncbi.nlm.nih.gov/'+p+'/','PMID '+p);
 
 function badge(tag){
   const map = {'ВЭ-ПИТРС':['ve-soft','ve'],'2-я линия':['accent-soft','accent'],'1-я линия':['ok-soft','ok'],'Резерв':['warn-soft','warn']};
   const m = map[tag] || ['accent-soft','accent'];
   return '<span class="text-[11px] font-semibold px-2 py-0.5 rounded-full whitespace-nowrap" style="background:var(--'+m[0]+');color:var(--'+m[1]+')">'+tag+'</span>';
 }
-const pill=(label,val)=>!val?'':'<div class="px-3 py-2 rounded-xl sub"><div class="text-[11px] uppercase tracking-wide muted">'+label+'</div><div class="text-[13.5px] mt-0.5">'+val+'</div></div>';
+function pill(label,val){
+  if(!val) return '';
+  return '<div class="px-3 py-2 rounded-xl sub"><div class="text-[11px] uppercase tracking-wide muted">'+label+'</div><div class="text-[13.5px] mt-0.5">'+val+'</div></div>';
+}
 
 /* Форматирование блока «Эффективность по РКИ» с выводом каждой записи с новой строки */
-const statsBlock = arr => !arr || !arr.length ? '' :
-  '<div class="mt-3"><div class="text-[12px] font-semibold uppercase tracking-wide muted">📊 Эффективность по РКИ</div><div class="mt-1.5 space-y-2.5">'
-  + arr.map(s =>
-      '<div class="px-3 py-2.5 rounded-xl sub" style="border-left:3px solid var(--accent)">'
+function statsBlock(arr){
+  if(!arr || !arr.length) return '';
+  let h = '<div class="mt-3"><div class="text-[12px] font-semibold uppercase tracking-wide muted">📊 Эффективность по РКИ</div><div class="mt-1.5 space-y-2.5">';
+  arr.forEach(function(s){
+    h += '<div class="px-3 py-2.5 rounded-xl sub" style="border-left:3px solid var(--accent)">'
       + '<div class="text-[13.5px] font-semibold">'+s.tr+'</div>'
       + '<div class="text-[12px] muted mt-0.5">'+s.pop+'</div>'
-      + '<div class="mt-2 space-y-2">'
-      + (s.metrics||[]).map(m =>
-          '<div class="p-2 rounded-lg bg-[var(--panel)] border bd">'
-          + '<div class="text-[12px] font-semibold" style="color:var(--accent)">'+m.m+'</div>'
-          + '<ul class="mt-1 space-y-0.5 text-[12.5px] pl-2" style="border-left:2px solid var(--line-2)">'
-          + m.lines.map(l => '<li>'+l+'</li>').join('')
-          + '</ul></div>').join('')
-      + '</div>'
+      + '<div class="mt-2 space-y-2">';
+    (s.metrics||[]).forEach(function(m){
+      h += '<div class="p-2 rounded-lg bg-[var(--panel)] border bd">'
+        + '<div class="text-[12px] font-semibold" style="color:var(--accent)">' + m.m + '</div>'
+        + '<ul class="mt-1 space-y-0.5 text-[12.5px] pl-2" style="border-left:2px solid var(--line-2)">';
+      m.lines.forEach(function(ln){
+        h += '<li>' + ln + '</li>';
+      });
+      h += '</ul></div>';
+    });
+    h += '</div>'
       + '<div class="mt-2 pt-2 text-[12px] muted" style="border-top:1px solid var(--line)">'
-      + '<div><b>Группа лечения:</b> '+s.drug+'</div>'
-      + '<div class="mt-0.5"><b>Контрольная группа:</b> '+s.ctrl+'</div>'
+      + '<div><b>Группа лечения:</b> ' + s.drug + '</div>'
+      + '<div class="mt-0.5"><b>Контрольная группа:</b> ' + s.ctrl + '</div>'
       + '</div>'
       + '<div class="mt-2 flex flex-wrap gap-1.5 items-center">'
-      + A('src', s.u, 'Первоисточник (DOI)')
-      + (s.p ? pmidLink(s.p) : '')
-      + (s.pdf ? A('pdfb', s.pdf.u, s.pdf.t) : '')
-      + '</div></div>').join('')
-  + '</div></div>';
+      + '<a class="src" href="' + s.u + '" target="_blank" rel="noopener">Первоисточник (DOI)</a>'
+      + (s.p ? '<a class="src" href="https://pubmed.ncbi.nlm.nih.gov/' + s.p + '/" target="_blank" rel="noopener">PMID ' + s.p + '</a>' : '')
+      + (s.pdf ? '<a class="pdfb" href="' + s.pdf.u + '" target="_blank" rel="noopener">' + s.pdf.t + '</a>' : '')
+      + '</div></div>';
+  });
+  return h + '</div></div>';
+}
 
-const rows = (title, arr, icon) => !arr || !arr.length ? '' :
-  '<div class="mt-3"><div class="text-[12px] font-semibold uppercase tracking-wide muted">'+icon+' '+title+'</div><ul class="mt-1.5 space-y-2.5">'
-  + arr.map(x =>
-      '<li class="text-[13.5px] leading-snug pl-3" style="border-left:2px solid '+(x.off?'var(--ok)':'var(--line-2)')+'">'
-      + A('lnk font-medium', x.u, x.t)
+function rows(title,arr,icon){
+  if(!arr || !arr.length) return '';
+  let h = '<div class="mt-3"><div class="text-[12px] font-semibold uppercase tracking-wide muted">'+icon+' '+title+'</div><ul class="mt-1.5 space-y-2.5">';
+  arr.forEach(function(x){
+    h += '<li class="text-[13.5px] leading-snug pl-3" style="border-left:2px solid '+(x.off?'var(--ok)':'var(--line-2)')+'">'
+      + '<a class="lnk font-medium" href="'+x.u+'" target="_blank" rel="noopener">'+x.t+'</a>'
       + (x.off ? ' <span class="pdfb">первоисточник</span>' : '')
       + (x.pdf ? ' <span class="pdfb">PDF</span>' : '')
       + (x.n ? '<div class="muted text-[12.5px] mt-0.5">'+x.n+'</div>' : '')
-      + (x.p ? '<div class="mt-1">'+pmidLink(x.p)+'</div>' : '')
-      + '</li>').join('')
-  + '</ul></div>';
+      + (x.p ? '<div class="mt-1"><a class="src" href="https://pubmed.ncbi.nlm.nih.gov/'+x.p+'/" target="_blank" rel="noopener">PMID '+x.p+'</a></div>' : '')
+      + '</li>';
+  });
+  return h + '</ul></div>';
+}
 
 /*
   Снижение СЧО относительно плацебо (отсутствия терапии) для сводной таблицы.
   kind: 'direct' - плацебо-контролируемое РКИ; 'nma' - объединенный NMA; 'indirect' - косвенный расчёт по цепочке; 'none' - оценка к плацебо невозможна.
-  Цепочки: RR(препарат к контролю) × RR(контроль к плацебо).
+  Цепочки: RR(препарат к контролю) × RR(контроль к плацебо). Опорные RR к плацебо: интерферон бета-1а 44 мкг п/к 0,68 (PRISMS); интерферон бета-1а 30 мкг в/м 0,68 (MSCRG); терифлуномид 14 мг ≈0,66 (TEMSO/TOWER).
 */
 const PLACEBO = {
   ocrelizumab:{kind:'nma', v:'≈63-67%',
@@ -1581,7 +1651,7 @@ const PLACEBO = {
   pegifnb:{kind:'direct', v:'36%',
     how:'ADVANCE, 1-й год: 0,256 против 0,397 (RR 0,644; p=0,0007).'},
   sampaegifnb:{kind:'none', v:'к плацебо не рассчитывается',
-    how:'В BCD-054-2 плацебо-группа завершила участие на 20-й неделе; сопоставимый годовой СЧО к плацебо не публиковался. Ожидаемый эффект класса интерферонов бета ~30-36% к плацебо.'},
+    how:'В BCD-054-2 плацебо-группа завершила участие на 20-й неделе; сопоставимый годовой СЧО к плацебо не публиковался. Доступно только сравнение с низкодозным ИФН бета-1а 30 мкг (превосходство по первичной точке, 52 нед). Класс препарата - интерферон бета, ожидаемый диапазон класса 30-36% к плацебо, но это предположение, а не данные РКИ.'},
   glatiramer:{kind:'direct', v:'29% (20 мг); 34% (40 мг)',
     how:'CONFIRM: 0,29 против 0,40 (20 мг ежедневно). GALA: 0,331 против 0,505 (40 мг 3 раза в неделю).'},
   teriflunomide:{kind:'direct', v:'31-36%',
@@ -1612,132 +1682,140 @@ const PLACEBO = {
     how:'MIST сравнивал трансплантацию с продолжением ПИТРС, плацебо-контроль этически невозможен. Первичная точка - прогрессирование: 5,8% против 66,7% за 1 год.'}
 };
 
-/* Построение строк сводной сравнительной таблицы. */
-const KIND_BADGE = {direct:'<span class="pdfb">прямое РКИ к плацебо</span>', nma:'<span class="src">объединенный NMA</span>', indirect:'<span class="warnb">косвенный расчёт</span>', none:'<span class="warnb">нет оценки к плацебо</span>'};
-const MRI_COLOR = {direct:'var(--ok)', calc:'var(--warn)', none:'var(--muted)'};
-const MRI_BADGE = {direct:'<span class="pdfb">прямое к плацебо</span>', calc:'<span class="warnb">расчёт по цепочке</span>', none:'<span class="warnb">нет прямых данных</span>'};
-const TOX_BADGE = {danger:'<span class="dangerb">Высокая тяжесть</span>', warn:'<span class="warnb">Умеренная (контроль)</span>', ok:'<span class="pdfb">Низкая / умеренная</span>'};
-
+/* Построение строк сводной сравнительной таблицы.
+   Порядок столбцов: Препарат | Снижение СЧО к плацебо | МРТ-эффект | Источник/метод | CDP | Побочные. */
 function renderCmpTable(){
   const tbody = document.getElementById('cmp-tbody');
   if(!tbody) return;
+  const kindBadge = {direct:'<span class="pdfb">прямое РКИ к плацебо</span>', nma:'<span class="src">объединенный NMA</span>', indirect:'<span class="warnb">косвенный расчёт</span>', none:'<span class="warnb">нет оценки к плацебо</span>'};
+  const mriColor = {direct:'var(--ok)', calc:'var(--warn)', none:'var(--muted)'};
+  const mriBadge = {direct:'<span class="pdfb">прямое к плацебо</span>', calc:'<span class="warnb">расчёт по цепочке</span>', none:'<span class="warnb">нет прямых данных</span>'};
   let html = '';
-  DATA.forEach(gr => gr.items.forEach(it => {
-    if(!it.cmp) return;
-    const c = it.cmp, p = PLACEBO[it.id] || {kind:'none', v:'нет данных', how:''};
+  DATA.forEach(function(gr){
+    gr.items.forEach(function(it){
+      if(!it.cmp) return;
+      const c = it.cmp;
+      const p = PLACEBO[it.id] || {kind:'none', v:'нет данных', how:''};
+      const toxBadge = c.tox.lvl === 'danger'
+        ? '<span class="dangerb">Высокая тяжесть</span>'
+        : (c.tox.lvl === 'warn' ? '<span class="warnb">Умеренная (контроль)</span>' : '<span class="pdfb">Низкая / умеренная</span>');
 
-    let mriHtml = '<span class="muted">—</span>';
-    if(c.mri && typeof c.mri === 'object'){
-      const t = c.mri.type || 'none';
-      mriHtml = '<div style="color:'+MRI_COLOR[t]+';font-weight:600;font-size:12.5px">К плацебо: '+c.mri.pbo+'</div>'
-        + '<div class="mt-0.5">'+(MRI_BADGE[t]||'')+'</div>'
-        + '<div class="muted text-[11.5px] leading-snug mt-1.5">'+c.mri.rki+'</div>';
-    } else if(typeof c.mri === 'string' && c.mri){
-      mriHtml = '<div class="text-[12px]">'+c.mri+'</div>';
-    }
+      let mriHtml = '<span class="muted">—</span>';
+      if(c.mri && typeof c.mri === 'object'){
+        const t = c.mri.type || 'none';
+        mriHtml = '<div style="color:'+mriColor[t]+';font-weight:600;font-size:12.5px">К плацебо: '+c.mri.pbo+'</div>'
+          + '<div class="mt-0.5">'+(mriBadge[t]||'')+'</div>'
+          + '<div class="muted text-[11.5px] leading-snug mt-1.5">'+c.mri.rki+'</div>';
+      } else if(typeof c.mri === 'string' && c.mri){
+        mriHtml = '<div class="text-[12px]">'+c.mri+'</div>';
+      }
 
-    html += '<tr>'
-      + '<td><b>' + it.inn + '</b><div class="muted text-[11.5px]">' + it.brand + '</div><div class="mt-1">' + badge(it.tag) + '</div></td>'
-      + '<td><b style="color:var(--accent);font-size:13px">' + p.v + '</b><div class="mt-1">' + (KIND_BADGE[p.kind] || '') + '</div>' + freqHTML(it.id, false) + '</td>'
-      + '<td>' + mriHtml + '</td>'
-      + '<td class="muted text-[11.5px] leading-snug">' + p.how + '<div class="mt-1.5" style="color:var(--txt)"><b>Прямое РКИ:</b> ' + c.arr + '</div><div class="mt-0.5">Контроль: ' + c.ctrl + '</div></td>'
-      + '<td class="text-[12px] leading-snug">' + c.cdp + '</td>'
-      + '<td><div class="mb-1">' + (TOX_BADGE[c.tox.lvl] || TOX_BADGE.ok) + '</div><div class="text-[12px] muted leading-snug">' + c.tox.t + '</div></td>'
-      + '</tr>';
-  }));
-  tbody.innerHTML = html;
-}
-
-// Поисковый индекс карточки: МНН, бренд, производитель, режимы, метрики РКИ, названия статей и документов.
-function haystack(it, group){
-  let hay = [it.inn,it.brand,it.maker,it.klass,it.shema,it.pokaz,it.reg||'',group].join(' ');
-  (it.stats||[]).forEach(s => {
-    hay += ' '+s.tr+' '+s.pop+' '+s.drug+' '+s.ctrl;
-    (s.metrics||[]).forEach(m => { hay += ' '+m.m+' '+m.lines.join(' '); });
+      html += '<tr>'
+        + '<td><b>' + it.inn + '</b><div class="muted text-[11.5px]">' + it.brand + '</div><div class="mt-1">' + badge(it.tag) + '</div></td>'
+        + '<td><b style="color:var(--accent);font-size:13px">' + p.v + '</b><div class="mt-1">' + (kindBadge[p.kind] || '') + '</div>' + frequencyTableCell(it.id) + '</td>'
+        + '<td>' + mriHtml + '</td>'
+        + '<td class="muted text-[11.5px] leading-snug">' + p.how + '<div class="mt-1.5" style="color:var(--txt)"><b>Прямое РКИ:</b> ' + c.arr + '</div><div class="mt-0.5">Контроль: ' + c.ctrl + '</div></td>'
+        + '<td class="text-[12px] leading-snug">' + c.cdp + '</td>'
+        + '<td><div class="mb-1">' + toxBadge + '</div><div class="text-[12px] muted leading-snug">' + c.tox.t + '</div></td>'
+        + '</tr>';
+    });
   });
-  (it.studies||[]).forEach(s => { hay += ' '+s.t+' '+(s.n||''); });
-  (it.docs||[]).forEach(s => { hay += ' '+s.t; });
-  return hay.toLowerCase();
+  tbody.innerHTML = html;
 }
 
 function render(){
   let html = '', shown = 0;
   const q = state.q.trim().toLowerCase();
-  DATA.forEach(gr => {
-    const items = gr.items.filter(it => {
+  DATA.forEach(function(gr){
+    const items = gr.items.filter(function(it){
       if(state.f !== 'all'){
         if(state.f === 'ВЭ-ПИТРС'){ if(!it.ve) return false; }
         else if(it.tag !== state.f) return false;
       }
-      return !q || haystack(it, gr.g).indexOf(q) !== -1;
+      if(q){
+        let hay = [it.inn,it.brand,it.maker,it.klass,it.shema,it.pokaz,it.reg||'',gr.g].join(' ');
+        (it.stats||[]).forEach(function(s){
+          hay += ' '+s.tr+' '+s.pop+' '+s.drug+' '+s.ctrl;
+          (s.metrics||[]).forEach(function(m){ hay += ' '+m.m+' '+m.lines.join(' '); });
+        });
+        (it.studies||[]).forEach(function(s){ hay += ' '+s.t+' '+(s.n||''); });
+        (it.docs||[]).forEach(function(s){ hay += ' '+s.t; });
+        if(hay.toLowerCase().indexOf(q) === -1) return false;
+      }
+      return true;
     });
     if(!items.length) return;
     shown += items.length;
     html += '<section><div class="flex items-baseline gap-2 flex-wrap px-1">'
-      + '<h2 class="font-bold text-[14.5px]">'+gr.g+'</h2><span class="text-[12px] muted">'+items.length+'</span></div>'
-      + (gr.note ? '<p class="text-[12.5px] muted px-1 mt-0.5">'+gr.note+'</p>' : '')
-      + '<div class="mt-2.5 space-y-2.5">'
-      + items.map(it =>
-          '<article class="acc card overflow-hidden" id="'+it.id+'">'
-          + '<button class="w-full text-left px-4 py-3.5 flex items-start gap-3" aria-expanded="false" aria-controls="'+it.id+'-body">'
-          + '<span class="mt-1 shrink-0 w-2 h-2 rounded-full" style="background:'+(it.ve?'var(--ve)':'var(--accent)')+'"></span>'
-          + '<span class="flex-1 min-w-0">'
-          + '<div class="font-semibold text-[15px] leading-snug">'+it.inn+' <span class="muted font-normal">/</span> '+it.brand+'</div>'
-          + '<div class="mt-0.5">'+freqHTML(it.id, true)+'</div>'
-          + '<div class="text-[12.5px] muted mt-1">'+it.klass+'</div>'
-          + '<div class="flex flex-wrap gap-1.5 mt-2">'+badge(it.tag)
-          + (it.ve ? '<span class="text-[11px] font-semibold px-2 py-0.5 rounded-full" style="background:var(--ve-soft);color:var(--ve)">Высокоэффективный</span>' : '')
-          + (it.reg ? '<span class="text-[11px] px-2 py-0.5 rounded-full sub muted">РУ: '+it.reg+'</span>' : '')
-          + '</div></span>'
-          + '<svg class="chev shrink-0 mt-1" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>'
-          + '</button>'
-          + '<div class="acc-body" id="'+it.id+'-body"><div><div class="px-4 pb-4 pt-0.5 border-t bd">'
-          + '<div class="grid sm:grid-cols-2 gap-2 mt-3">'
-          + pill('Схема введения', it.shema) + pill('Показания', it.pokaz)
-          + pill('Производитель', it.maker) + (it.reg ? pill('Регистрационное удостоверение', it.reg) : '')
-          + '</div>'
-          + statsBlock(it.stats)
-          + rows('Клинические исследования', it.studies, '🧪')
-          + rows('Регистрация в РФ и официальные документы', it.docs, '📄')
-          + '</div></div></div></article>').join('')
-      + '</div></section>';
+         +  '<h2 class="font-bold text-[14.5px]">'+gr.g+'</h2><span class="text-[12px] muted">'+items.length+'</span></div>'
+         +  (gr.note ? '<p class="text-[12.5px] muted px-1 mt-0.5">'+gr.note+'</p>' : '')
+         +  '<div class="mt-2.5 space-y-2.5">';
+    items.forEach(function(it){
+      const st = it.ve ? 'var(--ve)' : 'var(--accent)';
+      html += '<article class="acc card overflow-hidden" id="'+it.id+'">'
+        + '<button class="w-full text-left px-4 py-3.5 flex items-start gap-3" aria-expanded="false" aria-controls="'+it.id+'-body">'
+        + '<span class="mt-1 shrink-0 w-2 h-2 rounded-full" style="background:'+st+'"></span>'
+        + '<span class="flex-1 min-w-0">'
+        + '<div class="font-semibold text-[15px] leading-snug">'+it.inn+' <span class="muted font-normal">/</span> '+it.brand+'</div>'
+        + '<div class="mt-0.5">'+frequencyBadge(it.id)+'</div>'
+        + '<span class="block text-[12.5px] muted mt-1">'+it.klass+'</span>'
+        + '<span class="flex flex-wrap gap-1.5 mt-2">'+badge(it.tag)
+        + (it.ve ? '<span class="text-[11px] font-semibold px-2 py-0.5 rounded-full" style="background:var(--ve-soft);color:var(--ve)">Высокоэффективный</span>' : '')
+        + (it.reg ? '<span class="text-[11px] px-2 py-0.5 rounded-full sub muted">РУ: '+it.reg+'</span>' : '')
+        + '</span></span>'
+        + '<svg class="chev shrink-0 mt-1" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>'
+        + '</button>'
+        + '<div class="acc-body" id="'+it.id+'-body"><div><div class="px-4 pb-4 pt-0.5 border-t bd">'
+        + '<div class="grid sm:grid-cols-2 gap-2 mt-3">'
+        + pill('Схема введения', it.shema) + pill('Показания', it.pokaz)
+        + pill('Производитель', it.maker) + (it.reg ? pill('Регистрационное удостоверение', it.reg) : '')
+        + '</div>'
+        + statsBlock(it.stats)
+        + rows('Клинические исследования', it.studies, '🧪')
+        + rows('Регистрация в РФ и официальные документы', it.docs, '📄')
+        + '</div></div></div></article>';
+    });
+    html += '</div></section>';
   });
   list.innerHTML = html;
   document.getElementById('empty').classList.toggle('hidden', shown > 0);
 }
 
-document.addEventListener('click', e => {
+document.addEventListener('click', function(e){
   const head = e.target.closest('button[aria-expanded]');
-  if(!head) return;
-  const card = head.closest('.acc'), open = card.classList.toggle('open');
-  head.setAttribute('aria-expanded', open ? 'true' : 'false');
-  if(open) history.replaceState(null, '', '#' + card.id);
+  if(head){
+    const card = head.closest('.acc');
+    const open = card.classList.toggle('open');
+    head.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if(open) history.replaceState(null, '', '#' + card.id);
+  }
 });
-document.getElementById('q').addEventListener('input', e => { state.q = e.target.value; render(); });
-document.getElementById('filters').addEventListener('click', e => {
+document.getElementById('q').addEventListener('input', function(e){ state.q = e.target.value; render(); });
+document.getElementById('filters').addEventListener('click', function(e){
   const b = e.target.closest('button[data-f]'); if(!b) return;
   state.f = b.dataset.f;
-  document.querySelectorAll('#filters button').forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
+  document.querySelectorAll('#filters button').forEach(function(x){ x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
   render();
 });
 const tgl = document.getElementById('toggleAll');
-tgl.addEventListener('click', () => {
+tgl.addEventListener('click', function(){
   const all = Array.prototype.slice.call(document.querySelectorAll('.acc'));
-  const anyClosed = all.some(c => !c.classList.contains('open'));
-  all.forEach(c => {
+  const anyClosed = all.some(function(c){ return !c.classList.contains('open'); });
+  all.forEach(function(c){
     c.classList.toggle('open', anyClosed);
     c.querySelector('button[aria-expanded]').setAttribute('aria-expanded', anyClosed ? 'true' : 'false');
   });
   tgl.textContent = anyClosed ? 'Свернуть всё' : 'Развернуть всё';
 });
-const themeBtn = document.getElementById('theme');
-themeBtn.addEventListener('click', () => {
-  const d = document.documentElement.classList.toggle('dark');
+document.getElementById('theme').addEventListener('click', function(){
+  document.documentElement.classList.toggle('dark');
+  const d = document.documentElement.classList.contains('dark');
   localStorage.setItem('pitrs-theme', d ? 'dark' : 'light');
-  themeBtn.textContent = d ? '☀️' : '🌙';
+  document.getElementById('theme').textContent = d ? '☀️' : '🌙';
 });
-if(document.documentElement.classList.contains('dark')) themeBtn.textContent = '☀️';
-
+if(document.documentElement.classList.contains('dark')){
+  document.getElementById('theme').textContent = '☀️';
+}
 render();
 renderCmpTable();
 
@@ -1746,7 +1824,7 @@ if(location.hash){
   if(el && el.classList.contains('acc')){
     el.classList.add('open');
     el.querySelector('button[aria-expanded]').setAttribute('aria-expanded','true');
-    setTimeout(() => el.scrollIntoView({block:'start', behavior:'smooth'}), 120);
+    setTimeout(function(){ el.scrollIntoView({block:'start', behavior:'smooth'}); }, 120);
   }
 }
 </script>
